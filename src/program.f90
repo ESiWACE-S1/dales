@@ -200,7 +200,8 @@ program DALES
   call testwctime
 
   do while (timeleft>0 .or. rk3step < 3)
-    call tstep_update                           ! Calculate new timestep
+    ! Calculate new timestep, and reset tendencies to 0.
+    call tstep_update
     call timedep
     call samptend(tend_start,firstterm=.true.)
 
