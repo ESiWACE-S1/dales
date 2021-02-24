@@ -8,6 +8,7 @@
 !
 
 module modhypre
+use modprecision, only : pois_r
 
 implicit none
 private
@@ -32,7 +33,7 @@ contains
 
     implicit none
 
-    real, intent(inout) :: p(2-ih:i1+ih,2-jh:j1+jh,kmax)
+    real(pois_r), intent(inout) :: p(2-ih:i1+ih,2-jh:j1+jh,kmax)
 
     call error_and_exit()
   end subroutine
@@ -42,7 +43,7 @@ contains
 
     implicit none
 
-    real, intent(inout) :: p(2-ih:i1+ih,2-jh:j1+jh,kmax)
+    real(pois_r), intent(inout) :: p(2-ih:i1+ih,2-jh:j1+jh,kmax)
     logical, intent(out) :: converged
 
     call error_and_exit()

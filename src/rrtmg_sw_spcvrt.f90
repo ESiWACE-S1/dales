@@ -113,7 +113,7 @@
                                                                !   Dimensions: (nlayers,nbndsw)
       real(kind=rb), intent(in) :: pasyc(:,:)                  ! cloud asymmetry parameter
                                                                !   Dimensions: (nlayers,nbndsw)
-      real(kind=rb), intent(in) :: pomgc(:,:)                  ! cloud single scattering albedo
+      real(kind=rb), intent(in) :: pomgc(:,:)                  ! cloud s_r scattering albedo
                                                                !   Dimensions: (nlayers,nbndsw)
       real(kind=rb), intent(in) :: ptaucorig(:,:)              ! cloud optical depth, non-delta scaled
                                                                !   Dimensions: (nlayers,nbndsw)
@@ -121,7 +121,7 @@
                                                                !   Dimensions: (nlayers,nbndsw)
       real(kind=rb), intent(in) :: pasya(:,:)                  ! aerosol asymmetry parameter
                                                                !   Dimensions: (nlayers,nbndsw)
-      real(kind=rb), intent(in) :: pomga(:,:)                  ! aerosol single scattering albedo
+      real(kind=rb), intent(in) :: pomga(:,:)                  ! aerosol s_r scattering albedo
                                                                !   Dimensions: (nlayers,nbndsw)
 
       real(kind=rb), intent(in) :: colh2o(:)

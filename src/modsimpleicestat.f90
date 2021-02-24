@@ -30,7 +30,7 @@
 !  Copyright 1993-2009 Delft University of Technology, Wageningen University, Utrecht University, KNMI
 !
 module modsimpleicestat
-  use modglobal, only : longint
+  use modglobal, only : l_i
 
 implicit none
 private
@@ -41,7 +41,7 @@ save
   character(80),dimension(nvar,4) :: ncname
   character(80),dimension(1,4) :: tncname
   real          :: dtav, timeav
-  integer(kind=longint):: idtav, itimeav, tnext, tnextwrite
+  integer(kind=l_i):: idtav, itimeav, tnext, tnextwrite
   integer          :: nsamples
   logical          :: lmicrostat = .false.
   integer, parameter      :: nrfields = 5  , &

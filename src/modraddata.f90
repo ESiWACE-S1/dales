@@ -31,7 +31,7 @@
 module modraddata
 
 ! implicit none
-  use modglobal, only : longint,kind_rb,SHR_KIND_IN,SHR_KIND_R4
+  use modglobal, only : l_i,kind_rb,SHR_KIND_IN,SHR_KIND_R4
 
 SAVE
 
@@ -51,8 +51,8 @@ SAVE
   logical :: lcloudshading = .false.     !< Let clouds shade the surface for rad_lsm
 
   real              :: timerad = 0       !<  timescale of the radiation scheme
-  integer(kind=longint)  :: itimerad = 0 !<  timescale of the radiation scheme
-  integer (kind=longint) :: tnext   = 0  !<  time of the first upcoming call of the radiation scheme
+  integer(kind=l_i)  :: itimerad = 0 !<  timescale of the radiation scheme
+  integer (kind=l_i) :: tnext   = 0  !<  time of the first upcoming call of the radiation scheme
   real :: rka        = 130.              !< extinction coefficient in radpar scheme
   real :: dlwtop     = 74.               !< longwave radiative flux divergence at top of domain
   real :: dlwbot     = 0.                !< longwave radiative flux divergence near the surface
@@ -61,7 +61,7 @@ SAVE
                                          !        radiation at the top of the domain/cloud
 
   real :: gc         = 0.85              !< asymmetry factor of droplet scattering angle distribution
-  real :: SSA        = 0.999             !< typical single scattering albedo for clouds
+  real :: SSA        = 0.999             !< typical s_r scattering albedo for clouds
   integer :: iDE     = 1                 !< scalar field to be used as extinction
   logical :: laero   = .false.           !< .true. for aeosols .false. for clouds
 
@@ -153,7 +153,7 @@ SAVE
   real, parameter :: tmelt = 273.16
   real,allocatable,dimension(:)   :: presf_input,     &   ! Full-level pressure (sounding patched to domain)
                                      presh_input          ! Halflevel  pressure (sounding patched to domain)
-  real,allocatable,dimension(:)   :: tg_slice             ! Sea surface temperature of a 2D slice
+  real(kind_rb),allocatable,dimension(:)   :: tg_slice    ! Sea surface temperature of a 2D slice
 
   real(kind_rb),allocatable,dimension(:)   :: &
        o3, co2, ch4, n2o, o2, cfc11, cfc12, cfc22, ccl4   ! Profiles of trace gases

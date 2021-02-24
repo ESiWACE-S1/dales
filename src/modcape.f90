@@ -26,7 +26,7 @@
 !
 module modcape
 
-  use modglobal, only : longint,kmax
+  use modglobal, only : l_i,kmax
 
 implicit none
 private
@@ -40,7 +40,7 @@ save
   character(80),dimension(nvar,4) :: ncname
   character(80),dimension(1,4) :: tncname
   real    :: dtav
-  integer(kind=longint) :: idtav,tnext
+  integer(kind=l_i) :: idtav,tnext
   logical :: lcape = .false. !< switch for doing the crosssection (on/off)
 
 contains

@@ -22,97 +22,89 @@
 !  Copyright 1993-2009 Delft University of Technology, Wageningen University, Utrecht University, KNMI
 !
 module modglobal
-
+use modprecision
 implicit none
 save
 
       ! Simulation dimensions (parconst.f90)
-      integer :: itot = 64
-      integer :: jtot = 64
-      integer :: imax
-      integer :: jmax
-      integer :: kmax = 96
-      integer ::  i1
-      integer ::  j1
-      integer ::  k1
-      integer ::  k2
-      integer ::  i2
-      integer ::  j2
-      integer ::  nsv = 0       !< Number of additional scalar fields
-      integer ::  ncosv = 0
+      integer(n_i) :: itot = 64
+      integer(n_i) :: jtot = 64
+      integer(n_i) :: imax
+      integer(n_i) :: jmax
+      integer(n_i) :: kmax = 96
+      integer(n_i) ::  i1
+      integer(n_i) ::  j1
+      integer(n_i) ::  k1
+      integer(n_i) ::  k2
+      integer(n_i) ::  i2
+      integer(n_i) ::  j2
+      integer(n_i) ::  nsv = 0       !< Number of additional scalar fields
+      integer(n_i) ::  ncosv = 0
 
-      integer ::  ih=3
-      integer ::  jh=3
-      integer ::  kh=1
-      integer ::  kcb=0
+      integer(n_i) ::  ih=3
+      integer(n_i) ::  jh=3
+      integer(n_i) ::  kh=1
+      integer(n_i) ::  kcb=0
 
-      character(256) :: fname_options = 'namoptions'
-      integer, parameter :: longint=8
-      logical :: lwarmstart = .false.!<   flag for "cold" or "warm" start
-      real    :: trestart  = 3600. !<     * each trestart sec. a restart file is written to disk
-      integer(kind=longint) :: itrestart !<     * each trestart sec. a restart file is written to disk
-      integer(kind=longint)    :: tnextrestart    !<     * each trestart sec. a restart file is written to disk
-      character(50) :: startfile    !<    * name of the restart file
+      character(256)    :: fname_options = 'namoptions'
+      logical           :: lwarmstart = .false. !<   flag for "cold" or "warm" start
+      real(s_r)      :: trestart  = 3600.    !< * each trestart sec. a restart file is written to disk
+      integer(l_i)  :: itrestart !<     * each trestart sec. a restart file is written to disk
+      integer(l_i)  :: tnextrestart    !<     * each trestart sec. a restart file is written to disk
+      character(50)     :: startfile    !<    * name of the restart file
 
-      logical :: llsadv   = .false. !<  switch for large scale forcings
-      integer :: ntimedep = 100     !< maximum number of time points for time-dependent forcings
-
-      
-      !< Parameter kinds, for rrtmg radiation scheme
-      integer, parameter :: kind_rb = selected_real_kind(12) ! 8 byte real
-      integer, parameter :: kind_im = selected_int_kind(6)   ! 4 byte integer
-      integer,parameter  :: SHR_KIND_R4 = selected_real_kind( 6) ! 4 byte real
-      integer,parameter  :: SHR_KIND_IN = kind(1)   ! native integer
+      logical           :: llsadv   = .false. !<  switch for large scale forcings
+      integer(s_i) :: ntimedep = 100     !< maximum number of time points for time-dependent forcings
 
       !<  Global constants modconst.f90
       !< File numbers
 
-      integer, parameter :: ifinput    = 1
-      integer, parameter :: ifoutput   = 2
-      integer, parameter :: ifnamopt   = 3
+      integer(n_i), parameter :: ifinput    = 1
+      integer(n_i), parameter :: ifoutput   = 2
+      integer(n_i), parameter :: ifnamopt   = 3
 
-      real,parameter :: pi       = 3.141592653589793116
-      real,parameter :: grav     = 9.81             !<    *gravity acceleration.
-      real,parameter :: rd       = 287.04           !<    *gas constant for dry air.
-      real,parameter :: rv       = 461.5            !<    *gas constant for water vapor.
-      real,parameter :: cp       = 1004.            !<    *specific heat at constant pressure (dry air).
-      real,parameter :: rlv     = 2.53e6           !<    *latent heat for vaporisation
-      real,parameter :: riv     = 2.84e6           !<    *latent heat for sublimation
-      real,parameter :: tup     = 268.             !<    * Temperature range over which mixed phase occurs (high)
-      real,parameter :: tdn     = 253.             !<    * Temperature range over which mixed phase occurs (low)
-      real,parameter :: ep       = rd/rv            !<    0.622
-      real,parameter :: ep2      = rv/rd - 1.       !<    0.61
+      real(l_r),parameter :: pi       = 3.141592653589793116
+      real(s_r),parameter :: grav     = 9.81             !<    *gravity acceleration.
+      real(s_r),parameter :: rd       = 287.04           !<    *gas constant for dry air.
+      real(s_r),parameter :: rv       = 461.5            !<    *gas constant for water vapor.
+      real(s_r),parameter :: cp       = 1004.            !<    *specific heat at constant pressure (dry air).
+      real(s_r),parameter :: rlv     = 2.53e6           !<    *latent heat for vaporisation
+      real(s_r),parameter :: riv     = 2.84e6           !<    *latent heat for sublimation
+      real(s_r),parameter :: tup     = 268.             !<    * Temperature range over which mixed phase occurs (high)
+      real(s_r),parameter :: tdn     = 253.             !<    * Temperature range over which mixed phase occurs (low)
+      real(s_r),parameter :: ep       = rd/rv            !<    0.622
+      real(s_r),parameter :: ep2      = rv/rd - 1.       !<    0.61
       !< real,parameter :: cv       = cp-rd            !<    716.96
-      real,parameter :: rcp      = rd/cp            !<    0.286
-      real,parameter :: cpr      = cp/rd            !<    3.50
-      real,parameter :: rlvocp   = rlv/cp           !<    2.49
-      real,parameter :: mair     = 28.967           !< Molar mass of air
-      real,parameter :: rhow     = 0.998e3          !<    * Density of water
-      real,parameter :: pref0    = 1.e5             !<    *standard pressure used in exner function.
-      real,parameter :: tmelt    = 273.16           !<    *temperature of melting of ice.
-      real,parameter :: es0      = 610.78           !<    * constants used for computation
-      real,parameter :: at       = 17.27            !<    * of saturation mixing ratio
-      real,parameter :: bt       = 35.86            !<    * using Tetens Formula.
-      real,parameter :: ekmin    = 1.e-6            !<    *minimum value for k-coefficient.
-      real,parameter :: e12min   = 5.e-5            !<    *minimum value for TKE.
-      real,parameter :: fkar     = 0.4              !<    *Von Karman constant
-      real,parameter :: eps1     = 1.e-10           !<    *very small number*
-      real,parameter :: epscloud = 1.e-5            !<    *limit for cloud calculation 0.01 g/kg
-      real,parameter :: boltz    = 5.67e-8          !<    *Stefan-Boltzmann constant
+      real(s_r),parameter :: rcp      = rd/cp            !<    0.286
+      real(s_r),parameter :: cpr      = cp/rd            !<    3.50
+      real(s_r),parameter :: rlvocp   = rlv/cp           !<    2.49
+      real(s_r),parameter :: mair     = 28.967           !< Molar mass of air
+      real(s_r),parameter :: rhow     = 0.998e3          !<    * Density of water
+      real(s_r),parameter :: pref0    = 1.e5             !<    *standard pressure used in exner function.
+      real(s_r),parameter :: tmelt    = 273.16           !<    *temperature of melting of ice.
+      real(s_r),parameter :: es0      = 610.78           !<    * constants used for computation
+      real(s_r),parameter :: at       = 17.27            !<    * of saturation mixing ratio
+      real(s_r),parameter :: bt       = 35.86            !<    * using Tetens Formula.
+      real(s_r),parameter :: ekmin    = 1.e-6            !<    *minimum value for k-coefficient.
+      real(s_r),parameter :: e12min   = 5.e-5            !<    *minimum value for TKE.
+      real(s_r),parameter :: fkar     = 0.4              !<    *Von Karman constant
+      real(field_r),parameter :: eps1     = 1.e-10           !<    *very small number*
+      real(s_r),parameter :: epscloud = 1.e-5            !<    *limit for cloud calculation 0.01 g/kg
+      real(s_r),parameter :: boltz    = 5.67e-8          !<    *Stefan-Boltzmann constant
 
       logical :: lcoriol  = .true.  !<  switch for coriolis force
       logical :: lpressgrad = .true.  !<  switch for horizontal pressure gradient force
 
-      integer :: igrw_damp = 2 !< switch to enable gravity wave damping
-      real    :: geodamptime = 7200. !< time scale for nudging to geowind in sponge layer, prevents oscillations
-      real    :: om22                       !<    *2.*omega_earth*cos(lat)
-      real    :: om23                       !<    *2.*omega_earth*sin(lat)
-      real    :: om22_gs                       !<    *2.*omega_earth*cos(lat)
-      real    :: om23_gs                       !<    *2.*omega_earth*sin(lat)
-      real    :: xlat    = 52.              !<    *latitude  in degrees.
-      real    :: xlon    = 0.               !<    *longitude in degrees.
+      integer(n_i) :: igrw_damp = 2 !< switch to enable gravity wave damping
+      real(s_r)       :: geodamptime = 7200. !< time scale for nudging to geowind in sponge layer, prevents oscillations
+      real(s_r)    :: om22                       !<    *2.*omega_earth*cos(lat)
+      real(s_r)    :: om23                       !<    *2.*omega_earth*sin(lat)
+      real(s_r)    :: om22_gs                       !<    *2.*omega_earth*cos(lat)
+      real(s_r)    :: om23_gs                       !<    *2.*omega_earth*sin(lat)
+      real(n_r)    :: xlat    = 52.              !<    *latitude  in degrees.
+      real(n_r)    :: xlon    = 0.               !<    *longitude in degrees.
       logical :: lrigidlid = .false. !< switch to enable simulations with a rigid lid
-      real    :: unudge = 1.0   !< Nudging factor if igrw_damp == -1 (nudging mean wind fields to geostrophic values provided by lscale.inp)
+      real(s_r)    :: unudge = 1.0   !< Nudging factor if igrw_damp == -1 (nudging mean wind fields to geostrophic values provided by lscale.inp)
 
       !Base state
       integer :: ibas_prf = 3
@@ -161,11 +153,11 @@ save
       integer :: xyear  = 0     !<     * year, only for time units in netcdf
       real :: xday      = 1.    !<     * day number
       real :: xtime     = 0.    !<     * GMT time (in hours)
-      real :: cu        = 0.    !<     * translation velocity in x-direction
-      real :: cv        = 0.    !<     * translation velocity in y-direction
+      real(field_r) :: cu        = 0.    !<     * translation velocity in x-direction
+      real(field_r) :: cv        = 0.    !<     * translation velocity in y-direction
       real :: runtime   = 300.  !<     * simulation time in secs
       real :: dtmax     = 20.   !<     * maximum time integration interval
-      integer(kind=longint) :: idtmax        !<     * maximum time integration interval
+      integer(kind=l_i) :: idtmax        !<     * maximum time integration interval
       real :: dtav_glob   = 60.
       real :: timeav_glob = 3600.
       real :: tres     = 0.001
@@ -175,20 +167,20 @@ save
       real,allocatable :: dsv(:)          !<     * applied gradient of sv(n) at top of model
     !<     real :: dsv(nsv)          !<     * applied gradient of sv(n) at top of model
 
-      integer(kind=longint) :: dt                !<     * time integration interval
+      integer(kind=l_i) :: dt                !<     * time integration interval
       real :: rdt                !<     * time integration interval
       integer               :: dt_reason=0  !< indicates which dt limit was the lowest
-      integer(kind=longint) :: timee             !<     * elapsed time since the "cold" start
+      integer(kind=l_i) :: timee             !<     * elapsed time since the "cold" start
       real :: rtimee             !<     * elapsed time since the "cold" start
-      integer(kind=longint) :: btime             !<     * time of (re)start
+      integer(kind=l_i) :: btime             !<     * time of (re)start
       integer :: ntrun          !<     * number of timesteps since the start of the run
-      integer(kind=longint) :: timeleft
+      integer(kind=l_i) :: timeleft
       logical :: ladaptive   = .false.    !<    * adaptive timestepping on or off
       logical :: ltotruntime = .false. !<    * Whether the runtime is counted since the last cold start (if true) or the last warm start (if false, default)
 
       real    :: courant = -1
       real    :: peclet  = 0.15
-      integer(kind=longint) :: dt_lim
+      integer(kind=l_i) :: dt_lim
 
 
       integer :: rk3step = 0
@@ -349,8 +341,8 @@ contains
     mygamma251(-100)=0.
     mygamma21(-100)=0.
     do m=-99,4000
-    mygamma251(m)=max(lacz_gamma(m/100.+2.5)/lacz_gamma(m/100.+1.)*( ((m/100.+3)*(m/100.+2)*(m/100.+1))**(-1./2.) ),0.)
-    mygamma21(m)=max(lacz_gamma(m/100.+2.)/lacz_gamma(m/100.+1.)*( ((m/100.+3)*(m/100.+2)*(m/100.+1))**(-1./3.) ),0.)
+    mygamma251(m)=max(lacz_gamma(m/100._dp+2.5_dp)/lacz_gamma(m/100._dp+1._dp)*( ((m/100.+3)*(m/100.+2)*(m/100.+1))**(-1./2.) ),0.)
+    mygamma21(m)=max(lacz_gamma(m/100._dp+2._dp)/lacz_gamma(m/100._dp+1._dp)*( ((m/100.+3)*(m/100.+2)*(m/100.+1))**(-1./3.) ),0.)
     end do
 
     ! Select advection scheme for scalars. If not set in the options file, the momentum scheme is used
@@ -590,9 +582,8 @@ FUNCTION LACZ_GAMMA(X) RESULT(fn_val)
 !           Argonne, IL 60439
 
 !----------------------------------------------------------------------
-
+use modprecision, only : dp
 IMPLICIT NONE
-INTEGER, PARAMETER  :: dp = SELECTED_REAL_KIND(12, 60)
 
 REAL (dp), INTENT(IN)  :: x
 REAL (dp)              :: fn_val

@@ -47,7 +47,7 @@
 !      pgg     = assymetry factor
 !      prmuz   = cosine solar zenith angle
 !      ptau    = optical thickness
-!      pw      = single scattering albedo
+!      pw      = s_r scattering albedo
 !
 ! outputs
 ! -------
@@ -87,7 +87,7 @@
                                                                !   Dimensions: (nlayers)
       real(kind=rb), intent(in) :: ptau(:)                     ! optical depth
                                                                !   Dimensions: (nlayers)
-      real(kind=rb), intent(in) :: pw(:)                       ! single scattering albedo
+      real(kind=rb), intent(in) :: pw(:)                       ! s_r scattering albedo
                                                                !   Dimensions: (nlayers)
       real(kind=rb), intent(in) :: prmuz                       ! cosine of solar zenith angle
 

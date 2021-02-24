@@ -112,7 +112,7 @@
 !     The mode is chosen by using either rrtmg_lw.nomcica.f90 (to not use
 !     McICA) or rrtmg_lw.f90 (to use McICA) to interface with a GCM.
 !
-!    1) Standard, single forward model calculation (imca = 0)
+!    1) Standard, s_r forward model calculation (imca = 0)
 !    2) Monte Carlo Independent Column Approximation (McICA, Pincus et al.,
 !       JC, 2003) method is applied to the forward model calculation (imca = 1)
 !
@@ -233,7 +233,7 @@
 !      real(kind=rb)             :: taucld(:,:,:)      ! In-cloud optical depth (Dummy variable)
                                                       !    Dimensions: (nbndlw,ncol,nlay)
 !      real(kind=rb),allocatable,dimension(:,:,:)  :: taucld
-!      real(kind=rb), intent(in) :: ssacld(:,:,:)     ! In-cloud single scattering albedo
+!      real(kind=rb), intent(in) :: ssacld(:,:,:)     ! In-cloud s_r scattering albedo
                                                       !    Dimensions: (nbndlw,ncol,nlay)
                                                       !   for future expansion
                                                       !   (lw scattering not yet available)
@@ -245,7 +245,7 @@
                                                       !    Dimensions: (ncol,nlay,nbndlw)
 !      real(kind=rb)                               :: tauaer(:,:,:)      ! aerosol optical depth (Dummy variable)
                                                       !    Dimensions: (ncol,nlay,nbndlw)
-!      real(kind=rb), intent(in) :: ssaaer(:,:,:)     ! aerosol single scattering albedo
+!      real(kind=rb), intent(in) :: ssaaer(:,:,:)     ! aerosol s_r scattering albedo
                                                       !    Dimensions: (ncol,nlay,nbndlw)
                                                       !   for future expansion
                                                       !   (lw aerosols/scattering not yet available)
@@ -301,7 +301,7 @@
       real(kind=rb) :: taut(nzrad+2,ngptlw)    ! gaseous + aerosol optical depths
 
       real(kind=rb) :: taua(nzrad+2,nbndlw)    ! aerosol optical depth
-!      real(kind=rb) :: ssaa(nzrad+2,nbndlw)   ! aerosol single scattering albedo
+!      real(kind=rb) :: ssaa(nzrad+2,nbndlw)   ! aerosol s_r scattering albedo
                                               !   for future expansion
                                               !   (lw aerosols/scattering not yet available)
 !      real(kind=rb) :: asma(nzrad+2,nbndlw)   ! aerosol asymmetry parameter
@@ -356,7 +356,7 @@
 
       real(kind=rb) :: cldfrac(nzrad+2)        ! layer cloud fraction
       real(kind=rb) :: tauc(nbndlw,nzrad+2)    ! in-cloud optical depth
-!      real(kind=rb) :: ssac(nbndlw,nzrad+2)   ! in-cloud single scattering albedo
+!      real(kind=rb) :: ssac(nbndlw,nzrad+2)   ! in-cloud s_r scattering albedo
                                               !   for future expansion
                                               !   (lw scattering not yet available)
 !      real(kind=rb) :: asmc(nbndlw,nzrad+2)   ! in-cloud asymmetry parameter

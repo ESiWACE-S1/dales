@@ -875,7 +875,7 @@ contains
   !> **********************************************************************
   !> 1. `qcfel' is the abbreviation of ` qiu constants for each layer'.
   !> 2. The inhomogeneous atmosphere is divided into n adjacent homogeneous
-  !>    layers where the  single scattering properties are constant in each
+  !>    layers where the  s_r scattering properties are constant in each
   !>    layer and allowed to vary from one to another. Delta-four-stream is
   !>    employed for each homogeneous layer. The boundary conditions at the
   !>    top and bottom of the atmosphere,  together with  continuity condi-
@@ -1276,7 +1276,7 @@ contains
 
     if (McICA) then
        !
-       ! Select a single band and g-point (ib, ig1) and use these as the limits
+       ! Select a s_r band and g-point (ib, ig1) and use these as the limits
        !   in the loop through the spectrum below.
        !
        randomNumber = getRandomReal(randoms)
@@ -1401,7 +1401,7 @@ contains
       if (McICA) then
          randomNumber = getRandomReal(randoms)
          !
-         ! Select a single band and g-point (ib, ig1) and use these as the
+         ! Select a s_r band and g-point (ib, ig1) and use these as the
          ! limits in the loop through the spectrum below.
          !
          call select_bandg(solar_bands, bandweights, randomNumber, ib, ig1)
@@ -1568,7 +1568,7 @@ contains
   !> ri is the coefficient in Eq.(4.8) of Fu (1991) to compute the optical
   !> depth due to Rayleigh scattering in the solar bands.
   !>
-  !> tr, wr, and wwr are the optical depth, single scattering albedo,
+  !> tr, wr, and wwr are the optical depth, s_r scattering albedo,
   !> and expansion coefficients of the phase function ( 1, 2, 3, and
   !> 4 ) due to the Rayleigh scattering for a given layer.
   !>
@@ -2133,7 +2133,7 @@ contains
 
   end subroutine init_cldwtr
 
-  !> Subroutine cloud_water:  calculates the optical depth (tw), single
+  !> Subroutine cloud_water:  calculates the optical depth (tw), s_r
   !> scattering albedo (ww), and phase function (www(4)) given the cloud
   !> water [g/m^3] and effective radius [microns] by interpolating based on
   !> known optical properties at predefined sizes

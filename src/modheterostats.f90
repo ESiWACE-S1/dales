@@ -20,7 +20,7 @@
 !
 module modheterostats
 
-use modglobal, only: nsv, kmax,longint
+use modglobal, only: nsv, kmax,l_i
 
 implicit none
 private
@@ -29,7 +29,7 @@ public :: initheterostats, heterostats, exitheterostats
 save
   !namelist variables
   real                 :: dtav
-  integer(kind=longint):: idtav,tnext
+  integer(kind=l_i):: idtav,tnext
   logical              :: lheterostats  = .false.
   integer              :: ncklimit
 

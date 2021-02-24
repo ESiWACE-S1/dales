@@ -21,6 +21,7 @@
 !  Copyright 2014 Netherlands eScience Center
 !
 module modfftw
+use modprecision, only : pois_r
 use, intrinsic  :: iso_c_binding
 implicit none
 include 'fftw3.f03'
@@ -69,8 +70,8 @@ contains
     use, intrinsic  :: iso_c_binding
     implicit none
 
-    real, pointer              :: p(:,:,:)
-    real, pointer              :: Fp(:,:,:)
+    real(pois_r), pointer              :: p(:,:,:)
+    real(pois_r), pointer              :: Fp(:,:,:)
     real, allocatable          :: d(:,:,:)
     real, allocatable          :: xyrt(:,:)
     integer,intent(out)        :: ps,pe,qs,qe
@@ -627,8 +628,8 @@ contains
 
     implicit none
 
-    real, pointer :: p(:,:,:)
-    real, pointer :: Fp(:,:,:)
+    real(4), pointer :: p(:,:,:)
+    real(4), pointer :: Fp(:,:,:)
 
     if (method == 1) then
       call transpose_a1(p, p210)
@@ -654,8 +655,8 @@ contains
 
     implicit none
 
-    real, pointer :: p(:,:,:)
-    real, pointer :: Fp(:,:,:)
+    real(pois_r), pointer :: p(:,:,:)
+    real(pois_r), pointer :: Fp(:,:,:)
 
     Fp(:,:,:) = Fp(:,:,:) / sqrt(ijtot)
 

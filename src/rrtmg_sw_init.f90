@@ -1520,7 +1520,7 @@
       subroutine swcldpr
 !***********************************************************************
 
-! Purpose: Define cloud extinction coefficient, single scattering albedo
+! Purpose: Define cloud extinction coefficient, s_r scattering albedo
 !          and asymmetry parameter data.
 !
 
@@ -1541,7 +1541,7 @@
 !    requires further user input to specify the method to be used to
 !    compute the aborption due to each.
 !  INFLAG = 0:  For each cloudy layer, the cloud fraction, the cloud optical
-!    depth, the cloud single-scattering albedo, and the
+!    depth, the cloud s_r-scattering albedo, and the
 !    moments of the phase function (0:NSTREAM).  Note
 !    that these values are delta-m scaled within this
 !    subroutine.
@@ -1558,7 +1558,7 @@
 !    This version uses Ebert and Curry, JGR, (1992) method for
 !    ice particles larger than 131.0 microns.
 !  ICEFLAG = 3:  The ice generalized effective size (dge) is input
-!    and the optical depths, single-scattering albedo,
+!    and the optical depths, s_r-scattering albedo,
 !    and phase function moments are calculated as in
 !    Q. Fu, J. Climate, (1996). Q. Fu provided high resolution
 !    tables which were appropriately averaged for the
@@ -2305,7 +2305,7 @@
         & 1.540539e-02_rb,1.496287e-02_rb,1.454295e-02_rb,1.414392e-02_rb,1.376423e-02_rb,&
         & 1.340247e-02_rb,1.305739e-02_rb,1.272784e-02_rb /)
 
-! single-scattering albedo: unitless
+! s_r-scattering albedo: unitless
       ssaice2(:, 16) = (/ &
 ! band 16
         & 6.630615e-01_rb,6.451169e-01_rb,6.333696e-01_rb,6.246927e-01_rb,6.178420e-01_rb,&
@@ -2788,7 +2788,7 @@
         & 1.915659e-02_rb,1.861787e-02_rb,1.810304e-02_rb,1.761055e-02_rb,1.713899e-02_rb,&
         & 1.668704e-02_rb /)
 
-! single-scattering albedo: unitless
+! s_r-scattering albedo: unitless
       ssaice3(:, 16) = (/ &
 ! band 16
         & 6.749442e-01_rb,6.649947e-01_rb,6.565828e-01_rb,6.489928e-01_rb,6.420046e-01_rb,&

@@ -23,6 +23,7 @@
 !  Copyright 2014 Netherlands eScience Center
 !
 module modfft2d
+use modprecision, only : pois_r
 
 implicit none
 
@@ -31,7 +32,7 @@ save
   real, dimension(:),     allocatable :: winew, wjnew
   real, dimension(:,:,:), allocatable :: worka, workb
   real, dimension(:),     allocatable :: bufin, bufout
-  real, allocatable, target           :: fptr(:)
+  real(pois_r), allocatable, target           :: fptr(:)
 
 contains
 
@@ -40,8 +41,8 @@ contains
     use modglobal, only: itot, jtot, imax, jmax, kmax, i1, j1, ih, jh
     implicit none
 
-    real, pointer        :: p(:,:,:)
-    real, pointer        :: Fp(:,:,:)
+    real(pois_r), pointer        :: p(:,:,:)
+    real(pois_r), pointer        :: Fp(:,:,:)
     real, allocatable    :: d(:,:,:)
     real, allocatable    :: xyrt(:,:)
     integer, intent(out) :: ps,pe,qs,qe
@@ -152,8 +153,8 @@ contains
   subroutine fft2dexit(p, Fp, d, xyrt)
     implicit none
 
-    real, pointer     :: p(:,:,:)
-    real, pointer     :: Fp(:,:,:)
+    real(pois_r), pointer     :: p(:,:,:)
+    real(pois_r), pointer     :: Fp(:,:,:)
     real, allocatable :: d(:,:,:)
     real, allocatable :: xyrt(:,:)
 
@@ -209,15 +210,15 @@ contains
 
 
   subroutine transpose_a(p,ptrans)
-! data are on a single processor in the k-direction for p
-! data are on a single processor in the i-direction for ptrans
+! data are on a s_r processor in the k-direction for p
+! data are on a s_r processor in the i-direction for ptrans
 
     use mpi
     use modmpi, only : commrow, mpierr, my_real, nprocx
     use modglobal, only : i1,j1, itot, imax,jmax, kmax, ih, jh
     implicit none
 
-    real, intent(in)  ::   p(2-ih:i1+ih,2-jh:j1+jh,kmax)
+    real(pois_r), intent(in)  ::   p(2-ih:i1+ih,2-jh:j1+jh,kmax)
     real, intent(out) ::   ptrans(itot,jmax,nkonx)
 
     integer :: n, i,j,k, ii
@@ -255,15 +256,15 @@ contains
   end subroutine
 
   subroutine transpose_ainv(p,ptrans)
-! data are on a single processor in the k-direction for p
-! data are on a single processor in the i-direction for ptrans
+! data are on a s_r processor in the k-direction for p
+! data are on a s_r processor in the i-direction for ptrans
 
     use mpi
     use modmpi, only : commrow, mpierr, my_real, nprocx
     use modglobal, only : i1,j1, itot, imax,jmax, kmax, ih, jh
     implicit none
 
-    real, intent(inout)  :: p(2-ih:i1+ih,2-jh:j1+jh,kmax)
+    real(pois_r), intent(inout)  :: p(2-ih:i1+ih,2-jh:j1+jh,kmax)
     real, intent(in)     :: ptrans(itot,jmax,nkonx)
 
     integer :: n, i,j,k, ii
@@ -301,15 +302,15 @@ contains
   end subroutine
 
   subroutine transpose_b(p,ptrans)
-! data are on a single processor in the k-direction for p
-! data are on a single processor in the i-direction for ptrans
+! data are on a s_r processor in the k-direction for p
+! data are on a s_r processor in the i-direction for ptrans
 
     use mpi
     use modmpi, only : commcol, mpierr, nprocy, my_real
     use modglobal, only : i1,j1, jtot, imax,jmax, kmax, ih, jh
     implicit none
 
-    real, intent(in)  ::   p(2-ih:i1+ih,2-jh:j1+jh,kmax)
+    real(pois_r), intent(in)  ::   p(2-ih:i1+ih,2-jh:j1+jh,kmax)
     real, intent(out) ::   ptrans(jtot,imax,nkony)
 
     integer :: n, i,j,k, ii
@@ -348,15 +349,15 @@ contains
   end subroutine
 
   subroutine transpose_binv(p,ptrans)
-! data are on a single processor in the k-direction for p
-! data are on a single processor in the i-direction for ptrans
+! data are on a s_r processor in the k-direction for p
+! data are on a s_r processor in the i-direction for ptrans
 
     use mpi
     use modmpi, only : commcol, mpierr, nprocy, my_real
     use modglobal, only : i1,j1, jtot, imax,jmax, kmax, ih, jh
     implicit none
 
-    real, intent(inout)  ::   p(2-ih:i1+ih,2-jh:j1+jh,kmax)
+    real(pois_r), intent(inout)  ::   p(2-ih:i1+ih,2-jh:j1+jh,kmax)
     real, intent(in)     ::   ptrans(jtot,imax,nkony)
 
     integer :: n, i,j,k, ii
@@ -401,8 +402,8 @@ contains
 
     implicit none
 
-    real, intent(inout) ::  p(2-ih:i1+ih,2-jh:j1+jh,kmax)
-    real, intent(inout) :: Fp(2-ih:i1+ih,2-jh:j1+jh,kmax)
+    real(pois_r), intent(inout) ::  p(2-ih:i1+ih,2-jh:j1+jh,kmax)
+    real(pois_r), intent(inout) :: Fp(2-ih:i1+ih,2-jh:j1+jh,kmax)
 
     integer :: i,j,k, ke
 
@@ -449,8 +450,8 @@ contains
 
     implicit none
 
-    real, intent(inout) ::  p(2-ih:i1+ih,2-jh:j1+jh,kmax)
-    real, intent(inout) :: Fp(2-ih:i1+ih,2-jh:j1+jh,kmax)
+    real(pois_r), intent(inout) ::  p(2-ih:i1+ih,2-jh:j1+jh,kmax)
+    real(pois_r), intent(inout) :: Fp(2-ih:i1+ih,2-jh:j1+jh,kmax)
 
     integer :: i,j,k, ke
 

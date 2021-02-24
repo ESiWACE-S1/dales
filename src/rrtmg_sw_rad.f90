@@ -115,7 +115,7 @@
 !     The mode is chosen by using either rrtmg_sw.nomcica.f90 (to not use
 !     McICA) or rrtmg_sw.f90 (to use McICA) to interface with a GCM.
 !
-!    1) Standard, single forward model calculation (imca = 0); this is
+!    1) Standard, s_r forward model calculation (imca = 0); this is
 !       valid only for clear sky or fully overcast clouds
 !    2) Monte Carlo Independent Column Approximation (McICA, Pincus et al.,
 !       JC, 2003) method is applied to the forward model calculation (imca = 1)
@@ -126,7 +126,7 @@
 !     flags inflag, iceflag and liqflag; see text file rrtmg_sw_instructions
 !     and subroutine rrtmg_sw_cldprop.f90 for further details):
 !
-!    1) Input cloud fraction, cloud optical depth, single scattering albedo
+!    1) Input cloud fraction, cloud optical depth, s_r scattering albedo
 !       and asymmetry parameter directly (inflgsw = 0)
 !    2) Input cloud fraction and cloud physical properties: ice fracion,
 !       ice and liquid particle sizes (inflgsw = 1 or 2);
@@ -137,7 +137,7 @@
 !     Aerosol properties can be input in one of two ways (controlled by input
 !     flag iaer, see text file rrtmg_sw_instructions for further details):
 !
-!    1) Input aerosol optical depth, single scattering albedo and asymmetry
+!    1) Input aerosol optical depth, s_r scattering albedo and asymmetry
 !       parameter directly by layer and spectral band (iaer=10)
 !    2) Input aerosol optical depth and 0.55 micron directly by layer and use
 !       one or more of six ECMWF aerosol types (iaer=6)
@@ -240,7 +240,7 @@
                                                       !    Dimensions: (ncol,nlay)
 !      real(kind=rb), intent(in) :: taucld(:,:,:)      ! In-cloud optical depth (Dummy)
                                                       !    Dimensions: (nbndsw,ncol,nlay)
-!      real(kind=rb), intent(in) :: ssacld(:,:,:)      ! In-cloud single scattering albedo (Dummy)
+!      real(kind=rb), intent(in) :: ssacld(:,:,:)      ! In-cloud s_r scattering albedo (Dummy)
                                                       !    Dimensions: (nbndsw,ncol,nlay)
 !      real(kind=rb), intent(in) :: asmcld(:,:,:)      ! In-cloud asymmetry parameter (Dummy)
                                                       !    Dimensions: (nbndsw,ncol,nlay)
@@ -267,7 +267,7 @@
 !      real(kind=rb), intent(in) :: tauaer(:,:,:)      ! Aerosol optical depth (iaer=10 only) (Dummy)
                                                       !    Dimensions: (ncol,nlay,nbndsw)
                                                       ! (non-delta scaled)
-!      real(kind=rb), intent(in) :: ssaaer(:,:,:)      ! Aerosol single scattering albedo (iaer=10 only) (Dummy)
+!      real(kind=rb), intent(in) :: ssaaer(:,:,:)      ! Aerosol s_r scattering albedo (iaer=10 only) (Dummy)
                                                       !    Dimensions: (ncol,nlay,nbndsw)
                                                       ! (non-delta scaled)
 !      real(kind=rb), intent(in) :: asmaer(:,:,:)      ! Aerosol asymmetry parameter (iaer=10 only) (Dummy)
@@ -332,7 +332,7 @@
       real(kind=rb) :: albdif(nbndsw)         ! surface albedo, diffuse         ! zalbd
 
       real(kind=rb) :: taua(nzrad+2,nbndsw)    ! Aerosol optical depth
-      real(kind=rb) :: ssaa(nzrad+2,nbndsw)    ! Aerosol single scattering albedo
+      real(kind=rb) :: ssaa(nzrad+2,nbndsw)    ! Aerosol s_r scattering albedo
       real(kind=rb) :: asma(nzrad+2,nbndsw)    ! Aerosol asymmetry parameter
 
 ! Atmosphere - setcoef
@@ -370,7 +370,7 @@
 
       real(kind=rb) :: cldfrac(nzrad+2)        ! layer cloud fraction
       real(kind=rb) :: tauc(nbndsw,nzrad+2)    ! in-cloud optical depth (non-delta scaled)
-      real(kind=rb) :: ssac(nbndsw,nzrad+2)    ! in-cloud single scattering albedo (non-delta scaled)
+      real(kind=rb) :: ssac(nbndsw,nzrad+2)    ! in-cloud s_r scattering albedo (non-delta scaled)
       real(kind=rb) :: asmc(nbndsw,nzrad+2)    ! in-cloud asymmetry parameter (non-delta scaled)
       real(kind=rb) :: fsfc(nbndsw,nzrad+2)    ! in-cloud forward scattering fraction (non-delta scaled)
       real(kind=rb) :: ciwp(nzrad+2)           ! in-cloud ice water path
@@ -380,7 +380,7 @@
 
       real(kind=rb) :: taucloud(nzrad+2,jpband)  ! in-cloud optical depth
       real(kind=rb) :: taucldorig(nzrad+2,jpband)! in-cloud optical depth (non-delta scaled)
-      real(kind=rb) :: ssacloud(nzrad+2,jpband)  ! in-cloud single scattering albedo
+      real(kind=rb) :: ssacloud(nzrad+2,jpband)  ! in-cloud s_r scattering albedo
       real(kind=rb) :: asmcloud(nzrad+2,jpband)  ! in-cloud asymmetry parameter
 
 ! Atmosphere/clouds/aerosol - spcvrt,spcvmc
@@ -388,10 +388,10 @@
       real(kind=rb) :: ztaucorig(nzrad+2,nbndsw) ! unscaled cloud optical depth
       real(kind=rb) :: zasyc(nzrad+2,nbndsw)     ! cloud asymmetry parameter
                                                 !  (first moment of phase function)
-      real(kind=rb) :: zomgc(nzrad+2,nbndsw)     ! cloud single scattering albedo
+      real(kind=rb) :: zomgc(nzrad+2,nbndsw)     ! cloud s_r scattering albedo
       real(kind=rb) :: ztaua(nzrad+2,nbndsw)     ! total aerosol optical depth
       real(kind=rb) :: zasya(nzrad+2,nbndsw)     ! total aerosol asymmetry parameter
-      real(kind=rb) :: zomga(nzrad+2,nbndsw)     ! total aerosol single scattering albedo
+      real(kind=rb) :: zomga(nzrad+2,nbndsw)     ! total aerosol s_r scattering albedo
 
       real(kind=rb) :: zbbfu(nzrad+3)          ! temporary upward shortwave flux (w/m2)
       real(kind=rb) :: zbbfd(nzrad+3)          ! temporary downward shortwave flux (w/m2)
@@ -437,7 +437,7 @@
 ! Dummy variables
       real(kind=rb) :: taucld(nbndsw,imax,nzrad+2)      ! In-cloud optical depth (Dummy)
                                                       !    Dimensions: (nbndsw,ncol,nlay)
-      real(kind=rb) :: ssacld(nbndsw,imax,nzrad+2)      ! In-cloud single scattering albedo (Dummy)
+      real(kind=rb) :: ssacld(nbndsw,imax,nzrad+2)      ! In-cloud s_r scattering albedo (Dummy)
                                                       !    Dimensions: (nbndsw,ncol,nlay)
       real(kind=rb) :: asmcld(nbndsw,imax,nzrad+2)      ! In-cloud asymmetry parameter (Dummy)
                                                       !    Dimensions: (nbndsw,ncol,nlay)
@@ -446,7 +446,7 @@
       real(kind=rb) :: tauaer(imax,nzrad+2,nbndsw)      ! Aerosol optical depth (iaer=10 only) (Dummy)
                                                       !    Dimensions: (ncol,nlay,nbndsw)
                                                       ! (non-delta scaled)
-      real(kind=rb) :: ssaaer(imax,nzrad+2,nbndsw)      ! Aerosol single scattering albedo (iaer=10 only) (Dummy)
+      real(kind=rb) :: ssaaer(imax,nzrad+2,nbndsw)      ! Aerosol s_r scattering albedo (iaer=10 only) (Dummy)
                                                       !    Dimensions: (ncol,nlay,nbndsw)
                                                       ! (non-delta scaled)
       real(kind=rb) :: asmaer(imax,nzrad+2,nbndsw)      ! Aerosol asymmetry parameter (iaer=10 only) (Dummy)
@@ -501,7 +501,7 @@
 ! iaer = 0, no aerosols
 ! iaer = 6, use six ECMWF aerosol types
 !           input aerosol optical depth at 0.55 microns for each aerosol type (ecaer)
-! iaer = 10, input total aerosol optical depth, single scattering albedo
+! iaer = 10, input total aerosol optical depth, s_r scattering albedo
 !            and asymmetry parameter (tauaer, ssaaer, asmaer) directly
       iaer = 0
 
@@ -848,7 +848,7 @@
                                                       ! Dimensions: (ncol,nlay)
       real(kind=rb), intent(in) :: taucld(:,:,:)      ! In-cloud optical depth (optional)
                                                       ! Dimensions: (nbndsw,ncol,nlay)
-      real(kind=rb), intent(in) :: ssacld(:,:,:)      ! In-cloud single scattering albedo
+      real(kind=rb), intent(in) :: ssacld(:,:,:)      ! In-cloud s_r scattering albedo
                                                       ! Dimensions: (nbndsw,ncol,nlay)
       real(kind=rb), intent(in) :: asmcld(:,:,:)      ! In-cloud asymmetry parameter
                                                       ! Dimensions: (nbndsw,ncol,nlay)
@@ -865,7 +865,7 @@
 
       real(kind=rb), intent(in) :: tauaer(:,:,:)      ! Aerosol optical depth
                                                       ! Dimensions: (ncol,nlay,nbndsw)
-      real(kind=rb), intent(in) :: ssaaer(:,:,:)      ! Aerosol single scattering albedo
+      real(kind=rb), intent(in) :: ssaaer(:,:,:)      ! Aerosol s_r scattering albedo
                                                       ! Dimensions: (ncol,nlay,nbndsw)
       real(kind=rb), intent(in) :: asmaer(:,:,:)      ! Aerosol asymmetry parameter
                                                       ! Dimensions: (ncol,nlay,nbndsw)
@@ -896,7 +896,7 @@
                                                       !  default value of 1368.22 Wm-2 at 1 AU
       real(kind=rb), intent(out) :: taua(:,:)         ! Aerosol optical depth
                                                       ! Dimensions: (nlay,nbndsw)
-      real(kind=rb), intent(out) :: ssaa(:,:)         ! Aerosol single scattering albedo
+      real(kind=rb), intent(out) :: ssaa(:,:)         ! Aerosol s_r scattering albedo
                                                       ! Dimensions: (nlay,nbndsw)
       real(kind=rb), intent(out) :: asma(:,:)         ! Aerosol asymmetry parameter
                                                       ! Dimensions: (nlay,nbndsw)
@@ -910,7 +910,7 @@
                                                       ! Dimensions: (nlay)
       real(kind=rb), intent(out) :: tauc(:,:)         ! in-cloud optical depth (non-delta scaled)
                                                       ! Dimensions: (nbndsw,nlay)
-      real(kind=rb), intent(out) :: ssac(:,:)         ! in-cloud single scattering albedo (non-delta-scaled)
+      real(kind=rb), intent(out) :: ssac(:,:)         ! in-cloud s_r scattering albedo (non-delta-scaled)
                                                       ! Dimensions: (nbndsw,nlay)
       real(kind=rb), intent(out) :: asmc(:,:)         ! in-cloud asymmetry parameter (non-delta scaled)
                                                       ! Dimensions: (nbndsw,nlay)
@@ -983,7 +983,7 @@
 ! Set incoming solar flux adjustment to include adjustment for
 ! current Earth/Sun distance (ADJFLX) and scaling of default internal
 ! solar constant (rrsw_scon = 1368.22 Wm-2) by band (SOLVAR).  SOLVAR can be set
-! to a single scaling factor as needed, or to a different value in each
+! to a s_r scaling factor as needed, or to a different value in each
 ! band, which may be necessary for paleoclimate simulations.
 !
       do ib = jpb1,jpb2

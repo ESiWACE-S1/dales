@@ -18,14 +18,14 @@
 !
 !  name     type     purpose
 ! -----  :  ----   : ----------------------------------------------
-! xxxliq1 : real   : optical properties (extinction coefficient, single
+! xxxliq1 : real   : optical properties (extinction coefficient, s_r
 !                    scattering albedo, assymetry factor) from
 !                    Hu & Stamnes, j. clim., 6, 728-742, 1993.
-! xxxice2 : real   : optical properties (extinction coefficient, single
+! xxxice2 : real   : optical properties (extinction coefficient, s_r
 !                    scattering albedo, assymetry factor) from streamer v3.0,
 !                    Key, streamer user's guide, cooperative institude
 !                    for meteorological studies, 95 pp., 2001.
-! xxxice3 : real   : optical properties (extinction coefficient, single
+! xxxice3 : real   : optical properties (extinction coefficient, s_r
 !                    scattering albedo, assymetry factor) from
 !                    Fu, j. clim., 9, 1996.
 ! xbari   : real   : optical property coefficients for five spectral

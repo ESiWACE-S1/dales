@@ -33,7 +33,7 @@
 module modtimestat
 
 
-  use modglobal, only : longint
+  use modglobal, only : l_i
 
 implicit none
 ! private
@@ -49,7 +49,7 @@ save
   character(40) :: name
 
   real    :: dtav
-  integer(kind=longint) :: idtav,tnext
+  integer(kind=l_i) :: idtav,tnext
   logical :: ltimestat= .false. !<switch for timestatistics (on/off)
   real    :: zi,ziold=-1, we
   integer, parameter :: iblh_flux = 1, iblh_grad = 2, iblh_thres = 3

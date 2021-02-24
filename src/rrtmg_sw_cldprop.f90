@@ -70,7 +70,7 @@
                                                       !    Dimensions: (nlayers)
       real(kind=rb), intent(in) :: tauc(:,:)          ! cloud optical depth
                                                       !    Dimensions: (nbndsw,nlayers)
-      real(kind=rb), intent(in) :: ssac(:,:)          ! single scattering albedo
+      real(kind=rb), intent(in) :: ssac(:,:)          ! s_r scattering albedo
                                                       !    Dimensions: (nbndsw,nlayers)
       real(kind=rb), intent(in) :: asmc(:,:)          ! asymmetry parameter
                                                       !    Dimensions: (nbndsw,nlayers)
@@ -83,7 +83,7 @@
                                                       !    Dimensions: (nlayers,jpband)
       real(kind=rb), intent(out) :: taucldorig(:,:)   ! cloud optical depth (non-delta scaled)
                                                       !    Dimensions: (nlayers,jpband)
-      real(kind=rb), intent(out) :: ssacloud(:,:)     ! single scattering albedo (delta scaled)
+      real(kind=rb), intent(out) :: ssacloud(:,:)     ! s_r scattering albedo (delta scaled)
                                                       !    Dimensions: (nlayers,jpband)
       real(kind=rb), intent(out) :: asmcloud(:,:)     ! asymmetry parameter (delta scaled)
                                                       !    Dimensions: (nlayers,jpband)

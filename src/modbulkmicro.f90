@@ -45,6 +45,7 @@ module modbulkmicro
 !
 !   bulkmicro is called from *modmicrophysics*
 !*********************************************************************
+  use modprecision, only : dp
   implicit none
   private
   public initbulkmicro, exitbulkmicro, bulkmicro
@@ -80,9 +81,9 @@ module modbulkmicro
             ,qrmask   (2:i1,2:j1,k1)  & !
             ,qcmask   (2:i1,2:j1,k1)  )
 
-    gamma25=lacz_gamma(2.5)
+    gamma25=lacz_gamma(2.5_dp)
     gamma3=2.
-    gamma35=lacz_gamma(3.5)
+    gamma35=lacz_gamma(3.5_dp)
   end subroutine initbulkmicro
 
 !> Cleaning up after the run

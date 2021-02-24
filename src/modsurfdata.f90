@@ -29,6 +29,7 @@
 
 
 module modsurfdata
+use modprecision, only : field_r
 
 ! implicit none
 
@@ -218,7 +219,7 @@ SAVE
   real              :: oblav            !<  Spatially averaged obukhov length [m]
   real, allocatable :: Cm    (:,:)      !<  Drag coefficient for momentum [-]
   real, allocatable :: Cs    (:,:)      !<  Drag coefficient for scalars [-]
-  real, allocatable :: ustar (:,:)      !<  Friction velocity [m/s]
+  real(field_r), allocatable :: ustar (:,:)      !<  Friction velocity [m/s]
   real, allocatable :: thlflux (:,:)    !<  Kinematic temperature flux [K m/s]
   real, allocatable :: qtflux  (:,:)    !<  Kinematic specific humidity flux [kg/kg m/s]
   real, allocatable :: svflux  (:,:,:)  !<  Kinematic scalar flux [- m/s]

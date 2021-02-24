@@ -50,6 +50,7 @@ module modbulkmicro3
 !*********************************************************************
   use modmicrodata
   use modmicrodata3
+  use modprecision, only : dp
 
   implicit none
   private
@@ -1115,7 +1116,7 @@ real function calc_avent (nn, mu_a, nu_a, a_a,b_a, av)
   implicit none
   real, intent(in) ::  mu_a, nu_a, a_a,b_a, av
   integer, intent(in) :: nn
-  real :: arg11, arg12, arg21, arg22, mtt11, mtt12, mtt21,mtt22, expon02
+  real(dp) :: arg11, arg12, arg21, arg22, mtt11, mtt12, mtt21,mtt22, expon02
 
   ! calculation itself
   arg11     = (nu_a+nn+b_a)/mu_a
@@ -1145,7 +1146,7 @@ real function calc_bvent (nn, mu_a, nu_a, a_a, b_a, beta_a, bv)
   implicit none
   real, intent(in) ::  mu_a, nu_a, a_a,b_a, beta_a, bv
   integer, intent(in) :: nn
-  real :: arg11, arg12, arg21, arg22, mtt11, mtt12, mtt21,mtt22, expon02
+  real(dp) :: arg11, arg12, arg21, arg22, mtt11, mtt12, mtt21,mtt22, expon02
 
   ! calculation itself
   arg11     = (nu_a+nn+(3.0/2.0)*b_a+0.5*beta_a)/mu_a
@@ -1174,7 +1175,7 @@ real function calc_delta_b (kk, mu_b, nu_b, b_b)
   implicit none
   real, intent(in) ::  mu_b, nu_b, b_b
   integer, intent(in) :: kk
-  real :: arg11, arg12, arg21, arg22, mtt11, mtt12, mtt21,mtt22, expon02
+  real(dp) :: arg11, arg12, arg21, arg22, mtt11, mtt12, mtt21,mtt22, expon02
 
   ! calculation itself
   arg11     = (2.0*b_b+nu_b+1+kk)/mu_b
@@ -1204,11 +1205,11 @@ real function calc_delta_ab (kk, mu_a, nu_a, b_a, mu_b, nu_b, b_b)
   implicit none
   real, intent(in) ::  mu_a, nu_a, b_a, mu_b, nu_b, b_b
   integer, intent(in) :: kk
-  real :: arg11, arg12, arg21, arg22     &
-         ,arg13, arg14, arg23, arg24     &
-         ,mtt11, mtt12, mtt21,mtt22      &
-         ,mtt13, mtt14, mtt23,mtt24      &
-         ,exp03,exp04
+  real(dp) :: arg11, arg12, arg21, arg22     &
+            , arg13, arg14, arg23, arg24     &
+            , mtt11, mtt12, mtt21,mtt22      &
+            , mtt13, mtt14, mtt23,mtt24      &
+            , exp03,exp04
 
   ! calculation itself
   arg11     = (b_a+nu_a+1+kk)/mu_a
@@ -1249,9 +1250,9 @@ real function calc_th_b (kk, mu_b, nu_b, b_b, beta_b)
 
   real, intent(in) ::  mu_b, nu_b, b_b, beta_b
   integer, intent(in) :: kk
-  real :: arg11, arg12, arg21, arg22     &
-         ,mtt11, mtt12, mtt21,mtt22      &
-         ,exp02
+  real(dp) :: arg11, arg12, arg21, arg22     &
+            , mtt11, mtt12, mtt21,mtt22      &
+            , exp02
 
   ! calculation itself
   arg11     = (2.0*beta_b+2.0*b_b+nu_b+1.0+kk)/mu_b
@@ -1284,11 +1285,11 @@ real function calc_th_ab (kk, mu_a, nu_a, b_a, beta_a, mu_b, nu_b, b_b, beta_b)
   real, intent(in) ::  mu_a, nu_a, b_a, beta_a, mu_b, nu_b, b_b, beta_b
   integer, intent(in) :: kk
 
-  real :: arg11, arg12, arg21, arg22     &
-         ,arg13, arg14, arg23, arg24     &
-         ,mtt11, mtt12, mtt21,mtt22      &
-         ,mtt13, mtt14, mtt23,mtt24      &
-         ,exp03,exp04
+  real(dp) :: arg11, arg12, arg21, arg22     &
+            , arg13, arg14, arg23, arg24     &
+            , mtt11, mtt12, mtt21,mtt22      &
+            , mtt13, mtt14, mtt23,mtt24      &
+            , exp03,exp04
 
   ! calculation itself
   arg11     = (beta_a+b_a+nu_a+1+kk)/mu_a
@@ -1329,9 +1330,9 @@ real function calc_cons_mmt (kk, mu_a, nu_a)
 
   real, intent(in) ::    mu_a, nu_a
   integer, intent(in) :: kk
-  real :: arg11, arg12, arg21, arg22     &
-         ,mtt11, mtt12, mtt21,mtt22      &
-         ,exp02
+  real(dp) :: arg11, arg12, arg21, arg22     &
+            , mtt11, mtt12, mtt21,mtt22      &
+            , exp02
 
   ! calculation itself
   arg11     = (nu_a+1+kk)/mu_a
@@ -1362,9 +1363,9 @@ real function calc_cons_v (kk, mu_a, nu_a, al_a, be_a)
 
   real, intent(in) ::    mu_a, nu_a, al_a, be_a
   integer, intent(in) :: kk
-  real :: arg11, arg12, arg21, arg22     &
-         ,mtt11, mtt12, mtt21,mtt22      &
-         ,exp02
+  real(dp) :: arg11, arg12, arg21, arg22     &
+            , mtt11, mtt12, mtt21,mtt22      &
+            , exp02
 
   ! calculation itself
   arg11     = (nu_a+be_a+1+kk)/mu_a
@@ -1395,9 +1396,9 @@ real function calc_cons_lbd (mu_a, nu_a)
 
   real, intent(in) ::    mu_a, nu_a
   ! integer, intent(in) :: kk
-  real :: arg11, arg21                   &
-         ,mtt11, mtt21                   &
-         ,exp01
+  real(dp) :: arg11, arg21                   &
+            , mtt11, mtt21                   &
+            , exp01
 
   ! calculation itself
   arg11     = (nu_a+1.0)/mu_a

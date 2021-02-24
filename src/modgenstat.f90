@@ -66,7 +66,8 @@ module modgenstat
     !                                                                 |
     !    lstat      SWITCH TO ENABLE TIMESERIES                       |
     !-----------------------------------------------------------------|
-  use modglobal, only : longint
+  use modglobal, only : l_i
+  use modprecision
 
 implicit none
 ! private
@@ -81,7 +82,7 @@ save
   character(80),dimension(1,4) :: tncname
 
   real    :: dtav, timeav
-  integer(kind=longint) :: idtav,itimeav,tnext,tnextwrite
+  integer(kind=l_i) :: idtav,itimeav,tnext,tnextwrite
   logical :: lstat= .false. ! switch for conditional sampling cloud (on/off)
   integer :: nsamples
 !     ----  total fields  ---
@@ -520,7 +521,7 @@ contains
               thv2av  , &
               th2av   , &
               ql2av
-    real,allocatable, dimension(:,:,:)::  thv0
+    real(field_r),allocatable, dimension(:,:,:)::  thv0
     real,allocatable, dimension(:)::   thvmav
     real ,allocatable, dimension(:,:,:):: sv0h
 

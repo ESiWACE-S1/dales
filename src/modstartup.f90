@@ -382,7 +382,7 @@ contains
                                   rtimee,timee,ntrun,btime,dt_lim,nsv,&
                                   zf,dzf,dzh,rv,rd,cp,rlv,pref0,om23_gs,&
                                   ijtot,cu,cv,e12min,dzh,cexpnr,ifinput,lwarmstart,ltotruntime,itrestart,&
-                                  trestart, ladaptive,llsadv,tnextrestart,longint
+                                  trestart, ladaptive,llsadv,tnextrestart,l_i
     use modsubgrid,        only : ekm,ekh
     use modsurfdata,       only : wsvsurf, &
                                   thls,tskin,tskinm,tsoil,tsoilm,phiw,phiwm,Wl,Wlm,thvs,qts,isurf,svs,obl,oblav,&
@@ -812,13 +812,13 @@ contains
     if (.not.(ltotruntime)) then
       runtime = runtime + btime*tres
     end if
-    timeleft=ceiling((runtime)/tres-btime,longint)
+    timeleft=ceiling((runtime)/tres-btime,l_i)
 
     dt_lim = timeleft
     rdt = real(dt)*tres
     ntrun   = 0
     rtimee  = real(timee)*tres
-    itrestart = floor(trestart/tres,longint)
+    itrestart = floor(trestart/tres,l_i)
     tnextrestart = btime + itrestart
 
     deallocate (height,th0av,thv0)

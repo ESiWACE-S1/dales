@@ -29,7 +29,7 @@
 module modlsmcrosssection
 
 
-  use modglobal, only : longint
+  use modglobal, only : l_i
   use modsurfdata,only : ksoilmax
 
 implicit none
@@ -61,7 +61,7 @@ save
 
 
   real    :: dtav
-  integer(kind=longint) :: idtav,tnext
+  integer(kind=l_i) :: idtav,tnext
   logical :: lcross = .false. !< switch for doing the lsmcrosssection (on/off)
   integer :: crossplane = 2 !< Location of the xz lsmcrosssection
 

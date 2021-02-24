@@ -26,7 +26,7 @@
 !  Copyright 1993-2009 Delft University of Technology, Wageningen University, Utrecht University, KNMI
 !
 module modsamptend
-  use modglobal, only : longint
+  use modglobal, only : l_i
   use modsampdata
   implicit none
   private
@@ -36,7 +36,7 @@ module modsamptend
   integer, parameter :: nvar = 66
   character(80),allocatable,dimension(:,:,:) :: ncname
   character(80),dimension(1,4) :: tncname
-  integer(kind=longint) :: idtav,itimeav,tnext,tnextwrite
+  integer(kind=l_i) :: idtav,itimeav,tnext,tnextwrite
   integer,public,parameter :: tend_tot=1,tend_start=1,tend_adv=2,tend_subg=3,tend_force=4,tend_rad=5,&
                               tend_ls=6,tend_micro=7, tend_topbound=8,tend_pois=9,tend_addon=10, tend_coriolis=11, tend_totlb=12
   integer,parameter :: nrfields = 12

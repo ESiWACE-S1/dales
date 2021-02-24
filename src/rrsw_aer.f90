@@ -49,7 +49,7 @@
 ! -----   : ----   : ----------------------------------------------
 ! rsrtaua : real   : ratio of average optical thickness in
 !                    spectral band to that at 0.55 micron
-! rsrpiza : real   : average single scattering albedo (unitless)
+! rsrpiza : real   : average s_r scattering albedo (unitless)
 ! rsrasya : real   : average asymmetry parameter (unitless)
 !------------------------------------------------------------------
 

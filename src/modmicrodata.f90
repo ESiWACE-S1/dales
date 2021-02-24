@@ -23,6 +23,7 @@
 !
 
   module modmicrodata
+  use modprecision, only : field_r, dp
 
   use modglobal, only : rhow,lacz_gamma
   implicit none
@@ -157,7 +158,7 @@
   real, parameter ::  D_eq = 1.1E-3,  & !<  Parameters for break-up
             k_br = 1000       !<
 
-   real,allocatable,dimension(:,:,:) :: Nr,Nrp,qltot,qr,qrp,thlpmcr,qtpmcr
+   real(field_r),allocatable,dimension(:,:,:) :: Nr,Nrp,qltot,qr,qrp,thlpmcr,qtpmcr
    real,allocatable,dimension(:,:,:) :: precep
 
   real :: delt
@@ -179,27 +180,29 @@
   real :: evapfactor = 1.0      !  Prefactor to reduce evaporation
   real :: courantp = 1.0        !  CFLmax-criterion for precipitation
 
+  real(dp), parameter :: &
+      bbg=3.&
+     ,bbr=3. &
+     ,bbs=2. &
+     ,ddg=0.25 &
+     ,ddr=0.5 &
+     ,dds=0.25 
+
   real, parameter :: &
      ! Mass-diameter parameters A and B, terminal velocity parameters C, and D
      ! GRABOWSKI
      aar=5.2e2 &
-     ,bbr=3. &
      ,ccr=130. &
-     ,ddr=0.5 &
 !     ,ccr=842. & coefficients in Khairoutdinov and Randall
 !     ,ddr=0.8 & coefficients in Khairoutdinov and Randall
      ! For snow
      ! GRABOWSKI
      ,aas=2.5e-2 &
-     ,bbs=2. &
      ,ccs=4. &
-     ,dds=0.25 &
      ! For graupel (if present, following Tomita 2008 for terminal velocities and using mass-diameter
      ! relationship as for rain, but with only 40% of density)
      ,aag=2.e2 &
-     ,bbg=3.&
      ,ccg=82.5 &
-     ,ddg=0.25 &
      ! Collection efficiency matrix, alpha factor of Grabowski has been absorbed here GRABOSKWI
      ,ceffrl=0.8 &
      ,ceffsl=0.06 & ! probably 0.8 is better, wsa exp 156

@@ -27,7 +27,7 @@
 !
 module modquadrant
 
-use modglobal, only : longint
+use modglobal, only : l_i
 
 implicit none
 private
@@ -43,7 +43,7 @@ save
   integer                                    :: ncid,nrec = 0
   character(80),allocatable,dimension(:,:,:) :: ncname
   character(80),dimension(1,4)               :: tncname
-  integer(kind=longint)                      :: idtav,itimeav,tnext,tnextwrite
+  integer(kind=l_i)                      :: idtav,itimeav,tnext,tnextwrite
   integer, parameter                         :: isamptot=4
   integer                                    :: isamp
   character(30),dimension(4)                 :: samplname,longsamplname

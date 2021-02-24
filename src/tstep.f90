@@ -46,7 +46,7 @@ implicit none
 contains
 subroutine tstep_update
   use modglobal, only : i1,j1,rk3step,timee,rtimee,dtmax,dt,ntrun,courant,peclet,dt_reason, &
-                        kmax,dx,dy,dzh,dt_lim,ladaptive,timeleft,idtmax,rdt,tres,longint ,lwarmstart
+                        kmax,dx,dy,dzh,dt_lim,ladaptive,timeleft,idtmax,rdt,tres,l_i ,lwarmstart
   use modfields, only : um,vm,wm,up,vp,wp,thlp,svp,qtp,e12p
   use modsubgrid,only : ekm,ekh
   use mpi
@@ -88,8 +88,8 @@ subroutine tstep_update
         end do
         call MPI_ALLREDUCE(peclettotl,peclettot,1,MY_REAL,MPI_MAX,comm3d,mpierr)
         if ( pecletold>0) then
-           dt = min(timee,dt_lim,idtmax,floor(rdt/tres*courant/courtotmax,longint),floor(rdt/tres*peclet/peclettot,longint))
-           dt_reason = minloc((/timee,dt_lim,idtmax,floor(rdt/tres*courant/courtotmax,longint),floor(rdt/tres*peclet/peclettot,longint)/),1)
+           dt = min(timee,dt_lim,idtmax,floor(rdt/tres*courant/courtotmax,l_i),floor(rdt/tres*peclet/peclettot,l_i))
+           dt_reason = minloc((/timee,dt_lim,idtmax,floor(rdt/tres*courant/courtotmax,l_i),floor(rdt/tres*peclet/peclettot,l_i)/),1)
           if (abs(courtotmax-courold)/courold<0.1 .and. (abs(peclettot-pecletold)/pecletold<0.1)) then
             spinup = .false.
           end if
@@ -127,8 +127,8 @@ subroutine tstep_update
            peclettotl=max(peclettotl,maxval(ekh(2:i1,2:j1,k))*rdt/minval((/dzh(k),dx,dy/))**2)
         end do
         call MPI_ALLREDUCE(peclettotl,peclettot,1,MY_REAL,MPI_MAX,comm3d,mpierr)
-        dt = min(timee,dt_lim,idtmax,floor(rdt/tres*courant/courtotmax,longint),floor(rdt/tres*peclet/peclettot,longint))
-        dt_reason = minloc((/timee,dt_lim,idtmax,floor(rdt/tres*courant/courtotmax,longint),floor(rdt/tres*peclet/peclettot,longint)/),1)
+        dt = min(timee,dt_lim,idtmax,floor(rdt/tres*courant/courtotmax,l_i),floor(rdt/tres*peclet/peclettot,l_i))
+        dt_reason = minloc((/timee,dt_lim,idtmax,floor(rdt/tres*courant/courtotmax,l_i),floor(rdt/tres*peclet/peclettot,l_i)/),1)
         rdt = dble(dt)*tres
         timeleft=timeleft-dt
         dt_lim = timeleft

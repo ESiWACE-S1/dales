@@ -32,6 +32,7 @@
 
 module modmpi
 use mpi
+use modprecision
 implicit none
 save
   integer  :: commwrld, comm3d, commrow, commcol
@@ -190,7 +191,7 @@ contains
   subroutine excjs(a,sx,ex,sy,ey,sz,ez,ih,jh)
   implicit none
   integer sx, ex, sy, ey, sz, ez, ih, jh
-  real a(sx-ih:ex+ih, sy-jh:ey+jh, sz:ez)
+  real(field_r) a(sx-ih:ex+ih, sy-jh:ey+jh, sz:ez)
   integer status(MPI_STATUS_SIZE)
   integer ii, i, j, k
   integer reqn, reqs, reqe, reqw
@@ -317,7 +318,7 @@ contains
     integer :: ks,kf
     integer :: ib,ie,jb,je,kb,ke,ibs,ies,jbs,jes,kbs,kes
     real    :: aver(ks:kf)
-    real    :: var (ib:ie,jb:je,kb:ke)
+    real(field_r) :: var (ib:ie,jb:je,kb:ke)
     real    :: averl(ks:kf)
     real    :: avers(ks:kf)
     integer :: k

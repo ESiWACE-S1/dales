@@ -29,7 +29,7 @@
 module modAGScross
 
 
-  use modglobal, only : longint,kmax
+  use modglobal, only : l_i,kmax
 
 implicit none
 private
@@ -45,7 +45,7 @@ save
   character(80),dimension(1,4) :: tncnameAGS
 
   real    :: dtav
-  integer(kind=longint) :: idtav,tnext
+  integer(kind=l_i) :: idtav,tnext
   logical :: lAGScross = .false. !< switch for doing the AGScross (on/off)
 
 contains

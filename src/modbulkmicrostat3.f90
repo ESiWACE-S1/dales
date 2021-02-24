@@ -32,7 +32,7 @@
 !  Copyright 1993-2020 Delft University of Technology, Wageningen University, Utrecht University, KNMI, NLeSC
 !
 module modbulkmicrostat3
-  use modglobal, only : longint
+  use modglobal, only : l_i
 
 implicit none
 private
@@ -52,7 +52,7 @@ save
   character(80)                     :: fname_mphys = 'mphysprofiles.xxx.nc'
   character(80)                     :: fname_tends = 'mphystendencies.xxx.nc'
   real                              :: dtav, timeav
-  integer(kind=longint)             :: idtav, itimeav, tnext, tnextwrite
+  integer(kind=l_i)             :: idtav, itimeav, tnext, tnextwrite
   integer                           :: nsamples
   logical                           :: lmicrostat = .false.
 

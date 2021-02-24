@@ -410,7 +410,7 @@ module daleslib
         end subroutine check_tend
 
         
-        ! Performs a single time step. This is exactly the code inside the time loop of the main program. 
+        ! Performs a s_r time step. This is exactly the code inside the time loop of the main program. 
         ! If the adaptive time stepping is enabled, the new time stamp is not guaranteed to be a dt later.
         subroutine step
             !!----------------------------------------------------------------
@@ -597,11 +597,11 @@ module daleslib
         ! Note that the resulting model time may be a bit later than tstop.
         subroutine run_to(tstop)
 
-            use modglobal,          only: timee,longint,rk3step
+            use modglobal,          only: timee,l_i,rk3step
 
             implicit none
 
-            integer(kind=longint),intent(in) :: tstop
+            integer(kind=l_i),intent(in) :: tstop
 
             do while (timee < tstop .or. rk3step < 3)
                 call step
@@ -612,11 +612,11 @@ module daleslib
         ! Returns the model time, measured in s after the cold start.
         function get_model_time() result(ret)
 
-            use modglobal,          only: timee,longint
+            use modglobal,          only: timee,l_i
 
             implicit none
 
-            integer(kind=longint) :: ret
+            integer(kind=l_i) :: ret
 
             ret=timee
 

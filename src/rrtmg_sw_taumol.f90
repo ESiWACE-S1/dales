@@ -214,7 +214,7 @@
                                                          !   Dimensions: (nlayers,ngptsw)
       real(kind=rb), intent(out) :: taur(:,:)            ! Rayleigh
                                                          !   Dimensions: (nlayers,ngptsw)
-!      real(kind=rb), intent(out) :: ssa(:,:)            ! single scattering albedo (inactive)
+!      real(kind=rb), intent(out) :: ssa(:,:)            ! s_r scattering albedo (inactive)
                                                          !   Dimensions: (nlayers,ngptsw)
 
       hvrtau = '$Revision: 1.5 $'

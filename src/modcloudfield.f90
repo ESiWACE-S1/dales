@@ -27,7 +27,7 @@
 
 module modcloudfield
 
-  use modglobal, only : longint
+  use modglobal, only : l_i
 
 implicit none
 private
@@ -35,7 +35,7 @@ PUBLIC :: initcloudfield, cloudfield
 save
 
   real    :: dtav
-  integer(kind=longint) :: idtav,tnext
+  integer(kind=l_i) :: idtav,tnext
   logical :: lcloudfield= .false. !< switch for writing cloud field (on/off)
   logical :: laddinfo   = .false. !< switch to write ql and w values (on/off)
 

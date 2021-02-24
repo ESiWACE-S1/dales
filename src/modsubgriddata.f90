@@ -29,6 +29,7 @@
 !
 
 module modsubgriddata
+use modprecision, only : field_r
 implicit none
 save
 ! private
@@ -53,11 +54,11 @@ save
   logical :: sgs_surface_fix = .false.  !< which fix to apply to coupling of SGSTKE to surface
 
 
-  real, allocatable :: ekm(:,:,:)   !< k-coefficient for momentum
-  real, allocatable :: ekh(:,:,:)   !< k-coefficient for heat and q_tot
-  real, allocatable :: sbdiss(:,:,:)!< dissiation
-  real, allocatable :: sbshr(:,:,:) !< shear production
-  real, allocatable :: sbbuo(:,:,:) !< buoyancy production / destruction
+  real(field_r), allocatable :: ekm(:,:,:)   !< k-coefficient for momentum
+  real(field_r), allocatable :: ekh(:,:,:)   !< k-coefficient for heat and q_tot
+  real(field_r), allocatable :: sbdiss(:,:,:)!< dissiation
+  real(field_r), allocatable :: sbshr(:,:,:) !< shear production
+  real(field_r), allocatable :: sbbuo(:,:,:) !< buoyancy production / destruction
   real, allocatable :: zlt(:,:,:)   !< filter width
 
   real, allocatable :: csz(:)       !< Smagorinsky constant

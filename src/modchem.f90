@@ -119,7 +119,7 @@ module modchem
 !
 !
 
-  use modglobal, only : longint
+  use modglobal, only : l_i
 
 implicit none
 
@@ -132,7 +132,7 @@ save
   real itermin,dtchmovie
   real t_ref,q_ref,p_ref,h_ref
   logical lchem, ldiuvar,lchconst,lchmovie,lcloudKconst,lsegr
-  integer(kind=longint) ::     itimeav,tnextwrite,idtchmovie
+  integer(kind=l_i) ::     itimeav,tnextwrite,idtchmovie
 
   logical switch
 

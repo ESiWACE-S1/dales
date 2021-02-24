@@ -33,7 +33,7 @@
 !
 module modsampling
 
-use modglobal, only : longint
+use modglobal, only : l_i
 use modsampdata
 
 implicit none
@@ -44,7 +44,7 @@ save
   integer,parameter :: nvar = 32
   character(80),allocatable,dimension(:,:,:) :: ncname
   character(80),dimension(1,4) :: tncname
-  integer(kind=longint) :: idtav,itimeav,tnext,tnextwrite
+  integer(kind=l_i) :: idtav,itimeav,tnext,tnextwrite
   integer :: nsamples,isamp,isamptot
   character(20),dimension(10) :: samplname,longsamplname
   real, allocatable, dimension(:,:) ::  wfavl,thlfavl,thvfavl,qtfavl,qlfavl,nrsampfl,massflxhavl, &

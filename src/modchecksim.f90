@@ -27,14 +27,14 @@
 !
 !
 module modchecksim
-  use modglobal, only : longint
+  use modglobal, only : l_i
 
   implicit none
   private
   public initchecksim,checksim
 
   real    :: tcheck = 0.
-  integer(kind=longint) :: tnext = 3600.,itcheck
+  integer(kind=l_i) :: tnext = 3600.,itcheck
   real    :: dtmn =0.,ndt =0.
 
   ! explanations for dt_limit, determined in tstep_update()

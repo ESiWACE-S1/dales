@@ -29,7 +29,7 @@
 module modcrosssection
 
 
-  use modglobal, only : longint,kmax
+  use modglobal, only : l_i,kmax
 
 implicit none
 private
@@ -58,7 +58,7 @@ save
   character(80),dimension(1,4) :: tncname3
 
   real    :: dtav
-  integer(kind=longint) :: idtav,tnext
+  integer(kind=l_i) :: idtav,tnext
   logical :: lcross = .false. !< switch for doing the crosssection (on/off)
   logical :: lbinary = .false. !< switch for doing the crosssection (on/off)
   integer :: crossplane = 2 !< Location of the xz crosssection
