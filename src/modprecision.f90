@@ -14,8 +14,8 @@
 !! selected_real_kind intrinsic to select a suitable kind
 module modprecision
 use iso_fortran_env, only : real32, real64, real128, int16, int32, int64
-integer, parameter :: n_i = kind(1)
-integer, parameter :: s_i = int16
+!integer, parameter :: n_i = kind(1)
+!integer, parameter :: s_i = int16
 integer, parameter :: l_i = int64
 
 integer, parameter :: n_r = kind(1.)
@@ -29,7 +29,7 @@ INTEGER, PARAMETER  :: dp = SELECTED_REAL_KIND(12, 60)
 integer, parameter :: kind_rb  = real64     !selected_real_kind(12) ! 8 byte real
 integer, parameter :: kind_im  = int32      !selected_int_kind(6)   ! 4 byte integer
 integer, parameter :: SHR_KIND_R4 = real32  !selected_real_kind( 6) ! 4 byte real
-integer, parameter :: SHR_KIND_IN = n_i     ! native integer
+integer, parameter :: SHR_KIND_IN = kind(1) ! native integer
 
 !! Module specific precisions
 integer, parameter :: field_r = real32  ! Precision for the most common fields u, v, w
