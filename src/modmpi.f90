@@ -791,12 +791,14 @@ contains
   end subroutine D_MPI_BCAST_REAL128
 
   subroutine D_MPI_ALLREDUCE_REAL32(sendbuf, recvbuf, count, op, comm, ierror)
-    real(real32) :: sendbuf(..), recvbuf(..)
+    type(*)      :: sendbuf(..)
+    real(real32) :: recvbuf(..)
     integer  :: count, datatype, op, comm, ierror
     call MPI_ALLREDUCE(sendbuf, recvbuf, count, MPI_REAL4, op, comm, ierror)
   end subroutine D_MPI_ALLREDUCE_REAL32
   subroutine D_MPI_ALLREDUCE_REAL64(sendbuf, recvbuf, count, op, comm, ierror)
-    real(real64) :: sendbuf(..), recvbuf(..)
+    type(*)      :: sendbuf(..)
+    real(real64) :: recvbuf(..)
     integer  :: count, datatype, op, comm, ierror
     call MPI_ALLREDUCE(sendbuf, recvbuf, count, MPI_REAL8, op, comm, ierror)
   end subroutine D_MPI_ALLREDUCE_REAL64

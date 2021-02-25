@@ -36,7 +36,7 @@ contains
   subroutine initradiation
     use modglobal,    only : i1,ih,j1,jh,k1,nsv,ih,jh,btime,tres,dt_lim,ifnamopt,fname_options,checknamelisterror
     use mpi
-    use modmpi,       only : myid,my_real,comm3d,mpi_logical,mpi_integer
+    use modmpi,       only : myid,comm3d,mpi_logical,mpi_integer,D_MPI_BCAST
     implicit none
 
     integer :: ierr
@@ -64,12 +64,12 @@ contains
       close(ifnamopt)
     end if
 
-    call MPI_BCAST(SSA,1,my_real,0,comm3d,ierr)
+    call D_MPI_BCAST(SSA,1,0,comm3d,ierr)
     call MPI_BCAST(iDE,1,MPI_INTEGER,0,comm3d,ierr)
     call MPI_BCAST(laero,1,MPI_LOGICAL,0,comm3d,ierr)
 
     call MPI_BCAST(lCnstZenith,1,MPI_LOGICAL,0,comm3d,ierr)
-    call MPI_BCAST(cnstZenith, 1,my_real,    0,comm3d,ierr)
+    call D_MPI_BCAST(cnstZenith, 1, 0,comm3d,ierr)
     call MPI_BCAST(lCnstAlbedo,1,MPI_LOGICAL,0,comm3d,ierr)
     call MPI_BCAST(ioverlap,   1,MPI_INTEGER,0,comm3d,ierr)
     call MPI_BCAST(inflglw,    1,MPI_INTEGER,0,comm3d,ierr)
@@ -80,7 +80,7 @@ contains
     call MPI_BCAST(liqflgsw,   1,MPI_INTEGER,0,comm3d,ierr)
     call MPI_BCAST(ocean,      1,MPI_LOGICAL,0,comm3d,ierr)
     call MPI_BCAST(usero3,     1,MPI_LOGICAL,0,comm3d,ierr)
-    call MPI_BCAST(co2factor,  1,my_real,    0,comm3d,ierr)
+    call D_MPI_BCAST(co2factor,  1, 0,comm3d,ierr)
     call MPI_BCAST(doperpetual,1,MPI_LOGICAL,0,comm3d,ierr)
     call MPI_BCAST(doseasons,  1,MPI_LOGICAL,0,comm3d,ierr)
     call MPI_BCAST(iyear,      1,MPI_INTEGER,0,comm3d,ierr)

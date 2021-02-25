@@ -57,7 +57,8 @@ SAVE
 contains
   subroutine inittestbed
     use mpi
-    use modmpi,   only :myid,my_real,mpierr,comm3d,mpi_logical,mpi_integer
+    use modmpi,   only :myid,mpierr,comm3d,mpi_logical,mpi_integer &
+                       , D_MPI_BCAST
     use modglobal,only :ifnamopt,fname_options,k1,&
                         grav,rd,cp,pref0,rlv,zf,checknamelisterror
     use modsurfdata,only : ksoilmax
@@ -638,41 +639,41 @@ contains
 
     call MPI_BCAST(ntnudge    , 1,MPI_INTEGER,0,comm3d,mpierr)
 
-    call MPI_BCAST(tb_time    ,ntnudge   ,MY_REAL    ,0,comm3d,mpierr)
-    call MPI_BCAST(tb_ps      ,ntnudge   ,MY_REAL    ,0,comm3d,mpierr)
-    call MPI_BCAST(tb_qts     ,ntnudge   ,MY_REAL    ,0,comm3d,mpierr)
-    call MPI_BCAST(tb_thls    ,ntnudge   ,MY_REAL    ,0,comm3d,mpierr)
-    call MPI_BCAST(tb_wts     ,ntnudge   ,MY_REAL    ,0,comm3d,mpierr)
-    call MPI_BCAST(tb_wqs     ,ntnudge   ,MY_REAL    ,0,comm3d,mpierr)
-    call MPI_BCAST(tb_z0h     ,ntnudge   ,MY_REAL    ,0,comm3d,mpierr)
-    call MPI_BCAST(tb_z0m     ,ntnudge   ,MY_REAL    ,0,comm3d,mpierr)
-    call MPI_BCAST(tb_Qnet    ,ntnudge   ,MY_REAL    ,0,comm3d,mpierr)
+    call D_MPI_BCAST(tb_time    ,ntnudge   ,0,comm3d,mpierr)
+    call D_MPI_BCAST(tb_ps      ,ntnudge   ,0,comm3d,mpierr)
+    call D_MPI_BCAST(tb_qts     ,ntnudge   ,0,comm3d,mpierr)
+    call D_MPI_BCAST(tb_thls    ,ntnudge   ,0,comm3d,mpierr)
+    call D_MPI_BCAST(tb_wts     ,ntnudge   ,0,comm3d,mpierr)
+    call D_MPI_BCAST(tb_wqs     ,ntnudge   ,0,comm3d,mpierr)
+    call D_MPI_BCAST(tb_z0h     ,ntnudge   ,0,comm3d,mpierr)
+    call D_MPI_BCAST(tb_z0m     ,ntnudge   ,0,comm3d,mpierr)
+    call D_MPI_BCAST(tb_Qnet    ,ntnudge   ,0,comm3d,mpierr)
 
-    call MPI_BCAST(tnudge     ,ntnudge*k1,MY_REAL    ,0,comm3d,mpierr)
-    call MPI_BCAST(tb_u       ,ntnudge*k1,MY_REAL    ,0,comm3d,mpierr)
-    call MPI_BCAST(tb_v       ,ntnudge*k1,MY_REAL    ,0,comm3d,mpierr)
-    call MPI_BCAST(tb_w       ,ntnudge*k1,MY_REAL    ,0,comm3d,mpierr)
-    call MPI_BCAST(tb_thl     ,ntnudge*k1,MY_REAL    ,0,comm3d,mpierr)
-    call MPI_BCAST(tb_qt      ,ntnudge*k1,MY_REAL    ,0,comm3d,mpierr)
-    call MPI_BCAST(tb_ug      ,ntnudge*k1,MY_REAL    ,0,comm3d,mpierr)
-    call MPI_BCAST(tb_vg      ,ntnudge*k1,MY_REAL    ,0,comm3d,mpierr)
-    call MPI_BCAST(tb_uadv    ,ntnudge*k1,MY_REAL    ,0,comm3d,mpierr)
-    call MPI_BCAST(tb_vadv    ,ntnudge*k1,MY_REAL    ,0,comm3d,mpierr)
-    call MPI_BCAST(tb_qtadv   ,ntnudge*k1,MY_REAL    ,0,comm3d,mpierr)
-    call MPI_BCAST(tb_thladv  ,ntnudge*k1,MY_REAL    ,0,comm3d,mpierr)
-    call MPI_BCAST(tb_uadv    ,ntnudge*k1,MY_REAL    ,0,comm3d,mpierr)
-    call MPI_BCAST(tb_vadv    ,ntnudge*k1,MY_REAL    ,0,comm3d,mpierr)
-    call MPI_BCAST(tb_dqtdxls ,ntnudge*k1,MY_REAL    ,0,comm3d,mpierr)
-    call MPI_BCAST(tb_dqtdyls ,ntnudge*k1,MY_REAL    ,0,comm3d,mpierr)
+    call D_MPI_BCAST(tnudge     ,ntnudge*k1,0,comm3d,mpierr)
+    call D_MPI_BCAST(tb_u       ,ntnudge*k1,0,comm3d,mpierr)
+    call D_MPI_BCAST(tb_v       ,ntnudge*k1,0,comm3d,mpierr)
+    call D_MPI_BCAST(tb_w       ,ntnudge*k1,0,comm3d,mpierr)
+    call D_MPI_BCAST(tb_thl     ,ntnudge*k1,0,comm3d,mpierr)
+    call D_MPI_BCAST(tb_qt      ,ntnudge*k1,0,comm3d,mpierr)
+    call D_MPI_BCAST(tb_ug      ,ntnudge*k1,0,comm3d,mpierr)
+    call D_MPI_BCAST(tb_vg      ,ntnudge*k1,0,comm3d,mpierr)
+    call D_MPI_BCAST(tb_uadv    ,ntnudge*k1,0,comm3d,mpierr)
+    call D_MPI_BCAST(tb_vadv    ,ntnudge*k1,0,comm3d,mpierr)
+    call D_MPI_BCAST(tb_qtadv   ,ntnudge*k1,0,comm3d,mpierr)
+    call D_MPI_BCAST(tb_thladv  ,ntnudge*k1,0,comm3d,mpierr)
+    call D_MPI_BCAST(tb_uadv    ,ntnudge*k1,0,comm3d,mpierr)
+    call D_MPI_BCAST(tb_vadv    ,ntnudge*k1,0,comm3d,mpierr)
+    call D_MPI_BCAST(tb_dqtdxls ,ntnudge*k1,0,comm3d,mpierr)
+    call D_MPI_BCAST(tb_dqtdyls ,ntnudge*k1,0,comm3d,mpierr)
 
-    call MPI_BCAST(tb_tsoilav ,ntnudge*ksoilmax,MY_REAL    ,0,comm3d,mpierr)
-    call MPI_BCAST(tb_phiwav  ,ntnudge*ksoilmax,MY_REAL    ,0,comm3d,mpierr)
+    call D_MPI_BCAST(tb_tsoilav ,ntnudge*ksoilmax,0,comm3d,mpierr)
+    call D_MPI_BCAST(tb_phiwav  ,ntnudge*ksoilmax,0,comm3d,mpierr)
 
-    call MPI_BCAST(tbrad_p      ,ntnudge*nknudge,MY_REAL    ,0,comm3d,mpierr)
-    call MPI_BCAST(tbrad_qv     ,ntnudge*nknudge,MY_REAL    ,0,comm3d,mpierr)
-    call MPI_BCAST(tbrad_ql     ,ntnudge*nknudge,MY_REAL    ,0,comm3d,mpierr)
-    call MPI_BCAST(tbrad_t      ,ntnudge*nknudge,MY_REAL    ,0,comm3d,mpierr)
-    call MPI_BCAST(tbrad_o3     ,ntnudge*nknudge,MY_REAL    ,0,comm3d,mpierr)
+    call D_MPI_BCAST(tbrad_p      ,ntnudge*nknudge,0,comm3d,mpierr)
+    call D_MPI_BCAST(tbrad_qv     ,ntnudge*nknudge,0,comm3d,mpierr)
+    call D_MPI_BCAST(tbrad_ql     ,ntnudge*nknudge,0,comm3d,mpierr)
+    call D_MPI_BCAST(tbrad_t      ,ntnudge*nknudge,0,comm3d,mpierr)
+    call D_MPI_BCAST(tbrad_o3     ,ntnudge*nknudge,0,comm3d,mpierr)
 
     ltb_u   = any(abs(tb_u)>1e-8)
     ltb_v   = any(abs(tb_v)>1e-8)

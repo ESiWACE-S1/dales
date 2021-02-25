@@ -76,7 +76,8 @@ contains
     use modmicrophysics,   only : initmicrophysics
     use modsubgrid,        only : initsubgrid
     use mpi
-    use modmpi,            only : initmpi,commwrld,my_real,myid,nprocx,nprocy,mpierr
+    use modmpi,            only : initmpi,commwrld,myid,nprocx,nprocy,mpierr &
+                                , D_MPI_BCAST
     use modchem,           only : initchem
     use modversion,        only : git_version
     
@@ -161,83 +162,83 @@ contains
     call MPI_BCAST(lwarmstart ,1,MPI_LOGICAL,0,commwrld,mpierr)
     call MPI_BCAST(startfile  ,50,MPI_CHARACTER,0,commwrld,mpierr)
     call MPI_BCAST(author     ,80,MPI_CHARACTER,0,commwrld,mpierr)
-    call MPI_BCAST(runtime    ,1,MY_REAL   ,0,commwrld,mpierr)
-    call MPI_BCAST(trestart   ,1,MY_REAL   ,0,commwrld,mpierr)
-    call MPI_BCAST(dtmax      ,1,MY_REAL   ,0,commwrld,mpierr)
-    call MPI_BCAST(dtav_glob  ,1,MY_REAL   ,0,commwrld,mpierr)
+    call D_MPI_BCAST(runtime    ,1,0,commwrld,mpierr)
+    call D_MPI_BCAST(trestart   ,1,0,commwrld,mpierr)
+    call D_MPI_BCAST(dtmax      ,1,0,commwrld,mpierr)
+    call D_MPI_BCAST(dtav_glob  ,1,0,commwrld,mpierr)
     call MPI_BCAST(ltotruntime,1,MPI_LOGICAL,0,commwrld,mpierr)
-    call MPI_BCAST(wctime     ,1,MY_REAL   ,0,commwrld,mpierr)
-    call MPI_BCAST(timeav_glob,1,MY_REAL   ,0,commwrld,mpierr)
+    call D_MPI_BCAST(wctime     ,1,0,commwrld,mpierr)
+    call D_MPI_BCAST(timeav_glob,1,0,commwrld,mpierr)
     call MPI_BCAST(nsv        ,1,MPI_INTEGER,0,commwrld,mpierr)
 
     call MPI_BCAST(itot       ,1,MPI_INTEGER,0,commwrld,mpierr)
     call MPI_BCAST(jtot       ,1,MPI_INTEGER,0,commwrld,mpierr)
     call MPI_BCAST(kmax       ,1,MPI_INTEGER,0,commwrld,mpierr)
-    call MPI_BCAST(xsize      ,1,MY_REAL   ,0,commwrld,mpierr)
-    call MPI_BCAST(ysize      ,1,MY_REAL   ,0,commwrld,mpierr)
-    call MPI_BCAST(xlat       ,1,MY_REAL   ,0,commwrld,mpierr)
-    call MPI_BCAST(xlon       ,1,MY_REAL   ,0,commwrld,mpierr)
+    call D_MPI_BCAST(xsize      ,1,0,commwrld,mpierr)
+    call D_MPI_BCAST(ysize      ,1,0,commwrld,mpierr)
+    call D_MPI_BCAST(xlat       ,1,0,commwrld,mpierr)
+    call D_MPI_BCAST(xlon       ,1,0,commwrld,mpierr)
     call MPI_BCAST(xyear      ,1,MPI_INTEGER,0,commwrld,mpierr)
-    call MPI_BCAST(xday       ,1,MY_REAL   ,0,commwrld,mpierr)
-    call MPI_BCAST(xtime      ,1,MY_REAL   ,0,commwrld,mpierr)
+    call D_MPI_BCAST(xday       ,1,0,commwrld,mpierr)
+    call D_MPI_BCAST(xtime      ,1,0,commwrld,mpierr)
 
-    call MPI_BCAST(z0         ,1,MY_REAL   ,0,commwrld,mpierr)
-    call MPI_BCAST(ustin      ,1,MY_REAL   ,0,commwrld,mpierr)
+    call D_MPI_BCAST(z0         ,1,0,commwrld,mpierr)
+    call D_MPI_BCAST(ustin      ,1,0,commwrld,mpierr)
     !call MPI_BCAST(lneutraldrag ,1,MPI_LOGICAL,0,commwrld,mpierr)
-    call MPI_BCAST(wtsurf     ,1,MY_REAL   ,0,commwrld,mpierr)
-    call MPI_BCAST(wqsurf     ,1,MY_REAL   ,0,commwrld,mpierr)
-    call MPI_BCAST(wsvsurf(1:nsv),nsv,MY_REAL   ,0,commwrld,mpierr)
-    call MPI_BCAST(ps         ,1,MY_REAL   ,0,commwrld,mpierr)
-    call MPI_BCAST(thls       ,1,MY_REAL   ,0,commwrld,mpierr)
-    call MPI_BCAST(chi_half   ,1,MY_REAL   ,0,commwrld,mpierr)
+    call D_MPI_BCAST(wtsurf     ,1,0,commwrld,mpierr)
+    call D_MPI_BCAST(wqsurf     ,1,0,commwrld,mpierr)
+    call D_MPI_BCAST(wsvsurf(1:nsv),nsv,0,commwrld,mpierr)
+    call D_MPI_BCAST(ps         ,1,0,commwrld,mpierr)
+    call D_MPI_BCAST(thls       ,1,0,commwrld,mpierr)
+    call D_MPI_BCAST(chi_half   ,1,0,commwrld,mpierr)
     call MPI_BCAST(lmoist     ,1,MPI_LOGICAL,0,commwrld,mpierr)
     call MPI_BCAST(lcoriol    ,1,MPI_LOGICAL,0,commwrld,mpierr)
     call MPI_BCAST(lpressgrad ,1,MPI_LOGICAL,0,commwrld,mpierr)
     call MPI_BCAST(igrw_damp  ,1,MPI_INTEGER,0,commwrld,mpierr)
-    call MPI_BCAST(geodamptime,1,MY_REAL   ,0,commwrld,mpierr)
+    call D_MPI_BCAST(geodamptime,1,0,commwrld,mpierr)
     call MPI_BCAST(lforce_user,1,MPI_LOGICAL,0,commwrld,mpierr)
     call MPI_BCAST(lmomsubs   ,1,MPI_LOGICAL,0,commwrld,mpierr)
     call MPI_BCAST(ltimedep   ,1,MPI_LOGICAL,0,commwrld,mpierr)
     call MPI_BCAST(ltimedepuv ,1,MPI_LOGICAL,0,commwrld,mpierr)
     call MPI_BCAST(ltimedepsv ,1,MPI_LOGICAL,0,commwrld,mpierr)
     call MPI_BCAST(lrigidlid  ,1,MPI_LOGICAL,0,commwrld,mpierr)
-    call MPI_BCAST(unudge     ,1,MY_REAL    ,0,commwrld,mpierr)
+    call D_MPI_BCAST(unudge     ,1,0,commwrld,mpierr)
 
     call MPI_BCAST(irad       ,1,MPI_INTEGER,0,commwrld,mpierr)
-    call MPI_BCAST(timerad    ,1,MY_REAL   ,0,commwrld,mpierr)
+    call D_MPI_BCAST(timerad    ,1,0,commwrld,mpierr)
     call MPI_BCAST(iradiation ,1,MPI_INTEGER,0,commwrld,mpierr)
     call MPI_BCAST(rad_ls     ,1,MPI_LOGICAL,0,commwrld,mpierr)
     call MPI_BCAST(rad_longw  ,1,MPI_LOGICAL,0,commwrld,mpierr)
     call MPI_BCAST(rad_shortw ,1,MPI_LOGICAL,0,commwrld,mpierr)
     call MPI_BCAST(rad_smoke  ,1,MPI_LOGICAL,0,commwrld,mpierr)
     call MPI_BCAST(useMcIca   ,1,MPI_LOGICAL,0,commwrld,mpierr)
-    call MPI_BCAST(rka        ,1,MY_REAL   ,0,commwrld,mpierr)
-    call MPI_BCAST(dlwtop     ,1,MY_REAL   ,0,commwrld,mpierr)
-    call MPI_BCAST(dlwbot     ,1,MY_REAL   ,0,commwrld,mpierr)
-    call MPI_BCAST(sw0        ,1,MY_REAL   ,0,commwrld,mpierr)
-    call MPI_BCAST(gc         ,1,MY_REAL   ,0,commwrld,mpierr)
+    call D_MPI_BCAST(rka        ,1,0,commwrld,mpierr)
+    call D_MPI_BCAST(dlwtop     ,1,0,commwrld,mpierr)
+    call D_MPI_BCAST(dlwbot     ,1,0,commwrld,mpierr)
+    call D_MPI_BCAST(sw0        ,1,0,commwrld,mpierr)
+    call D_MPI_BCAST(gc         ,1,0,commwrld,mpierr)
     ! CvH call MPI_BCAST(sfc_albedo ,1,MY_REAL   ,0,commwrld,mpierr)
-    call MPI_BCAST(reff       ,1,MY_REAL   ,0,commwrld,mpierr)
+    call D_MPI_BCAST(reff       ,1,0,commwrld,mpierr)
     call MPI_BCAST(isvsmoke   ,1,MPI_INTEGER,0,commwrld,mpierr)
     call MPI_BCAST(lcloudshading,1,MPI_LOGICAL,0,commwrld,mpierr)
 
     call MPI_BCAST(llsadv     ,1,MPI_LOGICAL,0,commwrld,mpierr)
     call MPI_BCAST(lqlnr      ,1,MPI_LOGICAL,0,commwrld,mpierr)
-    call MPI_BCAST(lambda_crit,1,MY_REAL   ,0,commwrld,mpierr)
-    call MPI_BCAST(cu         ,1,MY_REAL   ,0,commwrld,mpierr)
-    call MPI_BCAST(cv         ,1,MY_REAL   ,0,commwrld,mpierr)
+    call D_MPI_BCAST(lambda_crit,1,0,commwrld,mpierr)
+    call D_MPI_BCAST(cu         ,1,0,commwrld,mpierr)
+    call D_MPI_BCAST(cv         ,1,0,commwrld,mpierr)
     call MPI_BCAST(ksp        ,1,MPI_INTEGER,0,commwrld,mpierr)
     call MPI_BCAST(irandom    ,1,MPI_INTEGER,0,commwrld,mpierr)
     call MPI_BCAST(krand      ,1,MPI_INTEGER,0,commwrld,mpierr)
     call MPI_BCAST(krandumin  ,1,MPI_INTEGER,0,commwrld,mpierr)
     call MPI_BCAST(krandumax  ,1,MPI_INTEGER,0,commwrld,mpierr)
-    call MPI_BCAST(randthl    ,1,MY_REAL    ,0,commwrld,mpierr)
-    call MPI_BCAST(randqt     ,1,MY_REAL   ,0,commwrld,mpierr)
-    call MPI_BCAST(randu      ,1,MY_REAL   ,0,commwrld,mpierr)
+    call D_MPI_BCAST(randthl    ,1,0,commwrld,mpierr)
+    call D_MPI_BCAST(randqt     ,1,0,commwrld,mpierr)
+    call D_MPI_BCAST(randu      ,1,0,commwrld,mpierr)
 
     call MPI_BCAST(ladaptive  ,1,MPI_LOGICAL,0,commwrld,mpierr)
-    call MPI_BCAST(courant,1,MY_REAL   ,0,commwrld,mpierr)
-    call MPI_BCAST(peclet,1,MY_REAL   ,0,commwrld,mpierr)
+    call D_MPI_BCAST(courant,1,0,commwrld,mpierr)
+    call D_MPI_BCAST(peclet,1,0,commwrld,mpierr)
 
     call MPI_BCAST(isurf   ,1,MPI_INTEGER,0,commwrld,mpierr)
     call MPI_BCAST(ibas_prf,1,MPI_INTEGER,0,commwrld,mpierr)
@@ -253,7 +254,7 @@ contains
     call MPI_BCAST(maxiter,1,MPI_INTEGER,0,commwrld,mpierr)
     call MPI_BCAST(n_pre,1,MPI_INTEGER,0,commwrld,mpierr)
     call MPI_BCAST(n_post,1,MPI_INTEGER,0,commwrld,mpierr)
-    call MPI_BCAST(tolerance,1,MY_REAL,0,commwrld,mpierr)
+    call D_MPI_BCAST(tolerance,1,0,commwrld,mpierr)
     call MPI_BCAST(precond,1,MPI_INTEGER,0,commwrld,mpierr)
     
     call testwctime
@@ -301,6 +302,7 @@ contains
     use modglobal, only : itot,jtot, ysize,xsize,dtmax,runtime, startfile,lwarmstart,eps1, imax,jmax
     use modmpi,    only : myid,nprocx,nprocy,mpierr
     use modtimedep, only : ltimedep
+    use mpi
 
 
       if(mod(jtot,nprocy) /= 0) then
@@ -388,7 +390,7 @@ contains
                                   thvs_patch,lhetero,qskin
     use modsurface,        only : surface,qtsurf,dthldz,ps
     use modboundary,       only : boundary
-    use modmpi,            only : slabsum,myid,comm3d,mpierr,my_real
+    use modmpi,            only : slabsum,myid,comm3d,mpierr,D_MPI_BCAST
     use modthermodynamics, only : thermodynamics,calc_halflev
     use moduser,           only : initsurf_user
 
@@ -485,11 +487,11 @@ contains
 
       end if ! end if myid==0
     ! MPI broadcast numbers reading
-      call MPI_BCAST(thlprof,kmax,MY_REAL   ,0,comm3d,mpierr)
-      call MPI_BCAST(qtprof ,kmax,MY_REAL   ,0,comm3d,mpierr)
-      call MPI_BCAST(uprof  ,kmax,MY_REAL   ,0,comm3d,mpierr)
-      call MPI_BCAST(vprof  ,kmax,MY_REAL   ,0,comm3d,mpierr)
-      call MPI_BCAST(e12prof,kmax,MY_REAL   ,0,comm3d,mpierr)
+      call D_MPI_BCAST(thlprof,kmax,0,comm3d,mpierr)
+      call D_MPI_BCAST(qtprof ,kmax,0,comm3d,mpierr)
+      call D_MPI_BCAST(uprof  ,kmax,0,comm3d,mpierr)
+      call D_MPI_BCAST(vprof  ,kmax,0,comm3d,mpierr)
+      call D_MPI_BCAST(e12prof,kmax,0,comm3d,mpierr)
       do k=1,kmax
       do j=1,j2
       do i=1,i2
@@ -557,9 +559,9 @@ contains
         end if
       end if ! end if myid==0
 
-      call MPI_BCAST(wsvsurf,nsv   ,MY_REAL   ,0,comm3d,mpierr)
+      call D_MPI_BCAST(wsvsurf,nsv   ,0,comm3d,mpierr)
 
-      call MPI_BCAST(svprof ,k1*nsv,MY_REAL   ,0,comm3d,mpierr)
+      call D_MPI_BCAST(svprof ,k1*nsv,0,comm3d,mpierr)
       do k=1,kmax
         do j=1,j2
           do i=1,i2
@@ -764,13 +766,13 @@ contains
 
 ! MPI broadcast variables read in
 
-    call MPI_BCAST(ug       ,kmax,MY_REAL   ,0,comm3d,mpierr)
-    call MPI_BCAST(vg       ,kmax,MY_REAL   ,0,comm3d,mpierr)
-    call MPI_BCAST(wfls     ,kmax,MY_REAL   ,0,comm3d,mpierr)
-    call MPI_BCAST(dqtdxls  ,kmax,MY_REAL   ,0,comm3d,mpierr)
-    call MPI_BCAST(dqtdyls  ,kmax,MY_REAL   ,0,comm3d,mpierr)
-    call MPI_BCAST(dqtdtls  ,kmax,MY_REAL   ,0,comm3d,mpierr)
-    call MPI_BCAST(thlpcar  ,kmax,MY_REAL   ,0,comm3d,mpierr)
+    call D_MPI_BCAST(ug       ,kmax,0,comm3d,mpierr)
+    call D_MPI_BCAST(vg       ,kmax,0,comm3d,mpierr)
+    call D_MPI_BCAST(wfls     ,kmax,0,comm3d,mpierr)
+    call D_MPI_BCAST(dqtdxls  ,kmax,0,comm3d,mpierr)
+    call D_MPI_BCAST(dqtdyls  ,kmax,0,comm3d,mpierr)
+    call D_MPI_BCAST(dqtdtls  ,kmax,0,comm3d,mpierr)
+    call D_MPI_BCAST(thlpcar  ,kmax,0,comm3d,mpierr)
 
 !-----------------------------------------------------------------
 !    2.3 make large-scale horizontal pressure gradient
@@ -1206,7 +1208,7 @@ contains
     use modfields,         only : rhobf,rhobh,drhobdzf,drhobdzh
     use modglobal,         only : k1,kmax,zf,zh,dzf,dzh,rv,rd,grav,cp,pref0,lwarmstart,ibas_prf,cexpnr,ifinput,ifoutput
     use modsurfdata,       only : thls,ps,qts
-    use modmpi,            only : myid,comm3d,mpierr,my_real
+    use modmpi,            only : myid,comm3d,mpierr,D_MPI_BCAST
     implicit none
 
     real :: thvb,prsb ! for calculating moist adiabat
@@ -1410,10 +1412,10 @@ contains
     end if ! ENDIF MYID=0
 
     ! MPI broadcast variables
-    call MPI_BCAST(rhobf       ,k1,MY_REAL   ,0,comm3d,mpierr)
-    call MPI_BCAST(rhobh       ,k1,MY_REAL   ,0,comm3d,mpierr)
-    call MPI_BCAST(drhobdzf    ,k1,MY_REAL   ,0,comm3d,mpierr)
-    call MPI_BCAST(drhobdzh    ,k1,MY_REAL   ,0,comm3d,mpierr)
+    call D_MPI_BCAST(rhobf       ,k1,0,comm3d,mpierr)
+    call D_MPI_BCAST(rhobh       ,k1,0,comm3d,mpierr)
+    call D_MPI_BCAST(drhobdzf    ,k1,0,comm3d,mpierr)
+    call D_MPI_BCAST(drhobdzh    ,k1,0,comm3d,mpierr)
 
     deallocate(pb,tb)
 

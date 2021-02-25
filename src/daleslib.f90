@@ -776,7 +776,7 @@ module daleslib
     ! NOTE averages the FULL input array - if less is wanted, pass a slice !
     function gatherlayeravg(Al,Ag) result(ret)
       use mpi
-      use modmpi, only: comm3d, my_real,  myid, nprocs
+      use modmpi, only: comm3d, myid, nprocs, D_MPI_REDUCE
       real, intent(in)      :: Al(:,:,:)
       real, intent(out)     :: Ag(:)
       integer               :: k, nk, ret
@@ -787,9 +787,9 @@ module daleslib
       
       !in-place reduction
       if (myid == 0) then
-         CALL mpi_reduce(MPI_IN_PLACE, Ag, nk, MY_REAL, MPI_SUM, 0, comm3d, ret)
+         CALL D_mpi_reduce(MPI_IN_PLACE, Ag, nk, MPI_SUM, 0, comm3d, ret)
       else
-         CALL mpi_reduce(          Ag, Ag, nk, MY_REAL, MPI_SUM, 0, comm3d, ret)
+         CALL D_mpi_reduce(          Ag, Ag, nk, MPI_SUM, 0, comm3d, ret)
       endif
       
       if (myid == 0) then
@@ -801,7 +801,7 @@ module daleslib
     ! Counts the profile of saturated grid cell fraction and scatters the result to all processes
     function gathersatfrac(Ag) result(ret)
       use mpi, only: MPI_SUM, MPI_IN_PLACE
-      use modmpi, only: comm3d, my_real, nprocs
+      use modmpi, only: comm3d, nprocs, D_MPI_ALLREDUCE
       use modglobal,   only : i1, j1
       use modfields, only: ql0
       real,    intent(out)    :: Ag(:)
@@ -811,7 +811,7 @@ module daleslib
       nk = size(ql0, 3)
       Ag = (/ (sum(merge(1., 0., ql0(2:i1,2:j1,k) > 0.)), k=1,nk) /)     ! sum layers of ql
 
-      CALL mpi_allreduce(MPI_IN_PLACE, Ag, nk, MY_REAL, MPI_SUM, comm3d, ret)
+      CALL D_mpi_allreduce(MPI_IN_PLACE, Ag, nk, MPI_SUM, comm3d, ret)
 
       Ag = Ag / (size(ql0,1) * size(ql0,2) * nprocs)
     
@@ -822,7 +822,7 @@ module daleslib
     ! note: assumes the qi array is large enough (kmax elements)
     function gatherlayericeavg(qi) result(ret)
       use mpi
-      use modmpi, only: comm3d, my_real, myid, nprocs
+      use modmpi, only: comm3d, myid, nprocs, D_MPI_REDUCE
       use modglobal, only: imax, jmax, kmax, i1, j1, tup, tdn
       use modfields, only: ql0, tmp0
       
@@ -843,9 +843,9 @@ module daleslib
       
       !in-place reduction
       if (myid == 0) then
-         CALL mpi_reduce(MPI_IN_PLACE, qi, kmax, MY_REAL, MPI_SUM, 0, comm3d, ret)
+         CALL D_mpi_reduce(MPI_IN_PLACE, qi, kmax, MPI_SUM, 0, comm3d, ret)
       else
-         CALL mpi_reduce(          qi, qi, kmax, MY_REAL, MPI_SUM, 0, comm3d, ret)
+         CALL D_mpi_reduce(          qi, qi, kmax, MPI_SUM, 0, comm3d, ret)
       endif
       
       if (myid == 0) then
@@ -913,7 +913,7 @@ module daleslib
     function gathervol(g_i,g_j,g_k,a,n,field) result(ret)
       use modglobal, only: imax, jmax
       use mpi
-      use modmpi, only: myidx, myidy, comm3d, my_real, myid
+      use modmpi, only: myidx, myidy, comm3d, myid, D_MPI_REDUCE
       
       integer, intent(in)                 :: n
       integer, dimension(n), intent(in)   :: g_i,g_j,g_k
@@ -942,9 +942,9 @@ module daleslib
       
       !in-place reduction
       if (myid == 0) then
-         CALL mpi_reduce(MPI_IN_PLACE, a, n, MY_REAL, MPI_SUM, 0, comm3d, ret)
+         CALL D_mpi_reduce(MPI_IN_PLACE, a, n, MPI_SUM, 0, comm3d, ret)
       else
-         CALL mpi_reduce(           a, a, n, MY_REAL, MPI_SUM, 0, comm3d, ret)
+         CALL D_mpi_reduce(           a, a, n, MPI_SUM, 0, comm3d, ret)
       endif
       
     end function gathervol
@@ -961,7 +961,7 @@ module daleslib
     function gatherlayer(g_i,g_j,a,n,field) result(ret)
       use modglobal, only: imax, jmax
       use mpi
-      use modmpi, only: myidx, myidy, comm3d, my_real, myid
+      use modmpi, only: myidx, myidy, comm3d, myid, D_MPI_REDUCE
 
       integer, intent(in)                 :: n
       integer, dimension(n), intent(in)   :: g_i,g_j
@@ -987,9 +987,9 @@ module daleslib
 
       !in-place reduction
       if (myid == 0) then
-         CALL mpi_reduce(MPI_IN_PLACE, a, n, MY_REAL, MPI_SUM, 0, comm3d, ret)
+         CALL D_mpi_reduce(MPI_IN_PLACE, a, n, MPI_SUM, 0, comm3d, ret)
       else
-         CALL mpi_reduce(           a, a, n, MY_REAL, MPI_SUM, 0, comm3d, ret)
+         CALL D_mpi_reduce(           a, a, n, MPI_SUM, 0, comm3d, ret)
       endif
     end function gatherlayer
 
@@ -1009,7 +1009,7 @@ module daleslib
       use modglobal, only: imax, jmax, kmax, dzf
       use modfields, only: rhobf
       use mpi
-      use modmpi, only: myidx, myidy, comm3d, my_real, myid
+      use modmpi, only: myidx, myidy, comm3d, myid, D_MPI_REDUCE
       
       integer, intent(in)                 :: n
       integer, dimension(n), intent(in)   :: g_i,g_j
@@ -1036,9 +1036,9 @@ module daleslib
       
       !in-place reduction
       if (myid == 0) then
-         CALL mpi_reduce(MPI_IN_PLACE, a, n, MY_REAL, MPI_SUM, 0, comm3d, ret)
+         CALL D_mpi_reduce(MPI_IN_PLACE, a, n, MPI_SUM, 0, comm3d, ret)
       else
-         CALL mpi_reduce(           a, a, n, MY_REAL, MPI_SUM, 0, comm3d, ret)
+         CALL D_mpi_reduce(           a, a, n, MPI_SUM, 0, comm3d, ret)
       endif
       
     end function gatherlwp
@@ -1060,7 +1060,7 @@ module daleslib
     ! NOTE averages the FULL input array - if less is wanted, pass a slice !
     function gathercloudfrac(ql,I,A) result(ret)
       use mpi
-      use modmpi, only: comm3d, my_real, myid, nprocs
+      use modmpi, only: comm3d, myid, nprocs, D_MPI_REDUCE
       real,    intent(in)     :: ql(:,:,:)
       integer, intent(in)     :: I(:)
       real,    intent(out)    :: A(:)
@@ -1078,9 +1078,9 @@ module daleslib
       
       !in-place reduction
       if (myid == 0) then
-         CALL mpi_reduce(MPI_IN_PLACE, A, size(I), MY_REAL, MPI_SUM, 0, comm3d, ret)
+         CALL D_mpi_reduce(MPI_IN_PLACE, A, size(I), MPI_SUM, 0, comm3d, ret)
       else
-         CALL mpi_reduce(          A,  A, size(I), MY_REAL, MPI_SUM, 0, comm3d, ret)
+         CALL D_mpi_reduce(          A,  A, size(I), MPI_SUM, 0, comm3d, ret)
       endif
       
       if (myid == 0) then

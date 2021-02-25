@@ -68,7 +68,8 @@ contains
 !> Initializing Crosssection. Read out the namelist, initializing the variables
   subroutine initcrosssection
     use mpi
-    use modmpi,   only :myid,my_real,mpierr,comm3d,mpi_logical,mpi_integer,cmyid,myidx,myidy
+    use modmpi,   only :myid,mpierr,comm3d,mpi_logical,mpi_integer,cmyid,myidx,myidy &
+                       , D_MPI_BCAST
     use modglobal,only :imax,jmax,ifnamopt,fname_options,dtmax,dtav_glob,ladaptive,j1,kmax,i1,dt_lim,cexpnr,tres,btime,checknamelisterror
     use modstat_nc,only : lnetcdf,open_nc, define_nc,ncinfo,nctiminfo,writestat_dims_nc
 
@@ -95,7 +96,7 @@ contains
       close(ifnamopt)
     end if
 
-    call MPI_BCAST(dtav       ,1,MY_REAL    ,0,comm3d,mpierr)
+    call D_MPI_BCAST(dtav       ,1,0,comm3d,mpierr)
     call MPI_BCAST(lcross     ,1,MPI_LOGICAL,0,comm3d,mpierr)
     call MPI_BCAST(lbinary    ,1,MPI_LOGICAL,0,comm3d,mpierr)
     call MPI_BCAST(crossheight(1:100),100,MPI_INTEGER,0,comm3d,mpierr)

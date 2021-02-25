@@ -74,7 +74,7 @@ contains
     use modglobal,  only : i1, j1, i2, j2, itot, jtot, nsv, ifnamopt, fname_options, ifinput, cexpnr, checknamelisterror
     use modraddata, only : iradiation,rad_shortw,irad_par,irad_user,irad_rrtmg
     use mpi
-    use modmpi,     only : myid, comm3d, mpierr, my_real, mpi_logical, mpi_integer
+    use modmpi,     only : myid, comm3d, mpierr, mpi_logical, mpi_integer, D_MPI_BCAST
 
     implicit none
 
@@ -116,36 +116,36 @@ contains
     end if
 
     call MPI_BCAST(isurf        , 1       , MPI_INTEGER, 0, comm3d, mpierr)
-    call MPI_BCAST(tsoilav      , ksoilmax, MY_REAL, 0, comm3d, mpierr)
-    call MPI_BCAST(tsoildeepav  , 1       , MY_REAL, 0, comm3d, mpierr)
-    call MPI_BCAST(phiwav       , ksoilmax, MY_REAL, 0, comm3d, mpierr)
-    call MPI_BCAST(rootfav      , ksoilmax, MY_REAL, 0, comm3d, mpierr)
+    call D_MPI_BCAST(tsoilav      , ksoilmax, 0, comm3d, mpierr)
+    call D_MPI_BCAST(tsoildeepav  , 1       , 0, comm3d, mpierr)
+    call D_MPI_BCAST(phiwav       , ksoilmax, 0, comm3d, mpierr)
+    call D_MPI_BCAST(rootfav      , ksoilmax, 0, comm3d, mpierr)
 
     call MPI_BCAST(lmostlocal   , 1, MPI_LOGICAL, 0, comm3d, mpierr)
     call MPI_BCAST(lsmoothflux  , 1, MPI_LOGICAL, 0, comm3d, mpierr)
     call MPI_BCAST(lneutral     , 1, MPI_LOGICAL, 0, comm3d, mpierr)
-    call MPI_BCAST(z0mav        , 1, MY_REAL, 0, comm3d, mpierr)
-    call MPI_BCAST(z0hav        , 1, MY_REAL, 0, comm3d, mpierr)
-    call MPI_BCAST(rsisurf2     , 1, MY_REAL, 0, comm3d, mpierr)
-    call MPI_BCAST(Cskinav      , 1, MY_REAL, 0, comm3d, mpierr)
-    call MPI_BCAST(lambdaskinav , 1, MY_REAL, 0, comm3d, mpierr)
-    call MPI_BCAST(albedoav     , 1, MY_REAL, 0, comm3d, mpierr)
-    call MPI_BCAST(Qnetav       , 1, MY_REAL, 0, comm3d, mpierr)
+    call D_MPI_BCAST(z0mav        , 1, 0, comm3d, mpierr)
+    call D_MPI_BCAST(z0hav        , 1, 0, comm3d, mpierr)
+    call D_MPI_BCAST(rsisurf2     , 1, 0, comm3d, mpierr)
+    call D_MPI_BCAST(Cskinav      , 1, 0, comm3d, mpierr)
+    call D_MPI_BCAST(lambdaskinav , 1, 0, comm3d, mpierr)
+    call D_MPI_BCAST(albedoav     , 1, 0, comm3d, mpierr)
+    call D_MPI_BCAST(Qnetav       , 1, 0, comm3d, mpierr)
 
-    call MPI_BCAST(rsminav      , 1, MY_REAL, 0, comm3d, mpierr)
-    call MPI_BCAST(rssoilminav  , 1, MY_REAL, 0, comm3d, mpierr)
-    call MPI_BCAST(cvegav       , 1, MY_REAL, 0, comm3d, mpierr)
-    call MPI_BCAST(Wlav         , 1, MY_REAL, 0, comm3d, mpierr)
-    call MPI_BCAST(LAIav        , 1, MY_REAL, 0, comm3d, mpierr)
-    call MPI_BCAST(gDav         , 1, MY_REAL, 0, comm3d, mpierr)
+    call D_MPI_BCAST(rsminav      , 1, 0, comm3d, mpierr)
+    call D_MPI_BCAST(rssoilminav  , 1, 0, comm3d, mpierr)
+    call D_MPI_BCAST(cvegav       , 1, 0, comm3d, mpierr)
+    call D_MPI_BCAST(Wlav         , 1, 0, comm3d, mpierr)
+    call D_MPI_BCAST(LAIav        , 1, 0, comm3d, mpierr)
+    call D_MPI_BCAST(gDav         , 1, 0, comm3d, mpierr)
 
-    call MPI_BCAST(z0         ,1,MY_REAL   ,0,comm3d,mpierr)
-    call MPI_BCAST(ustin      ,1,MY_REAL   ,0,comm3d,mpierr)
-    call MPI_BCAST(wtsurf     ,1,MY_REAL   ,0,comm3d,mpierr)
-    call MPI_BCAST(wqsurf     ,1,MY_REAL   ,0,comm3d,mpierr)
-    call MPI_BCAST(wsvsurf(1:nsv),nsv,MY_REAL   ,0,comm3d,mpierr)
-    call MPI_BCAST(ps         ,1,MY_REAL   ,0,comm3d,mpierr)
-    call MPI_BCAST(thls       ,1,MY_REAL   ,0,comm3d,mpierr)
+    call D_MPI_BCAST(z0         ,1,0,comm3d,mpierr)
+    call D_MPI_BCAST(ustin      ,1,0,comm3d,mpierr)
+    call D_MPI_BCAST(wtsurf     ,1,0,comm3d,mpierr)
+    call D_MPI_BCAST(wqsurf     ,1,0,comm3d,mpierr)
+    call D_MPI_BCAST(wsvsurf(1:nsv),nsv,0,comm3d,mpierr)
+    call D_MPI_BCAST(ps         ,1,0,comm3d,mpierr)
+    call D_MPI_BCAST(thls       ,1,0,comm3d,mpierr)
 
     call MPI_BCAST(lhetero                    ,            1, MPI_LOGICAL, 0, comm3d, mpierr)
     call MPI_BCAST(loldtable                  ,            1, MPI_LOGICAL, 0, comm3d, mpierr)
@@ -156,12 +156,12 @@ contains
     call MPI_BCAST(planttype                  ,            1, MPI_INTEGER, 0, comm3d, mpierr)
     call MPI_BCAST(lrelaxgc                   ,            1, MPI_LOGICAL, 0, comm3d, mpierr)
     call MPI_BCAST(lrelaxci                   ,            1, MPI_LOGICAL, 0, comm3d, mpierr)
-    call MPI_BCAST(kgc                        ,            1, MY_REAL    , 0, comm3d, mpierr)
-    call MPI_BCAST(kci                        ,            1, MY_REAL    , 0, comm3d, mpierr)
-    call MPI_BCAST(phi                        ,            1, MY_REAL    , 0, comm3d, mpierr)
-    call MPI_BCAST(phifc                      ,            1, MY_REAL    , 0, comm3d, mpierr)
-    call MPI_BCAST(phiwp                      ,            1, MY_REAL    , 0, comm3d, mpierr)
-    call MPI_BCAST(R10                        ,            1, MY_REAL    , 0, comm3d, mpierr)
+    call D_MPI_BCAST(kgc                        ,            1, 0, comm3d, mpierr)
+    call D_MPI_BCAST(kci                        ,            1, 0, comm3d, mpierr)
+    call D_MPI_BCAST(phi                        ,            1, 0, comm3d, mpierr)
+    call D_MPI_BCAST(phifc                      ,            1, 0, comm3d, mpierr)
+    call D_MPI_BCAST(phiwp                      ,            1, 0, comm3d, mpierr)
+    call D_MPI_BCAST(R10                        ,            1, 0, comm3d, mpierr)
     call MPI_BCAST(lsplitleaf                 ,            1, MPI_LOGICAL, 0, comm3d, mpierr)
     
     call MPI_BCAST(land_use(1:mpatch,1:mpatch),mpatch*mpatch, MPI_INTEGER, 0, comm3d, mpierr)
@@ -704,7 +704,8 @@ contains
     use modglobal,  only : i1,j1,fkar,zf,cu,cv,nsv,ijtot,rd,rv
     use modfields,  only : thl0, qt0, u0, v0, u0av, v0av
     use mpi
-    use modmpi,     only : my_real, mpierr, comm3d, mpi_sum, excjs, mpi_integer
+    use modmpi,     only : mpierr, comm3d, mpi_sum, excjs, mpi_integer &
+                         , D_MPI_ALLREDUCE, D_MPI_BCAST
     use moduser,    only : surf_user
     implicit none
 
@@ -744,10 +745,10 @@ contains
         enddo
       enddo
 
-      call MPI_ALLREDUCE(upatch(1:xpatches,1:ypatches),Supatch(1:xpatches,1:ypatches),&
-      xpatches*ypatches,    MY_REAL,MPI_SUM, comm3d,mpierr)
-      call MPI_ALLREDUCE(vpatch(1:xpatches,1:ypatches),Svpatch(1:xpatches,1:ypatches),&
-      xpatches*ypatches,    MY_REAL,MPI_SUM, comm3d,mpierr)
+      call D_MPI_ALLREDUCE(upatch(1:xpatches,1:ypatches),Supatch(1:xpatches,1:ypatches),&
+      xpatches*ypatches,MPI_SUM, comm3d,mpierr)
+      call D_MPI_ALLREDUCE(vpatch(1:xpatches,1:ypatches),Svpatch(1:xpatches,1:ypatches),&
+      xpatches*ypatches,MPI_SUM, comm3d,mpierr)
       call MPI_ALLREDUCE(Npatch(1:xpatches,1:ypatches),SNpatch(1:xpatches,1:ypatches),&
       xpatches*ypatches,MPI_INTEGER,MPI_SUM, comm3d,mpierr)
 
@@ -766,7 +767,7 @@ contains
         call getobl
       end if
 
-      call MPI_BCAST(oblav ,1,MY_REAL ,0,comm3d,mpierr)
+      call D_MPI_BCAST(oblav ,1 ,0,comm3d,mpierr)
 
       do j = 2, j1
         do i = 2, i1
@@ -876,9 +877,9 @@ contains
         wtsurfl = sum(thlflux(2:i1,2:j1))
         wqsurfl = sum(qtflux (2:i1,2:j1))
 
-        call MPI_ALLREDUCE(ustl, ust, 1,  MY_REAL,MPI_SUM, comm3d,mpierr)
-        call MPI_ALLREDUCE(wtsurfl, wtsurf, 1,  MY_REAL,MPI_SUM, comm3d,mpierr)
-        call MPI_ALLREDUCE(wqsurfl, wqsurf, 1,  MY_REAL,MPI_SUM, comm3d,mpierr)
+        call D_MPI_ALLREDUCE(ustl  ,  ust   , 1, MPI_SUM, comm3d,mpierr)
+        call D_MPI_ALLREDUCE(wtsurfl, wtsurf, 1, MPI_SUM, comm3d,mpierr)
+        call D_MPI_ALLREDUCE(wqsurfl, wqsurf, 1, MPI_SUM, comm3d,mpierr)
 
         wtsurf = wtsurf / ijtot
         wqsurf = wqsurf / ijtot
@@ -1003,18 +1004,18 @@ contains
         end do
       end do
 
-      call MPI_ALLREDUCE(thlsl, thls, 1,  MY_REAL, MPI_SUM, comm3d,mpierr)
-      call MPI_ALLREDUCE(qtsl, qts, 1,  MY_REAL, MPI_SUM, comm3d,mpierr)
+      call D_MPI_ALLREDUCE(thlsl, thls, 1, MPI_SUM, comm3d,mpierr)
+      call D_MPI_ALLREDUCE(qtsl , qts , 1, MPI_SUM, comm3d,mpierr)
 
       thls = thls / ijtot
       qts  = qts  / ijtot
       thvs = thls * (1. + (rv/rd - 1.) * qts)
 
       if (lhetero) then
-        call MPI_ALLREDUCE(lthls_patch(1:xpatches,1:ypatches), thls_patch(1:xpatches,1:ypatches),&
-        xpatches*ypatches,     MY_REAL, MPI_SUM, comm3d,mpierr)
-        call MPI_ALLREDUCE(lqts_patch(1:xpatches,1:ypatches),  qts_patch(1:xpatches,1:ypatches),&
-        xpatches*ypatches,     MY_REAL, MPI_SUM, comm3d,mpierr)
+        call D_MPI_ALLREDUCE(lthls_patch(1:xpatches,1:ypatches), thls_patch(1:xpatches,1:ypatches),&
+        xpatches*ypatches, MPI_SUM, comm3d,mpierr)
+        call D_MPI_ALLREDUCE(lqts_patch(1:xpatches,1:ypatches),  qts_patch(1:xpatches,1:ypatches),&
+        xpatches*ypatches, MPI_SUM, comm3d,mpierr)
         call MPI_ALLREDUCE(Npatch(1:xpatches,1:ypatches)     , SNpatch(1:xpatches,1:ypatches),&
         xpatches*ypatches, MPI_INTEGER ,MPI_SUM, comm3d,mpierr)
         thls_patch = thls_patch / SNpatch
@@ -1042,7 +1043,7 @@ contains
     use modfields,   only : qt0
     !use modsurfdata, only : rs, ra
     use mpi
-    use modmpi,      only : my_real,mpierr,comm3d,mpi_sum,mpi_integer
+    use modmpi,      only : mpierr,comm3d,mpi_sum,mpi_integer, D_MPI_ALLREDUCE
 
     implicit none
     real       :: exner, tsurf, qsatsurf, surfwet, es, qtsl
@@ -1067,8 +1068,7 @@ contains
         end do
       end do
 
-      call MPI_ALLREDUCE(qtsl, qts, 1,  MY_REAL, &
-                         MPI_SUM, comm3d,mpierr)
+      call D_MPI_ALLREDUCE(qtsl, qts, 1,  MPI_SUM, comm3d,mpierr)
       qts  = qts / ijtot
       thvs = thls * (1. + (rv/rd - 1.) * qts)
 
@@ -1090,8 +1090,8 @@ contains
             Npatch(patchx,patchy)     = Npatch(patchx,patchy)     + 1
           enddo
         enddo
-        call MPI_ALLREDUCE(lqts_patch(1:xpatches,1:ypatches), qts_patch(1:xpatches,1:ypatches),&
-        xpatches*ypatches,     MY_REAL,MPI_SUM, comm3d,mpierr)
+        call D_MPI_ALLREDUCE(lqts_patch(1:xpatches,1:ypatches), qts_patch(1:xpatches,1:ypatches),&
+        xpatches*ypatches,MPI_SUM, comm3d,mpierr)
         call MPI_ALLREDUCE(Npatch(1:xpatches,1:ypatches)    , SNpatch(1:xpatches,1:ypatches)  ,&
         xpatches*ypatches,MPI_INTEGER ,MPI_SUM, comm3d,mpierr)
         qts_patch = qts_patch / SNpatch
@@ -1108,7 +1108,7 @@ contains
     use modglobal, only : zf, rv, rd, grav, i1, j1, i2, j2, cu, cv
     use modfields, only : thl0av, qt0av, u0, v0, thl0, qt0, u0av, v0av
     use mpi
-    use modmpi,    only : my_real,mpierr,comm3d,mpi_sum,mpi_integer
+    use modmpi,    only : mpierr,comm3d,mpi_sum,mpi_integer,D_MPI_ALLREDUCE
     implicit none
 
     integer             :: i,j,iter,patchx,patchy
@@ -1207,18 +1207,18 @@ contains
         enddo
       enddo
 
-      call MPI_ALLREDUCE(upatch(1:xpatches,1:ypatches)   ,Supatch(1:xpatches,1:ypatches) ,xpatches*ypatches,&
-      MY_REAL,MPI_SUM, comm3d,mpierr)
-      call MPI_ALLREDUCE(vpatch(1:xpatches,1:ypatches)   ,Svpatch(1:xpatches,1:ypatches) ,xpatches*ypatches,&
-      MY_REAL,MPI_SUM, comm3d,mpierr)
+      call D_MPI_ALLREDUCE(upatch(1:xpatches,1:ypatches)   ,Supatch(1:xpatches,1:ypatches) ,xpatches*ypatches,&
+      MPI_SUM, comm3d,mpierr)
+      call D_MPI_ALLREDUCE(vpatch(1:xpatches,1:ypatches)   ,Svpatch(1:xpatches,1:ypatches) ,xpatches*ypatches,&
+      MPI_SUM, comm3d,mpierr)
       call MPI_ALLREDUCE(Npatch(1:xpatches,1:ypatches)   ,SNpatch(1:xpatches,1:ypatches) ,xpatches*ypatches,&
       MPI_INTEGER,MPI_SUM, comm3d,mpierr)
-      call MPI_ALLREDUCE(lthlpatch(1:xpatches,1:ypatches),thlpatch(1:xpatches,1:ypatches),xpatches*ypatches,&
-      MY_REAL,MPI_SUM, comm3d,mpierr)
-      call MPI_ALLREDUCE(lqpatch(1:xpatches,1:ypatches)  ,qpatch(1:xpatches,1:ypatches)  ,xpatches*ypatches,&
-      MY_REAL,MPI_SUM, comm3d,mpierr)
-      call MPI_ALLREDUCE(loblpatch(1:xpatches,1:ypatches),oblpatch(1:xpatches,1:ypatches),xpatches*ypatches,&
-      MY_REAL,MPI_SUM, comm3d,mpierr)
+      call D_MPI_ALLREDUCE(lthlpatch(1:xpatches,1:ypatches),thlpatch(1:xpatches,1:ypatches),xpatches*ypatches,&
+      MPI_SUM, comm3d,mpierr)
+      call D_MPI_ALLREDUCE(lqpatch(1:xpatches,1:ypatches)  ,qpatch(1:xpatches,1:ypatches)  ,xpatches*ypatches,&
+      MPI_SUM, comm3d,mpierr)
+      call D_MPI_ALLREDUCE(loblpatch(1:xpatches,1:ypatches),oblpatch(1:xpatches,1:ypatches),xpatches*ypatches,&
+      MPI_SUM, comm3d,mpierr)
 
       horvpatch = sqrt(((Supatch/SNpatch) + cu) **2. + ((Svpatch/SNpatch) + cv) ** 2.)
       horvpatch = max(horvpatch, 0.1)
@@ -1644,7 +1644,7 @@ contains
     use modfields, only : ql0,qt0,thl0,rhof,presf,svm
     use modraddata,only : iradiation,useMcICA,swd,swu,lwd,lwu,irad_par,swdir,swdif,zenith
     use mpi
-    use modmpi, only :comm3d,my_real,mpi_sum,mpierr,mpi_integer,myid
+    use modmpi, only :comm3d,mpi_sum,mpierr,mpi_integer,myid, D_MPI_ALLREDUCE
     use modmicrodata, only : imicro,imicro_bulk
 
     real     :: f1, f2, f3, f4 ! Correction functions for Jarvis-Stewart
@@ -2192,10 +2192,10 @@ contains
       endif
     endif
 
-    call MPI_ALLREDUCE(local_wco2av, wco2av, 1,    MY_REAL, MPI_SUM, comm3d,mpierr)
-    call MPI_ALLREDUCE(local_Anav  , Anav  , 1,    MY_REAL, MPI_SUM, comm3d,mpierr)
-    call MPI_ALLREDUCE(local_gcco2av  , gcco2av  , 1,    MY_REAL, MPI_SUM, comm3d,mpierr)
-    call MPI_ALLREDUCE(local_Respav, Respav, 1,    MY_REAL, MPI_SUM, comm3d,mpierr)
+    call D_MPI_ALLREDUCE(local_wco2av , wco2av , 1, MPI_SUM, comm3d,mpierr)
+    call D_MPI_ALLREDUCE(local_Anav   , Anav   , 1, MPI_SUM, comm3d,mpierr)
+    call D_MPI_ALLREDUCE(local_gcco2av, gcco2av, 1, MPI_SUM, comm3d,mpierr)
+    call D_MPI_ALLREDUCE(local_Respav , Respav , 1, MPI_SUM, comm3d,mpierr)
 
     Anav   = Anav/ijtot
     gcco2av= gcco2av/ijtot
@@ -2203,11 +2203,11 @@ contains
     Respav = Respav/ijtot
 
 
-    call MPI_ALLREDUCE(thlsl, thls, 1,  MY_REAL, MPI_SUM, comm3d,mpierr)
+    call D_MPI_ALLREDUCE(thlsl, thls, 1, MPI_SUM, comm3d,mpierr)
     thls = thls / ijtot
     if (lhetero) then
-      call MPI_ALLREDUCE(lthls_patch(1:xpatches,1:ypatches), thls_patch(1:xpatches,1:ypatches),&
-      xpatches*ypatches,     MY_REAL, MPI_SUM, comm3d,mpierr)
+      call D_MPI_ALLREDUCE(lthls_patch(1:xpatches,1:ypatches), thls_patch(1:xpatches,1:ypatches),&
+      xpatches*ypatches, MPI_SUM, comm3d,mpierr)
       call MPI_ALLREDUCE(Npatch(1:xpatches,1:ypatches)     , SNpatch(1:xpatches,1:ypatches)   ,&
       xpatches*ypatches, MPI_INTEGER ,MPI_SUM, comm3d,mpierr)
       thls_patch = thls_patch / SNpatch

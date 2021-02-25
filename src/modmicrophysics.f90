@@ -37,7 +37,7 @@ implicit none
 contains
   subroutine initmicrophysics
     use mpi
-    use modmpi,   only :myid,my_real,comm3d,mpi_integer,mpi_logical
+    use modmpi,   only :myid,comm3d,mpi_integer,mpi_logical, D_MPI_BCAST
     use modglobal,only :ifnamopt,fname_options,nsv,checknamelisterror
     use modbulkmicro, only : initbulkmicro
     use modsimpleice, only : initsimpleice
@@ -70,11 +70,11 @@ contains
     call MPI_BCAST(l_berry,  1, MPI_LOGICAL ,0,comm3d,ierr)
     call MPI_BCAST(l_graupel,1, MPI_LOGICAL ,0,comm3d,ierr)
     call MPI_BCAST(l_warm,   1, MPI_LOGICAL ,0,comm3d,ierr)
-    call MPI_BCAST(mur_cst,  1, MY_REAL     ,0,comm3d,ierr)
-    call MPI_BCAST(Nc_0,     1, MY_REAL     ,0,comm3d,ierr)
-    call MPI_BCAST(sig_g,    1, MY_REAL     ,0,comm3d,ierr)
-    call MPI_BCAST(sig_gr,   1, MY_REAL     ,0,comm3d,ierr)
-    call MPI_BCAST(courantp, 1, MY_REAL     ,0,comm3d,ierr)
+    call D_MPI_BCAST(mur_cst,  1, 0,comm3d,ierr)
+    call D_MPI_BCAST(Nc_0,     1, 0,comm3d,ierr)
+    call D_MPI_BCAST(sig_g,    1, 0,comm3d,ierr)
+    call D_MPI_BCAST(sig_gr,   1, 0,comm3d,ierr)
+    call D_MPI_BCAST(courantp, 1, 0,comm3d,ierr)
 
     select case (imicro)
     case(imicro_none)
