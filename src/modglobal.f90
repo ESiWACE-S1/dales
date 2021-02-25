@@ -194,9 +194,9 @@ save
 
       ! modphsgrd.f90
 
-      real :: dx              !<  grid spacing in x-direction
-      real :: dy              !<  grid spacing in y-direction
-      real :: dz              !<  grid spacing in z-direction
+      real(field_r) :: dx              !<  grid spacing in x-direction
+      real(field_r) :: dy              !<  grid spacing in y-direction
+      real(field_r) :: dz              !<  grid spacing in z-direction
       real :: dxi             !<  1/dx
       real :: dyi             !<  1/dy
       real :: dzi             !<  1/dz

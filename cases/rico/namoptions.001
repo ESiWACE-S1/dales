@@ -34,7 +34,7 @@ thls       =  298.5
 
 
 lmoist     =  .true.
-isurf      =  10
+isurf      =  2
 irad       =  0
 timerad    =  2
 lcoriol    =  .true.
