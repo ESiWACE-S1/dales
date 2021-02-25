@@ -210,10 +210,10 @@ save
 
 
       real :: ijtot
-      real, allocatable :: dzf(:)         !<  thickness of full level
-      real, allocatable :: dzh(:)         !<  thickness of half level
-      real, allocatable :: zh(:)          !<  height of half level [m]
-      real, allocatable :: zf(:)          !<  height of full level [m]
+      real(field_r), allocatable :: dzf(:)         !<  thickness of full level
+      real(field_r), allocatable :: dzh(:)         !<  thickness of half level
+      real(field_r), allocatable :: zh(:)          !<  height of half level [m]
+      real(field_r), allocatable :: zf(:)          !<  height of full level [m]
       real :: xsize    = -1 !<  domain size in x-direction
       real :: ysize    = -1 !<  domain size in y-direction
       real, allocatable :: delta(:)       !<  (dx*dy*dz)**(1/3)
@@ -229,7 +229,7 @@ contains
 !! Set courant number, calculate the grid sizes (both computational and physical), and set the coriolis parameter
   subroutine initglobal
     use mpi
-    use modmpi, only : nprocx, nprocy, myid,comm3d, my_real, mpierr
+    use modmpi, only : nprocx, nprocy, myid,comm3d, mpierr, D_MPI_BCAST
     implicit none
 
     integer :: advarr(4)
@@ -411,7 +411,7 @@ contains
 
   ! MPI broadcast kmax elements from zf
 
-    call MPI_BCAST(zf,kmax,MY_REAL   ,0,comm3d,mpierr)
+    call D_MPI_BCAST(zf, kmax, 0, comm3d, mpierr)
 
     zh(1) = 0.0
     do k=1,kmax

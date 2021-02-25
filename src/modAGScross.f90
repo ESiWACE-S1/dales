@@ -52,7 +52,7 @@ contains
 !> Initializing AGScross. Read out the namelist, initializing the variables
   subroutine initAGScross
     use mpi
-    use modmpi,   only :myid,my_real,mpierr,comm3d,mpi_logical,cmyid
+    use modmpi,   only :myid,mpierr,comm3d,mpi_logical,cmyid, D_MPI_BCAST
     use modglobal,only :imax,jmax,ifnamopt,fname_options,dtmax, dtav_glob,ladaptive,dt_lim,cexpnr,tres,btime,checknamelisterror
     use modstat_nc,only : open_nc, define_nc,ncinfo,writestat_dims_nc,nctiminfo
     use modsurfdata, only : lrsAgs, ksoilmax,lsplitleaf
@@ -75,8 +75,8 @@ contains
 
     if (.not. lrsAgs) lAGScross = .false.
 
-    call MPI_BCAST(dtav       ,1,MY_REAL    ,0,comm3d,mpierr)
-    call MPI_BCAST(lAGScross     ,1,MPI_LOGICAL,0,comm3d,mpierr)
+    call D_MPI_BCAST(dtav    ,1 ,0,comm3d,mpierr)
+    call MPI_BCAST(lAGScross ,1,MPI_LOGICAL,0,comm3d,mpierr)
 
     idtav = dtav/tres
     tnext   = idtav+btime

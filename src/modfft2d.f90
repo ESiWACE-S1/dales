@@ -215,7 +215,7 @@ contains
 ! data are on a s_r processor in the i-direction for ptrans
 
     use mpi
-    use modmpi, only : commrow, mpierr, my_real, nprocx
+    use modmpi, only : commrow, mpierr, nprocx, D_MPI_ALLTOALL
     use modglobal, only : i1,j1, itot, imax,jmax, kmax, ih, jh
     implicit none
 
@@ -238,9 +238,9 @@ contains
     enddo
     enddo
 
-    call MPI_ALLTOALL(bufin,   (imax*jmax*nkonx),my_real, &
-                      bufout,  (imax*jmax*nkonx),my_real, &
-                      commrow,mpierr)
+    call D_MPI_ALLTOALL(bufin,   (imax*jmax*nkonx), &
+                        bufout,  (imax*jmax*nkonx), &
+                        commrow,mpierr)
 
     ii = 0
     do n=0,nprocx-1
@@ -261,7 +261,7 @@ contains
 ! data are on a s_r processor in the i-direction for ptrans
 
     use mpi
-    use modmpi, only : commrow, mpierr, my_real, nprocx
+    use modmpi, only : commrow, mpierr, nprocx, D_MPI_ALLTOALL
     use modglobal, only : i1,j1, itot, imax,jmax, kmax, ih, jh
     implicit none
 
@@ -282,9 +282,9 @@ contains
     enddo
     enddo
 
-    call MPI_ALLTOALL(bufin,   (imax*jmax*nkonx),my_real, &
-                      bufout,  (imax*jmax*nkonx),my_real, &
-                      commrow,mpierr)
+    call D_MPI_ALLTOALL(bufin,   (imax*jmax*nkonx), &
+                        bufout,  (imax*jmax*nkonx), &
+                        commrow,mpierr)
 
     ii = 0
     do n=0,nprocx-1
@@ -307,7 +307,7 @@ contains
 ! data are on a s_r processor in the i-direction for ptrans
 
     use mpi
-    use modmpi, only : commcol, mpierr, nprocy, my_real
+    use modmpi, only : commcol, mpierr, nprocy, D_MPI_ALLTOALL
     use modglobal, only : i1,j1, jtot, imax,jmax, kmax, ih, jh
     implicit none
 
@@ -330,9 +330,9 @@ contains
     enddo
     enddo
 
-    call MPI_ALLTOALL(bufin,   (imax*jmax*nkony),my_real, &
-                      bufout,  (imax*jmax*nkony),my_real, &
-                      commcol,mpierr)
+    call D_MPI_ALLTOALL(bufin,   (imax*jmax*nkony), &
+                        bufout,  (imax*jmax*nkony), &
+                        commcol,mpierr)
 
 
     ii = 0
@@ -354,7 +354,7 @@ contains
 ! data are on a s_r processor in the i-direction for ptrans
 
     use mpi
-    use modmpi, only : commcol, mpierr, nprocy, my_real
+    use modmpi, only : commcol, mpierr, nprocy, D_MPI_ALLTOALL
     use modglobal, only : i1,j1, jtot, imax,jmax, kmax, ih, jh
     implicit none
 
@@ -375,9 +375,9 @@ contains
     enddo
     enddo
 
-    call MPI_ALLTOALL(bufin,   (imax*jmax*nkony),my_real, &
-                      bufout,  (imax*jmax*nkony),my_real, &
-                      commcol,mpierr)
+    call D_MPI_ALLTOALL(bufin,   (imax*jmax*nkony), &
+                        bufout,  (imax*jmax*nkony), &
+                        commcol,mpierr)
 
     ii = 0
     do n=0,nprocy-1
