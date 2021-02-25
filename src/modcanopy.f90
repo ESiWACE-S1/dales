@@ -185,7 +185,7 @@ contains
     implicit none
 
     integer n
-    real :: zeroar(i2,j2)
+    real(field_r) :: zeroar(i2,j2)
 
     zeroar = 0.0
 
@@ -349,7 +349,7 @@ contains
 
     real(field_r), intent(inout) :: putout(2-ih:i1+ih,2-jh:j1+jh,k1)
     real, intent(in   ) :: flux_top
-    real, intent(in   ) :: flux_surf(i2,j2)
+    real(field_r), intent(in   ) :: flux_surf(i2,j2)
     real, intent(in   ) :: alpha
     real, intent(in   ) :: pai(ncanopy+1)
     real                :: flux_net (i2,j2)

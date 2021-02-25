@@ -27,6 +27,7 @@
 !  Copyright 1993-2009 Delft University of Technology, Wageningen University, Utrecht University, KNMI
 !
 module advec_hybrid_f
+use modprecision, only : field_r
 implicit none
 contains
 
@@ -36,8 +37,8 @@ subroutine advecc_hybrid_f(pin, pout, phi_tilde_in)
 
   implicit none
   
-  real,dimension(2-ih:i1+ih,2-jh:j1+jh,k1),intent(in)   :: pin  !< Input: the cell centered field (qt,thetal,sv etc)
-  real,dimension(2-ih:i1+ih,2-jh:j1+jh,k1),intent(inout):: pout !< Output: the tendency for the input field (qtp,thetalp,svp etc)
+  real(field_r),dimension(2-ih:i1+ih,2-jh:j1+jh,k1),intent(in)   :: pin  !< Input: the cell centered field (qt,thetal,sv etc)
+  real(field_r),dimension(2-ih:i1+ih,2-jh:j1+jh,k1),intent(inout):: pout !< Output: the tendency for the input field (qtp,thetalp,svp etc)
   real,optional,intent(in) :: phi_tilde_in   !< Order of magnitude of the field, used in the smoothness criterion. Optional. 
 
   real :: phi_tilde

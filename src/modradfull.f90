@@ -29,6 +29,7 @@
 module modradfull
 
   use RandomNumbers
+  use modprecision, only : field_r
   use modglobal, only : pi
   implicit none
   private
@@ -108,7 +109,7 @@ module modradfull
 
   real, allocatable ::  rhof_b(:),exnf_b(:)
   real, allocatable ::  temp_b(:,:,:),qv_b(:,:,:),ql_b(:,:,:),rr_b(:,:,:)
-  real, allocatable ::  tempskin(:,:)
+  real(field_r), allocatable ::  tempskin(:,:)
 contains
     subroutine radfull
   !   use radiation,    only : d4stream
@@ -208,7 +209,8 @@ contains
       real, optional, dimension (2-ih:i1+ih,2-jh:j1+jh,k1), intent (in) :: rr
       logical, optional, intent(in) :: lclear
       real, dimension (2-ih:i1+ih,2-jh:j1+jh,k1), intent (out) :: fus3D,fds3D,fuir3D,fdir3D
-      real, dimension (1:i1+1,1:j1+1), intent (in) :: tskin, albedo
+      real(field_r), dimension (1:i1+1,1:j1+1), intent (in) :: tskin
+      real, dimension (1:i1+1,1:j1+1), intent (in) :: albedo
 
       integer :: kk
       logical :: doclear
@@ -1110,7 +1112,7 @@ contains
         do k = 1, nv
            f0a(k) = 2.0 * ( 1.0 - w(k) ) * bf(k)
            tmp    = alog( bf(k+1)/bf(k) )
-           u0a(k) = -(t(k)-tkm1) / sign(max(abs(tmp),eps1),tmp)
+           u0a(k) = -(t(k)-tkm1) / sign(real(max(abs(tmp),eps1),kind(tmp)),tmp)
            u0a(k) = sign(max(abs(u0a(k)),1.e-8),u0a(k))
            tkm1   = t(k)
         end do
@@ -1191,8 +1193,8 @@ contains
          as, & ! broadband albedo (all visible bands given this value)
          ee, & ! broadband surface emissivity (all IR bands given this value)
          u0, & ! cosine of solar zenith angle
-         ss, & ! Solar constant
-         pts   ! Surface skin temperature
+         ss    ! Solar constant
+    real(field_r), intent(in) ::  pts   ! Surface skin temperature
 
     logical, optional, intent (in ) :: useMcICA
 
@@ -1233,9 +1235,8 @@ contains
 !          prwc, & ! rain water content [g/m^3]
 !          pgwc    ! graupel water content
 
-    real, intent (in) :: &
-         ee, & ! broadband surface emissivity (all IR bands given this value)
-         pts   ! Surface skin temperature
+    real, intent (in) ::  ee ! broadband surface emissivity (all IR bands given this value)
+    real(field_r), intent(in) ::  pts   ! Surface skin temperature
 
     logical, optional, intent (in ) :: useMcICA
 
@@ -1633,7 +1634,8 @@ contains
   !> and surface temperatures are taken as the skin temperature.
   !>
   subroutine planck ( pt, tskin, llimit, rlimit, bf)
-    real, intent (in)    :: pt(nv), tskin, llimit, rlimit
+    real, intent (in)    :: pt(nv), llimit, rlimit
+    real(field_r), intent(in) :: tskin
     real, intent (out)   :: bf(nv1) ! intensity [W/m^2/Sr]
 
     real, parameter :: xk = 10.

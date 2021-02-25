@@ -31,9 +31,8 @@
 
 
 module modtimestat
-
-
   use modglobal, only : l_i
+  use modprecision, only : field_r
 
 implicit none
 ! private
@@ -67,15 +66,15 @@ save
   real, allocatable :: u0av_patch (:,:)     ! patch averaged um    at full level
   real, allocatable :: v0av_patch (:,:)     ! patch averaged vm    at full level
   real, allocatable :: w0av_patch (:,:)     ! patch averaged wm    at full level
-  real,allocatable, dimension(:,:) :: zbase_field, ztop_field, cc_field, qlint_field, tke_tot_field
-  real,allocatable, dimension(:,:) :: zbase_patch, ztop_patch, zbasemin_patch, zbasemin_patchl
-  real,allocatable, dimension(:,:) :: cc_patch, qlint_patch, qlintmax_patch, qlintmax_patchl, tke_tot_patch
-  real,allocatable, dimension(:,:) :: wmax_patch, wmax_patchl, qlmax_patch, qlmax_patchl, ztopmax_patch, ztopmax_patchl
-  real,allocatable, dimension(:,:) :: ust_patch, qst_patch, tst_patch, wthls_patch, wqls_patch, wthvs_patch
+  real(field_r),allocatable, dimension(:,:) :: zbase_field, ztop_field, cc_field, qlint_field, tke_tot_field
+  real(field_r),allocatable, dimension(:,:) :: zbase_patch, ztop_patch, zbasemin_patch, zbasemin_patchl
+  real(field_r),allocatable, dimension(:,:) :: cc_patch, qlint_patch, qlintmax_patch, qlintmax_patchl, tke_tot_patch
+  real(field_r),allocatable, dimension(:,:) :: wmax_patch, wmax_patchl, qlmax_patch, qlmax_patchl, ztopmax_patch, ztopmax_patchl
+  real(field_r),allocatable, dimension(:,:) :: ust_patch, qst_patch, tst_patch, wthls_patch, wqls_patch, wthvs_patch
   !In combination with isurf = 1
-  real,allocatable, dimension(:,:) :: Qnet_patch, H_patch, LE_patch, G0_patch, tendskin_patch,rs_patch,ra_patch
-  real,allocatable, dimension(:,:) :: cliq_patch, wl_patch, rsveg_patch, rssoil_patch, tskin_patch, obl_patch
-  real,allocatable, dimension(:,:) :: zi_patch,ziold_patch,we_patch, zi_field
+  real(field_r),allocatable, dimension(:,:) :: Qnet_patch, H_patch, LE_patch, G0_patch, tendskin_patch,rs_patch,ra_patch
+  real(field_r),allocatable, dimension(:,:) :: cliq_patch, wl_patch, rsveg_patch, rssoil_patch, tskin_patch, obl_patch
+  real(field_r),allocatable, dimension(:,:) :: zi_patch,ziold_patch,we_patch, zi_field
 
 contains
 !> Initializing Timestat. Read out the namelist, initializing the variables
@@ -1216,7 +1215,7 @@ contains
    use modmpi,     only : mpierr,comm3d,my_real,mpi_sum
    implicit none
    real                :: patchsum_1level(xpatches,ypatches),xl(xpatches,ypatches)
-   real, intent(in)    :: x(imax,jmax)
+   real(field_r), intent(in)    :: x(imax,jmax)
    integer             :: i,j,iind,jind
 
    patchsum_1level = 0

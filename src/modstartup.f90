@@ -30,8 +30,7 @@
 !
 
 module modstartup
-
-
+use modprecision,      only : field_r, l_r
 implicit none
 ! private
 ! public :: startup, writerestartfiles,trestart
@@ -400,7 +399,7 @@ contains
     logical negval !switch to allow or not negative values in randomnization
 
     real, allocatable :: height(:), th0av(:)
-    real, allocatable :: thv0(:,:,:)
+    real(field_r), allocatable :: thv0(:,:,:)
 
     character(80) chmess
 
@@ -682,7 +681,7 @@ contains
       call slabsum(qt0av ,1,k1,qt0 ,2-ih,i1+ih,2-jh,j1+jh,1,k1,2,i1,2,j1,1,k1)
       call slabsum(ql0av ,1,k1,ql0 ,2-ih,i1+ih,2-jh,j1+jh,1,k1,2,i1,2,j1,1,k1)
       do n=1,nsv
-        call slabsum(sv0av(1,n),1,k1,sv0(:,:,:,n),2-ih,i1+ih,2-jh,j1+jh,1,k1,2,i1,2,j1,1,k1)
+        call slabsum(sv0av(1:1,n),1,k1,sv0(:,:,:,n),2-ih,i1+ih,2-jh,j1+jh,1,k1,2,i1,2,j1,1,k1)
       end do
 
       u0av  = u0av  /ijtot + cu
@@ -1171,7 +1170,7 @@ contains
     integer i,j,klev
     integer is,ie,js,je
     real ran,ampl
-    real field(2-ihl:i1+ihl,2-jhl:j1+jhl,k1)
+    real(field_r) field(2-ihl:i1+ihl,2-jhl:j1+jhl,k1)
     parameter (imm = 134456, ia = 8121, ic = 28411)
     logical negval
 
@@ -1288,7 +1287,7 @@ contains
               j=j+1
             end do
             tb(k)=tmat(j-1)+lapserate(j)*(zf(k)-zmat(j-1))
-            if(abs(lapserate(j))<1e-99) then
+            if(abs(lapserate(j))<1e-99_l_r) then
               pb(k)=exp((log(pmat(j-1))*tmat(j-1)*rd+zmat(j-1)*grav-zf(k)*grav)/(tmat(j-1)*rd))
             else
               pb(k)=exp((log(pmat(j-1))*lapserate(j)*rd+log(tmat(j-1)+zmat(j-1)*lapserate(j))*grav-&
@@ -1334,7 +1333,7 @@ contains
               j=j+1
             end do
             tb(k)=tmat(j-1)+lapserate(j)*(zf(k)-zmat(j-1))
-            if(abs(lapserate(j))<1e-99) then
+            if(abs(lapserate(j))<1e-99_l_r) then
               pb(k)=exp((log(pmat(j-1))*tmat(j-1)*rd+zmat(j-1)*grav-zf(k)*grav)/(tmat(j-1)*rd))
             else
               pb(k)=exp((log(pmat(j-1))*lapserate(j)*rd+log(tmat(j-1)+zmat(j-1)*lapserate(j))*grav-&

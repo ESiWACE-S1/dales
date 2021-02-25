@@ -32,7 +32,9 @@ integer, parameter :: SHR_KIND_R4 = real32  !selected_real_kind( 6) ! 4 byte rea
 integer, parameter :: SHR_KIND_IN = n_i     ! native integer
 
 !! Module specific precisions
-integer, parameter :: field_r = real32
-integer, parameter :: pois_r  = real32
+integer, parameter :: field_r = real32  ! Precision for the most common fields u, v, w
+                                        ! And all other fields that do not have
+                                        ! their own kind and need to interoperate
+integer, parameter :: pois_r  = real128 ! Precision for the poisson solver
 
 end module

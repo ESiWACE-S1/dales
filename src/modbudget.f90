@@ -26,6 +26,7 @@
 !  Copyright 1993-2009 Delft University of Technology, Wageningen University, Utrecht University, KNMI
 !
 module modbudget
+  use modprecision, only : field_r
   use modglobal, only : l_i
 
   implicit none
@@ -672,7 +673,7 @@ end subroutine do_genbudget
     ! 1.1 Declare allocatable
     !----------------------------
     integer i,j,k
-    real, allocatable :: sbshrav(:),sbbuoav(:) ,sbdissav(:),&
+    real(field_r), allocatable :: sbshrav(:),sbbuoav(:) ,sbdissav(:),&
          ekmav(:),khkmav(:)
     real, allocatable :: sbtkeavl(:),khkmavl(:)
 

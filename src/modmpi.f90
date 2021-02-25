@@ -31,7 +31,9 @@
 
 
 module modmpi
-use mpi
+use mpi, only : MPI_DOUBLE_PRECISION, MPI_COMM_SIZE, MPI_SUM, MPI_STATUS_SIZE &
+              , MPI_COMM_WORLD, MPI_WTIME, MPI_LOGICAL, MPI_IN_PLACE &
+              , MPI_INTEGER, MPI_MAX, MPI_MIN, MPI_REAL4, MPI_REAL8, MPI_REAL16
 use modprecision
 implicit none
 save
@@ -55,8 +57,42 @@ save
   character(8) :: cmyid
   character(3) :: cmyidx, cmyidy
 
-contains
+  !------------------------------------------------------------------------------
+  ! D_MPI_INTERFACE
+  !
+  ! Victor Azizi Escience Center 2021
+  !
+  ! purpose
+  ! -------
+  ! These interfaces determine the correct KIND for the mpi procedures from the
+  ! KIND of the input arguments, this means that code that calls this functions 
+  ! does not have to worry about changing the MPI_TYPE with a changing KIND
+  ! 
+  ! The argument list is the same as the corresponding MPI_ functions, but with
+  ! the MPI_TYPE omitted
+  !------------------------------------------------------------------------------
+  interface D_MPI_ISEND
+    procedure :: D_MPI_ISEND_REAL32
+    procedure :: D_MPI_ISEND_REAL64
+    procedure :: D_MPI_ISEND_REAL128
+  end interface
+  interface D_MPI_RECV
+    procedure :: D_MPI_RECV_REAL32
+    procedure :: D_MPI_RECV_REAL64
+    procedure :: D_MPI_RECV_REAL128
+  end interface
+  interface excjs
+    procedure :: excjs_real32
+    procedure :: excjs_real64
+    procedure :: excjs_real128
+  end interface
+  interface slabsum
+    procedure :: slabsum_real32
+    procedure :: slabsum_real64
+    procedure :: slabsum_real128
+  end interface
 
+contains
   ! Initializes the world communicator within dales. Optionally this communicator is passed from an external caller.
   ! TODO: Handle errors correctly.
   subroutine initmpicomm(comm)
@@ -188,18 +224,18 @@ contains
     endif
   end subroutine exitmpi
 
-  subroutine excjs(a,sx,ex,sy,ey,sz,ez,ih,jh)
+  subroutine excjs_real32(a,sx,ex,sy,ey,sz,ez,ih,jh)
   implicit none
   integer sx, ex, sy, ey, sz, ez, ih, jh
-  real(field_r) a(sx-ih:ex+ih, sy-jh:ey+jh, sz:ez)
+  real(real32) a(sx-ih:ex+ih, sy-jh:ey+jh, sz:ez)
   integer status(MPI_STATUS_SIZE)
   integer ii, i, j, k
   integer reqn, reqs, reqe, reqw
   integer nssize, ewsize
-  real,allocatable, dimension(:) :: sendn,recvn
-  real,allocatable, dimension(:) :: sends,recvs
-  real,allocatable, dimension(:) :: sende,recve
-  real,allocatable, dimension(:) :: sendw,recvw
+  real(real32),allocatable, dimension(:) :: sendn,recvn &
+                                          , sends,recvs &
+                                          , sende,recve &
+                                          , sendw,recvw
 
 !   Calculate buffer size
   nssize = jh*(ex - sx + 1 + 2*ih)*(ez - sz + 1)
@@ -225,12 +261,12 @@ contains
     enddo
     enddo
 
-    call MPI_ISEND(sendn, nssize, MY_REAL, nbrnorth, 4, comm3d, reqn, mpierr)
-    call MPI_ISEND(sends, nssize, MY_REAL, nbrsouth, 5, comm3d, reqs, mpierr)
+    call D_MPI_ISEND(sendn, nssize, nbrnorth, 4, comm3d, reqn, mpierr)
+    call D_MPI_ISEND(sends, nssize, nbrsouth, 5, comm3d, reqs, mpierr)
 
     !   Receive south/north
-    call MPI_RECV(recvs, nssize, MY_REAL, nbrsouth, 4, comm3d, status, mpierr)
-    call MPI_RECV(recvn, nssize, MY_REAL, nbrnorth, 5, comm3d, status, mpierr)
+    call D_MPI_RECV(recvs, nssize, nbrsouth, 4, comm3d, status, mpierr)
+    call D_MPI_RECV(recvn, nssize, nbrnorth, 5, comm3d, status, mpierr)
 
     ii = 0
     do j=1,jh
@@ -267,12 +303,12 @@ contains
     enddo
     enddo
 
-    call MPI_ISEND(sende, ewsize, MY_REAL, nbreast, 6, comm3d, reqe, mpierr)
-    call MPI_ISEND(sendw, ewsize, MY_REAL, nbrwest, 7, comm3d, reqw, mpierr)
+    call D_MPI_ISEND(sende, ewsize, nbreast, 6, comm3d, reqe, mpierr)
+    call D_MPI_ISEND(sendw, ewsize, nbrwest, 7, comm3d, reqw, mpierr)
 
     !   Receive west/east
-    call MPI_RECV(recvw, ewsize, MY_REAL, nbrwest, 6, comm3d, status, mpierr)
-    call MPI_RECV(recve, ewsize, MY_REAL, nbreast, 7, comm3d, status, mpierr)
+    call D_MPI_RECV(recvw, ewsize, nbrwest, 6, comm3d, status, mpierr)
+    call D_MPI_RECV(recve, ewsize, nbreast, 7, comm3d, status, mpierr)
 
     ii = 0
     do i=1,ih
@@ -310,18 +346,266 @@ contains
   deallocate (recvn, recvs, recve, recvw)
 
   return
-  end subroutine excjs
+  end subroutine excjs_real32
 
-  subroutine slabsum(aver,ks,kf,var,ib,ie,jb,je,kb,ke,ibs,ies,jbs,jes,kbs,kes)
+  subroutine excjs_real64(a,sx,ex,sy,ey,sz,ez,ih,jh)
+  implicit none
+  integer sx, ex, sy, ey, sz, ez, ih, jh
+  real(real64) a(sx-ih:ex+ih, sy-jh:ey+jh, sz:ez)
+  integer status(MPI_STATUS_SIZE)
+  integer ii, i, j, k
+  integer reqn, reqs, reqe, reqw
+  integer nssize, ewsize
+  real(real64),allocatable, dimension(:) :: sendn,recvn &
+                                          , sends,recvs &
+                                          , sende,recve &
+                                          , sendw,recvw
+
+!   Calculate buffer size
+  nssize = jh*(ex - sx + 1 + 2*ih)*(ez - sz + 1)
+  ewsize = ih*(ey - sy + 1 + 2*jh)*(ez - sz + 1)
+
+!   Allocate send / receive buffers
+  allocate(sendn(nssize),sends(nssize))
+  allocate(sende(ewsize),sendw(ewsize))
+
+  allocate(recvn(nssize),recvs(nssize))
+  allocate(recve(ewsize),recvw(ewsize))
+
+  if(nprocy .gt. 1)then
+    !   Send north/south
+    ii = 0
+    do j=1,jh
+    do k=sz,ez
+    do i=sx-ih,ex+ih
+      ii = ii + 1
+      sendn(ii) = a(i,ey-j+1,k)
+      sends(ii) = a(i,sy+j-1,k)
+    enddo
+    enddo
+    enddo
+
+    call D_MPI_ISEND(sendn, nssize, nbrnorth, 4, comm3d, reqn, mpierr)
+    call D_MPI_ISEND(sends, nssize, nbrsouth, 5, comm3d, reqs, mpierr)
+
+    !   Receive south/north
+    call D_MPI_RECV(recvs, nssize, nbrsouth, 4, comm3d, status, mpierr)
+    call D_MPI_RECV(recvn, nssize, nbrnorth, 5, comm3d, status, mpierr)
+
+    ii = 0
+    do j=1,jh
+    do k=sz,ez
+    do i=sx-ih,ex+ih
+      ii = ii + 1
+      a(i,sy-j,k) = recvs(ii)
+      a(i,ey+j,k) = recvn(ii)
+    enddo
+    enddo
+    enddo
+  else
+    ! Single processor, make sure the field is periodic
+    do j=1,jh
+    do k=sz,ez
+    do i=sx-ih,ex+ih
+      a(i,sy-j,k) = a(i,ey-j+1,k)
+      a(i,ey+j,k) = a(i,sy+j-1,k)
+    enddo
+    enddo
+    enddo
+  endif
+
+  if(nprocx .gt. 1)then
+    !   Send east/west
+    ii = 0
+    do i=1,ih
+    do k=sz,ez
+    do j=sy-jh,ey+jh
+      ii = ii + 1
+      sende(ii) = a(ex-i+1,j,k)
+      sendw(ii) = a(sx+i-1,j,k)
+    enddo
+    enddo
+    enddo
+
+    call D_MPI_ISEND(sende, ewsize, nbreast, 6, comm3d, reqe, mpierr)
+    call D_MPI_ISEND(sendw, ewsize, nbrwest, 7, comm3d, reqw, mpierr)
+
+    !   Receive west/east
+    call D_MPI_RECV(recvw, ewsize, nbrwest, 6, comm3d, status, mpierr)
+    call D_MPI_RECV(recve, ewsize, nbreast, 7, comm3d, status, mpierr)
+
+    ii = 0
+    do i=1,ih
+    do k=sz,ez
+    do j=sy-jh,ey+jh
+      ii = ii + 1
+      a(sx-i,j,k) = recvw(ii)
+      a(ex+i,j,k) = recve(ii)
+    enddo
+    enddo
+    enddo
+  else
+    ! Single processor, make sure the field is periodic
+    do i=1,ih
+    do k=sz,ez
+    do j=sy-jh,ey+jh
+      a(sx-i,j,k) = a(ex-i+1,j,k)
+      a(ex+i,j,k) = a(sx+i-1,j,k)
+    enddo
+    enddo
+    enddo
+  endif
+
+  if(nprocx.gt.1)then
+    call MPI_WAIT(reqe, status, mpierr)
+    call MPI_WAIT(reqw, status, mpierr)
+  endif
+
+  if(nprocy.gt.1)then
+    call MPI_WAIT(reqn, status, mpierr)
+    call MPI_WAIT(reqs, status, mpierr)
+  endif
+
+  deallocate (sendn, sends, sende, sendw)
+  deallocate (recvn, recvs, recve, recvw)
+
+  return
+  end subroutine excjs_real64
+
+  subroutine excjs_real128(a,sx,ex,sy,ey,sz,ez,ih,jh)
+  implicit none
+  integer sx, ex, sy, ey, sz, ez, ih, jh
+  real(real128) a(sx-ih:ex+ih, sy-jh:ey+jh, sz:ez)
+  integer status(MPI_STATUS_SIZE)
+  integer ii, i, j, k
+  integer reqn, reqs, reqe, reqw
+  integer nssize, ewsize
+  real(real128),allocatable, dimension(:) :: sendn,recvn &
+                                          , sends,recvs &
+                                          , sende,recve &
+                                          , sendw,recvw
+
+!   Calculate buffer size
+  nssize = jh*(ex - sx + 1 + 2*ih)*(ez - sz + 1)
+  ewsize = ih*(ey - sy + 1 + 2*jh)*(ez - sz + 1)
+
+!   Allocate send / receive buffers
+  allocate(sendn(nssize),sends(nssize))
+  allocate(sende(ewsize),sendw(ewsize))
+
+  allocate(recvn(nssize),recvs(nssize))
+  allocate(recve(ewsize),recvw(ewsize))
+
+  if(nprocy .gt. 1)then
+    !   Send north/south
+    ii = 0
+    do j=1,jh
+    do k=sz,ez
+    do i=sx-ih,ex+ih
+      ii = ii + 1
+      sendn(ii) = a(i,ey-j+1,k)
+      sends(ii) = a(i,sy+j-1,k)
+    enddo
+    enddo
+    enddo
+
+    call D_MPI_ISEND(sendn, nssize, nbrnorth, 4, comm3d, reqn, mpierr)
+    call D_MPI_ISEND(sends, nssize, nbrsouth, 5, comm3d, reqs, mpierr)
+
+    !   Receive south/north
+    call D_MPI_RECV(recvs, nssize, nbrsouth, 4, comm3d, status, mpierr)
+    call D_MPI_RECV(recvn, nssize, nbrnorth, 5, comm3d, status, mpierr)
+
+    ii = 0
+    do j=1,jh
+    do k=sz,ez
+    do i=sx-ih,ex+ih
+      ii = ii + 1
+      a(i,sy-j,k) = recvs(ii)
+      a(i,ey+j,k) = recvn(ii)
+    enddo
+    enddo
+    enddo
+  else
+    ! Single processor, make sure the field is periodic
+    do j=1,jh
+    do k=sz,ez
+    do i=sx-ih,ex+ih
+      a(i,sy-j,k) = a(i,ey-j+1,k)
+      a(i,ey+j,k) = a(i,sy+j-1,k)
+    enddo
+    enddo
+    enddo
+  endif
+
+  if(nprocx .gt. 1)then
+    !   Send east/west
+    ii = 0
+    do i=1,ih
+    do k=sz,ez
+    do j=sy-jh,ey+jh
+      ii = ii + 1
+      sende(ii) = a(ex-i+1,j,k)
+      sendw(ii) = a(sx+i-1,j,k)
+    enddo
+    enddo
+    enddo
+
+    call D_MPI_ISEND(sende, ewsize, nbreast, 6, comm3d, reqe, mpierr)
+    call D_MPI_ISEND(sendw, ewsize, nbrwest, 7, comm3d, reqw, mpierr)
+
+    !   Receive west/east
+    call D_MPI_RECV(recvw, ewsize, nbrwest, 6, comm3d, status, mpierr)
+    call D_MPI_RECV(recve, ewsize, nbreast, 7, comm3d, status, mpierr)
+
+    ii = 0
+    do i=1,ih
+    do k=sz,ez
+    do j=sy-jh,ey+jh
+      ii = ii + 1
+      a(sx-i,j,k) = recvw(ii)
+      a(ex+i,j,k) = recve(ii)
+    enddo
+    enddo
+    enddo
+  else
+    ! Single processor, make sure the field is periodic
+    do i=1,ih
+    do k=sz,ez
+    do j=sy-jh,ey+jh
+      a(sx-i,j,k) = a(ex-i+1,j,k)
+      a(ex+i,j,k) = a(sx+i-1,j,k)
+    enddo
+    enddo
+    enddo
+  endif
+
+  if(nprocx.gt.1)then
+    call MPI_WAIT(reqe, status, mpierr)
+    call MPI_WAIT(reqw, status, mpierr)
+  endif
+
+  if(nprocy.gt.1)then
+    call MPI_WAIT(reqn, status, mpierr)
+    call MPI_WAIT(reqs, status, mpierr)
+  endif
+
+  deallocate (sendn, sends, sende, sendw)
+  deallocate (recvn, recvs, recve, recvw)
+
+  return
+  end subroutine excjs_real128
+
+  subroutine slabsum_real32(aver,ks,kf,var,ib,ie,jb,je,kb,ke,ibs,ies,jbs,jes,kbs,kes)
     implicit none
 
-    integer :: ks,kf
-    integer :: ib,ie,jb,je,kb,ke,ibs,ies,jbs,jes,kbs,kes
-    real    :: aver(ks:kf)
-    real(field_r) :: var (ib:ie,jb:je,kb:ke)
-    real    :: averl(ks:kf)
-    real    :: avers(ks:kf)
-    integer :: k
+    integer      :: ks,kf
+    integer      :: ib,ie,jb,je,kb,ke,ibs,ies,jbs,jes,kbs,kes
+    real(real32) :: aver(ks:kf)
+    real(real32) :: var (ib:ie,jb:je,kb:ke)
+    real(real32) :: averl(ks:kf)
+    real(real32) :: avers(ks:kf)
+    integer      :: k
 
     averl       = 0.
     avers       = 0.
@@ -330,14 +614,66 @@ contains
       averl(k) = sum(var(ibs:ies,jbs:jes,k))
     enddo
 
-    call MPI_ALLREDUCE(averl, avers, kf-ks+1,  MY_REAL, &
+    call MPI_ALLREDUCE(averl, avers, kf-ks+1,  MPI_REAL4, &
                        MPI_SUM, comm3d,mpierr)
 
     aver = aver + avers
 
     return
-  end subroutine slabsum
-  
+  end subroutine slabsum_real32
+
+  subroutine slabsum_real64(aver,ks,kf,var,ib,ie,jb,je,kb,ke,ibs,ies,jbs,jes,kbs,kes)
+    implicit none
+
+    integer      :: ks,kf
+    integer      :: ib,ie,jb,je,kb,ke,ibs,ies,jbs,jes,kbs,kes
+    real(real64) :: aver(ks:kf)
+    real(real64) :: var (ib:ie,jb:je,kb:ke)
+    real(real64) :: averl(ks:kf)
+    real(real64) :: avers(ks:kf)
+    integer      :: k
+
+    averl       = 0.
+    avers       = 0.
+
+    do k=kbs,kes
+      averl(k) = sum(var(ibs:ies,jbs:jes,k))
+    enddo
+
+    call MPI_ALLREDUCE(averl, avers, kf-ks+1,  MPI_REAL8, &
+                       MPI_SUM, comm3d,mpierr)
+
+    aver = aver + avers
+
+    return
+  end subroutine slabsum_real64
+
+  subroutine slabsum_real128(aver,ks,kf,var,ib,ie,jb,je,kb,ke,ibs,ies,jbs,jes,kbs,kes)
+    implicit none
+
+    integer      :: ks,kf
+    integer      :: ib,ie,jb,je,kb,ke,ibs,ies,jbs,jes,kbs,kes
+    real(real128) :: aver(ks:kf)
+    real(real128) :: var (ib:ie,jb:je,kb:ke)
+    real(real128) :: averl(ks:kf)
+    real(real128) :: avers(ks:kf)
+    integer      :: k
+
+    averl       = 0.
+    avers       = 0.
+
+    do k=kbs,kes
+      averl(k) = sum(var(ibs:ies,jbs:jes,k))
+    enddo
+
+    call MPI_ALLREDUCE(averl, avers, kf-ks+1,  MPI_REAL16, &
+                       MPI_SUM, comm3d,mpierr)
+
+    aver = aver + avers
+
+    return
+  end subroutine slabsum_real128
+
   subroutine mpi_get_time(val)
    real, intent(out) :: val
  
@@ -385,5 +721,47 @@ contains
     endif
 
   end subroutine gatherrow
+
+  !MPI interfaces instantations for the various types
+  subroutine D_MPI_ISEND_REAL32(buf, count, dest, tag, comm, request, ierror)
+    implicit none
+    real(real32)  ::   buf(*)
+    integer       ::   count, dest, tag, comm, request, ierror
+    call MPI_ISEND(buf,count,MPI_REAL4,dest,tag,comm,request,ierror)
+  end subroutine D_MPI_ISEND_REAL32
+  subroutine D_MPI_ISEND_REAL64(buf, count, dest, tag, comm, request, ierror)
+    implicit none
+    real(real64)  ::   buf(*)
+    integer       ::   count, dest, tag, comm, request, ierror
+    call MPI_ISEND(buf,count,MPI_REAL8,dest,tag,comm,request,ierror)
+  end subroutine D_MPI_ISEND_REAL64
+  subroutine D_MPI_ISEND_REAL128(buf, count, dest, tag, comm, request, ierror)
+    implicit none
+    real(real128)  ::   buf(*)
+    integer       ::   count, dest, tag, comm, request, ierror
+    call MPI_ISEND(buf,count,MPI_REAL16,dest,tag,comm,request,ierror)
+  end subroutine D_MPI_ISEND_REAL128
+  subroutine D_MPI_RECV_REAL32(buf, count, source, tag, comm, status, ierror)
+    implicit none
+    real(real32)  ::   buf(*)
+    integer    count, source, tag, comm
+    integer    status(mpi_status_size), ierror
+    call MPI_RECV(buf,count,MPI_REAL4,source,tag,comm,status,ierror)
+  end subroutine D_MPI_RECV_REAL32
+  subroutine D_MPI_RECV_REAL64(buf, count, source, tag, comm, status, ierror)
+    implicit none
+    real(real64)  ::   buf(*)
+    integer    count, source, tag, comm
+    integer    status(mpi_status_size), ierror
+    call MPI_RECV(buf,count,MPI_REAL8,source,tag,comm,status,ierror)
+  end subroutine D_MPI_RECV_REAL64
+  subroutine D_MPI_RECV_REAL128(buf, count, source, tag, comm, status, ierror)
+    implicit none
+    real(real128)  ::   buf(*)
+    integer    count, source, tag, comm
+    integer    status(mpi_status_size), ierror
+    call MPI_RECV(buf,count,MPI_REAL16,source,tag,comm,status,ierror)
+  end subroutine D_MPI_RECV_REAL128
+
 
 end module

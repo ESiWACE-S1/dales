@@ -1029,8 +1029,8 @@ contains
 
     end if
 
-    ! Transfer ustar to neighbouring cells
-    call excjs(ustar,2,i1,2,j1,1,1,1,1)
+    ! Transfer ustar to neighbouring cells, reshape since excjs is a 3d function
+    call excjs(reshape(ustar, (/i1+1,j1+1,1/)),2,i1,2,j1,1,1,1,1)
 
     return
 
@@ -1112,8 +1112,9 @@ contains
     implicit none
 
     integer             :: i,j,iter,patchx,patchy
-    real                :: thv, thvsl, L, horv2, oblavl, thvpatch(xpatches,ypatches), horvpatch(xpatches,ypatches)
-    real                :: Rib, Lstart, Lend, fx, fxdif, Lold
+    real                :: thv, thvsl, horv2, oblavl, thvpatch(xpatches,ypatches), horvpatch(xpatches,ypatches)
+    real(field_r)       :: L, Lend, Lstart, Lold
+    real                :: Rib, fx, fxdif
     real                :: upcu, vpcv
     real                :: upatch(xpatches,ypatches), vpatch(xpatches,ypatches)
     real                :: Supatch(xpatches,ypatches), Svpatch(xpatches,ypatches)
@@ -1177,7 +1178,7 @@ contains
                 if(iter > 1000) stop 'Obukhov length calculation does not converge!'
              end do
 
-             if (abs(L)>1e6) L = sign(1.0e6,L)
+             if (abs(L)>1e6) L = sign(real(1.0e6,kind(L)),L)
           end if
           obl(i,j) = L
 
@@ -1262,7 +1263,7 @@ contains
             if(abs((L - Lold)/L) < 1e-4) exit
           end do
 
-          if (abs(L)>1e6) L = sign(1.0e6,L)
+          if (abs(L)>1e6) L = sign(real(1.0e6,kind(L)),L)
           oblpatch(patchx,patchy) = L
         enddo
       enddo
@@ -1316,7 +1317,7 @@ contains
           if(iter > 1000) stop 'Obukhov length calculation does not converge!'
        end do
 
-       if (abs(L)>1e6) L = sign(1.0e6,L)
+       if (abs(L)>1e6) L = sign(real(1.0e6,kind(L)),L)
        if(.not. lmostlocal) then
           if(.not. lhetero) then
              obl(:,:) = L
@@ -1332,9 +1333,9 @@ contains
   function psim(zeta)
     implicit none
 
-    real             :: psim
-    real, intent(in) :: zeta
-    real             :: x
+    real(field_r)             :: psim
+    real(field_r), intent(in) :: zeta
+    real(field_r)             :: x
 
     if(zeta <= 0) then
       x     = (1. - 16. * zeta) ** (0.25)
@@ -1353,9 +1354,9 @@ contains
 
     implicit none
 
-    real             :: psih
-    real, intent(in) :: zeta
-    real             :: x
+    real(field_r)             :: psih
+    real(field_r), intent(in) :: zeta
+    real(field_r)             :: x
 
     if(zeta <= 0) then
       x     = (1. - 16. * zeta) ** (0.25)
@@ -1377,8 +1378,8 @@ contains
   ! FJ 2018: For very stable situations, zeta > 1 add cap to phi - the linear expression is valid only for zeta < 1
  function phim(zeta)
     implicit none
-    real             :: phim
-    real, intent(in) :: zeta
+    real(field_r)             :: phim
+    real(field_r), intent(in) :: zeta
 
     if (zeta < 0.) then ! unstable
        phim = (1.-16.*zeta)**(-0.25)
@@ -1395,8 +1396,8 @@ contains
    ! stability function Phi for heat.  
  function phih(zeta)
     implicit none
-    real             :: phih
-    real, intent(in) :: zeta
+    real(field_r)             :: phih
+    real(field_r), intent(in) :: zeta
 
     if (zeta < 0.) then ! unstable
        phih = (1.-16.*zeta)**(-0.50)

@@ -98,13 +98,13 @@ SAVE
   ! Land surface properties
 
   ! Surface properties
-  real, allocatable :: z0m        (:,:) !<  Roughness length for momentum [m]
+  real(field_r), allocatable :: z0m        (:,:) !<  Roughness length for momentum [m]
   real              :: z0mav    = -1
-  real, allocatable :: z0h        (:,:) !<  Roughness length for heat [m]
+  real(field_r), allocatable :: z0h        (:,:) !<  Roughness length for heat [m]
   real              :: z0hav    = -1
-  real, allocatable :: tskin      (:,:) !<  Skin temperature [K]
+  real(field_r), allocatable :: tskin      (:,:) !<  Skin temperature [K]
   real, allocatable :: tskinm     (:,:) !<  Skin temperature previous timestep [K]
-  real, allocatable :: Wl         (:,:) !<  Liquid water reservoir [m]
+  real(field_r), allocatable :: Wl         (:,:) !<  Liquid water reservoir [m]
   real              :: Wlav     = -1
   real, parameter   :: Wmax     = 0.0002 !<  Maximum layer of liquid water on surface [m]
   real, allocatable :: Wlm        (:,:) !<  Liquid water reservoir previous timestep [m]
@@ -115,7 +115,7 @@ SAVE
   real              :: LAIav    = -1
   real, allocatable :: cveg       (:,:) !<  Vegetation cover [-]
   real              :: cvegav   = -1
-  real, allocatable :: cliq       (:,:) !<  Fraction of vegetated surface covered with liquid water [-]
+  real(field_r), allocatable :: cliq       (:,:) !<  Fraction of vegetated surface covered with liquid water [-]
   real, allocatable :: Cskin      (:,:) !<  Heat capacity skin layer [J]
   real              :: Cskinav  = -1
   real, allocatable :: lambdaskin (:,:) !<  Heat conductivity skin layer [W/m/K]
@@ -193,21 +193,21 @@ SAVE
 
 
   ! Surface energy balance
-  real, allocatable :: Qnet     (:,:)   !<  Net radiation [W/m2]
+  real(field_r), allocatable :: Qnet     (:,:)   !<  Net radiation [W/m2]
   real              :: Qnetav   = -1
-  real, allocatable :: LE       (:,:)   !<  Latent heat flux [W/m2]
-  real, allocatable :: H        (:,:)   !<  Sensible heat flux [W/m2]
-  real, allocatable :: G0       (:,:)   !<  Ground heat flux [W/m2]
-  real, allocatable :: ra       (:,:)   !<  Aerodynamic resistance [s/m]
-  real, allocatable :: rs       (:,:)   !<  Composite resistance [s/m]
-  real, allocatable :: rsveg    (:,:)   !<  Vegetation resistance [s/m]
-  real, allocatable :: rssoil   (:,:)   !<  Soil evaporation resistance [s/m]
+  real(field_r), allocatable :: LE       (:,:)   !<  Latent heat flux [W/m2]
+  real(field_r), allocatable :: H        (:,:)   !<  Sensible heat flux [W/m2]
+  real(field_r), allocatable :: G0       (:,:)   !<  Ground heat flux [W/m2]
+  real(field_r), allocatable :: ra       (:,:)   !<  Aerodynamic resistance [s/m]
+  real(field_r), allocatable :: rs       (:,:)   !<  Composite resistance [s/m]
+  real(field_r), allocatable :: rsveg    (:,:)   !<  Vegetation resistance [s/m]
+  real(field_r), allocatable :: rssoil   (:,:)   !<  Soil evaporation resistance [s/m]
   real              :: rsisurf2 = 0.    !<  Vegetation resistance [s/m] if isurf2 is used
   real, allocatable :: rsmin    (:,:)   !<  Minimum vegetation resistance [s/m]
   real              :: rsminav = -1
   real, allocatable :: rssoilmin(:,:)   !<  Minimum soil evaporation resistance [s/m]
   real              :: rssoilminav = -1
-  real, allocatable :: tendskin (:,:)   !<  Tendency of skin [W/m2]
+  real(field_r), allocatable :: tendskin (:,:)   !<  Tendency of skin [W/m2]
   real, allocatable :: gD       (:,:)   !<  Response factor vegetation to vapor pressure deficit [-]
   real              :: gDav
 
@@ -215,14 +215,14 @@ SAVE
   logical           :: lmostlocal  = .false.  !<  Switch to apply MOST locally to get local Obukhov length
   logical           :: lsmoothflux = .false.  !<  Create uniform sensible and latent heat flux over domain
   logical           :: lneutral    = .false.  !<  Disable stability corrections
-  real, allocatable :: obl   (:,:)      !<  Obukhov length [m]
+  real(field_r), allocatable :: obl   (:,:)      !<  Obukhov length [m]
   real              :: oblav            !<  Spatially averaged obukhov length [m]
   real, allocatable :: Cm    (:,:)      !<  Drag coefficient for momentum [-]
   real, allocatable :: Cs    (:,:)      !<  Drag coefficient for scalars [-]
   real(field_r), allocatable :: ustar (:,:)      !<  Friction velocity [m/s]
-  real, allocatable :: thlflux (:,:)    !<  Kinematic temperature flux [K m/s]
-  real, allocatable :: qtflux  (:,:)    !<  Kinematic specific humidity flux [kg/kg m/s]
-  real, allocatable :: svflux  (:,:,:)  !<  Kinematic scalar flux [- m/s]
+  real(field_r), allocatable :: thlflux (:,:)    !<  Kinematic temperature flux [K m/s]
+  real(field_r), allocatable :: qtflux  (:,:)    !<  Kinematic specific humidity flux [kg/kg m/s]
+  real(field_r), allocatable :: svflux  (:,:,:)  !<  Kinematic scalar flux [- m/s]
 
   ! Surface gradients of prognostic variables
   real, allocatable :: dudz  (:,:)      !<  U-wind gradient in surface layer [1/s]

@@ -111,14 +111,14 @@ save
   real, allocatable  :: svmmn(:,:),svptmn(:,:),svplsmn(:,:),svpmn(:,:)
   real, allocatable  :: sv2mn(:,:)
 
- real, allocatable :: umav (:)     ! slab averaged ql_0    at full level
- real, allocatable :: vmav (:)     ! slab averaged ql_0    at full level
- real, allocatable :: thlmav (:)     ! slab averaged ql_0    at full level
- real, allocatable :: thmav (:)     ! slab averaged ql_0    at full level
- real, allocatable :: qtmav (:)     ! slab averaged ql_0    at full level
- real, allocatable :: qlmav (:)     ! slab averaged ql_0    at full level
+ real(field_r), allocatable :: umav (:)     ! slab averaged ql_0    at full level
+ real(field_r), allocatable :: vmav (:)     ! slab averaged ql_0    at full level
+ real(field_r), allocatable :: thlmav (:)     ! slab averaged ql_0    at full level
+ real(field_r), allocatable :: thmav (:)     ! slab averaged ql_0    at full level
+ real(field_r), allocatable :: qtmav (:)     ! slab averaged ql_0    at full level
+ real(field_r), allocatable :: qlmav (:)     ! slab averaged ql_0    at full level
  real, allocatable :: cfracav (:)     ! slab averaged ql_0    at full level
- real, allocatable :: svmav (:,:)     ! slab averaged ql_0    at full level
+ real(field_r), allocatable :: svmav (:,:)     ! slab averaged ql_0    at full level
   real, allocatable :: svpav(:,:)                  !  slab average total tendency of sv(n)
   real, allocatable :: svptav(:,:)                 !  slab average tendency of sv(n) due to turb.
 
@@ -522,7 +522,7 @@ contains
               th2av   , &
               ql2av
     real(field_r),allocatable, dimension(:,:,:)::  thv0
-    real,allocatable, dimension(:)::   thvmav
+    real(field_r),allocatable, dimension(:)::   thvmav
     real ,allocatable, dimension(:,:,:):: sv0h
 
     integer i, j, k, n, km
@@ -690,7 +690,7 @@ contains
   !
 
     do n=1,nsv
-      call slabsum(svmav(1,n),1,k1,svm(:,:,:,n),2-ih,i1+ih,2-jh,j1+jh,1,k1,2,i1,2,j1,1,k1)
+      call slabsum(svmav(1:1,n),1,k1,svm(:,:,:,n),2-ih,i1+ih,2-jh,j1+jh,1,k1,2,i1,2,j1,1,k1)
     enddo
     svmav = svmav/ijtot
   !------------------------------------------------------------------
