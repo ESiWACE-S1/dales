@@ -29,9 +29,9 @@ implicit none
 
 save
   integer                             :: nkonx, nkony
-  real, dimension(:),     allocatable :: winew, wjnew
-  real, dimension(:,:,:), allocatable :: worka, workb
-  real, dimension(:),     allocatable :: bufin, bufout
+  real(pois_r), dimension(:),     allocatable :: winew, wjnew
+  real(pois_r), dimension(:,:,:), allocatable :: worka, workb
+  real(pois_r), dimension(:),     allocatable :: bufin, bufout
   real(pois_r), allocatable, target           :: fptr(:)
 
 contains
@@ -39,12 +39,13 @@ contains
   subroutine fft2dinit(p, Fp, d, xyrt, ps,pe,qs,qe)
     use modmpi, only   : nprocx, nprocy
     use modglobal, only: itot, jtot, imax, jmax, kmax, i1, j1, ih, jh
+    use fftnew, only   : rffti
     implicit none
 
     real(pois_r), pointer        :: p(:,:,:)
     real(pois_r), pointer        :: Fp(:,:,:)
-    real, allocatable    :: d(:,:,:)
-    real, allocatable    :: xyrt(:,:)
+    real(pois_r), allocatable    :: d(:,:,:)
+    real(pois_r), allocatable    :: xyrt(:,:)
     integer, intent(out) :: ps,pe,qs,qe
 
     integer :: sz
@@ -102,7 +103,7 @@ contains
 
     implicit none
 
-    real, allocatable :: xyrt(:,:)
+    real(pois_r), allocatable :: xyrt(:,:)
 
     integer :: i,j,iv,jv
     real    :: fac
@@ -155,8 +156,8 @@ contains
 
     real(pois_r), pointer     :: p(:,:,:)
     real(pois_r), pointer     :: Fp(:,:,:)
-    real, allocatable :: d(:,:,:)
-    real, allocatable :: xyrt(:,:)
+    real(pois_r), allocatable :: d(:,:,:)
+    real(pois_r), allocatable :: xyrt(:,:)
 
     deallocate(bufin,bufout)
     deallocate(worka,workb)
@@ -219,7 +220,7 @@ contains
     implicit none
 
     real(pois_r), intent(in)  ::   p(2-ih:i1+ih,2-jh:j1+jh,kmax)
-    real, intent(out) ::   ptrans(itot,jmax,nkonx)
+    real(pois_r), intent(out) ::   ptrans(itot,jmax,nkonx)
 
     integer :: n, i,j,k, ii
 
@@ -265,7 +266,7 @@ contains
     implicit none
 
     real(pois_r), intent(inout)  :: p(2-ih:i1+ih,2-jh:j1+jh,kmax)
-    real, intent(in)     :: ptrans(itot,jmax,nkonx)
+    real(pois_r), intent(in)     :: ptrans(itot,jmax,nkonx)
 
     integer :: n, i,j,k, ii
 
@@ -311,7 +312,7 @@ contains
     implicit none
 
     real(pois_r), intent(in)  ::   p(2-ih:i1+ih,2-jh:j1+jh,kmax)
-    real, intent(out) ::   ptrans(jtot,imax,nkony)
+    real(pois_r), intent(out) ::   ptrans(jtot,imax,nkony)
 
     integer :: n, i,j,k, ii
 
@@ -358,7 +359,7 @@ contains
     implicit none
 
     real(pois_r), intent(inout)  ::   p(2-ih:i1+ih,2-jh:j1+jh,kmax)
-    real, intent(in)     ::   ptrans(jtot,imax,nkony)
+    real(pois_r), intent(in)     ::   ptrans(jtot,imax,nkony)
 
     integer :: n, i,j,k, ii
 
@@ -399,6 +400,7 @@ contains
 
     use modglobal, only : imax, jmax, kmax, itot, jtot, ijtot, i1, j1, ih, jh
     use modmpi, only    : myidx,myidy,nprocx
+    use fftnew, only    : rfftf
 
     implicit none
 
@@ -447,6 +449,7 @@ contains
 
     use modglobal, only : imax, jmax, kmax, itot, jtot, ijtot, i1, j1, ih, jh
     use modmpi, only    : myidx,myidy,nprocx
+    use fftnew, only    : rfftb
 
     implicit none
 

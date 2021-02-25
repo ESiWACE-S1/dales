@@ -30,8 +30,8 @@ contains
   subroutine fftwinit(p, Fp, d, xyrt, ps,pe,qs,qe)
     real(pois_r), pointer      :: p(:,:,:)
     real(pois_r), pointer      :: Fp(:,:,:)
-    real, allocatable  :: d(:,:,:)
-    real, allocatable  :: xyrt(:,:)
+    real(pois_r), allocatable  :: d(:,:,:)
+    real(pois_r), allocatable  :: xyrt(:,:)
     integer,intent(out)        :: ps,pe,qs,qe
     call error_and_exit()
     ps=0 ! suppress warnings about intent(out) variables not being assigned
@@ -43,8 +43,8 @@ contains
  subroutine fftwexit(p,Fp,d,xyrt)
     real(pois_r), pointer     :: p(:,:,:)
     real(pois_r), pointer     :: Fp(:,:,:)
-    real, allocatable :: d(:,:,:)
-    real, allocatable :: xyrt(:,:)
+    real(pois_r), allocatable :: d(:,:,:)
+    real(pois_r), allocatable :: xyrt(:,:)
     call error_and_exit()
  end subroutine
 

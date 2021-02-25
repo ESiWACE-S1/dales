@@ -38,8 +38,8 @@ save
 
   real(pois_r), pointer     :: p(:,:,:)    ! pressure fluctuations in real space
   real(pois_r), pointer     :: Fp(:,:,:)   ! pressure fluctuations in fourier space
-  real, allocatable :: d(:,:,:)    ! work array for tridiagonal solver
-  real, allocatable :: xyrt(:,:)   ! constant factors in the poisson equation
+  real(pois_r), allocatable :: d(:,:,:)    ! work array for tridiagonal solver
+  real(pois_r), allocatable :: xyrt(:,:)   ! constant factors in the poisson equation
 
   integer :: ps,pe,qs,qe           ! start and end index of fourier space matrices
 
