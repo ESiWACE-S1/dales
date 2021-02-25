@@ -1178,7 +1178,7 @@ contains
                 if(iter > 1000) stop 'Obukhov length calculation does not converge!'
              end do
 
-             if (abs(L)>1e6) L = sign(real(1.0e6,kind(L)),L)
+             if (abs(L)>1e6) L = sign(1.0e6_field_r,L)
           end if
           obl(i,j) = L
 
@@ -1263,7 +1263,7 @@ contains
             if(abs((L - Lold)/L) < 1e-4) exit
           end do
 
-          if (abs(L)>1e6) L = sign(real(1.0e6,kind(L)),L)
+          if (abs(L)>1e6) L = sign(1.0e6_field_r,L)
           oblpatch(patchx,patchy) = L
         enddo
       enddo
@@ -1317,7 +1317,7 @@ contains
           if(iter > 1000) stop 'Obukhov length calculation does not converge!'
        end do
 
-       if (abs(L)>1e6) L = sign(real(1.0e6,kind(L)),L)
+       if (abs(L)>1e6) L = sign(1.0e6_field_r,L)
        if(.not. lmostlocal) then
           if(.not. lhetero) then
              obl(:,:) = L
