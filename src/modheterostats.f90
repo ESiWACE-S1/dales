@@ -266,7 +266,7 @@ contains
     use modsubgrid, only : ekm, ekh
     use modglobal,  only : iadv_sv, iadv_kappa, dzf, dzh, rlv, cp, rv, &
                            rd, imax, jmax, i1, j1, k1, ih, jh, itot
-
+    use advec_kappa, only : halflev_kappa
     implicit none
 
     integer n,i,j,k
@@ -281,7 +281,7 @@ contains
     real, dimension(jmax,ncklimit,nsv) :: svavg, svhavg, svvar,  wsvcov, wsvcovs
 
     real  vonw(2-ih:i1+ih,2-jh:j1+jh,k1),uonw(2-ih:i1+ih,2-jh:j1+jh,k1)
-    real  sv0h(2-ih:i1+ih,2-jh:j1+jh,k1,nsv),thv0(2-ih:i1+ih,2-jh:j1+jh,k1)
+    real(field_r) :: sv0h(2-ih:i1+ih,2-jh:j1+jh,k1,nsv),thv0(2-ih:i1+ih,2-jh:j1+jh,k1)
 
     real  buffer(jmax,ncklimit)
     real  bufferij(itot,jmax)

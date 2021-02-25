@@ -466,6 +466,7 @@ contains
     use modglobal, only : i1,ih,j1,jh,k1,kmax,nsv,dzf,dzh,rlv,rv,rd,cp, &
                           ijtot,cu,cv,iadv_sv,iadv_kappa,eps1,dxi,dyi
     use modmpi,    only : comm3d,my_real,mpi_sum,mpierr,slabsum
+    use advec_kappa, only : halflev_kappa
     implicit none
 
 
@@ -523,7 +524,7 @@ contains
               ql2av
     real(field_r),allocatable, dimension(:,:,:)::  thv0
     real(field_r),allocatable, dimension(:)::   thvmav
-    real ,allocatable, dimension(:,:,:):: sv0h
+    real(field_r),allocatable, dimension(:,:,:):: sv0h
 
     integer i, j, k, n, km
     real    tsurf, qsat, c1, c2

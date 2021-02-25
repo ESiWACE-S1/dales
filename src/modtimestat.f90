@@ -941,10 +941,12 @@ contains
     use modsurface, only : patchxnr,patchynr
     use mpi
     use modmpi,     only : mpierr, comm3d,mpi_sum,my_real
+    use advec_kappa,only : halflev_kappa
     implicit none
     real    :: zil, dhdt,locval,oldlocval
     integer :: location,i,j,k,nsamp,stride
-    real, allocatable,dimension(:,:,:) :: blh_fld,  sv0h, blh_fld2
+    real, allocatable,dimension(:,:,:) :: blh_fld, blh_fld2
+    real(field_r), allocatable,dimension(:,:,:) :: sv0h
     real, allocatable, dimension(:) :: profile, gradient, dgrad
     allocate(blh_fld(2-ih:i1+ih,2-jh:j1+jh,k1),sv0h(2-ih:i1+ih,2-jh:j1+jh,k1))
     allocate(profile(k1),gradient(k1),dgrad(k1))

@@ -31,9 +31,10 @@
 
 
 module modmpi
-use mpi, only : MPI_DOUBLE_PRECISION, MPI_COMM_SIZE, MPI_SUM, MPI_STATUS_SIZE &
-              , MPI_COMM_WORLD, MPI_WTIME, MPI_LOGICAL, MPI_IN_PLACE &
-              , MPI_INTEGER, MPI_MAX, MPI_MIN, MPI_REAL4, MPI_REAL8, MPI_REAL16
+use mpi
+!use mpi, only : MPI_DOUBLE_PRECISION, MPI_COMM_SIZE, MPI_SUM, MPI_STATUS_SIZE &
+!              , MPI_COMM_WORLD, MPI_WTIME, MPI_LOGICAL, MPI_IN_PLACE &
+!              , MPI_INTEGER, MPI_MAX, MPI_MIN, MPI_REAL4, MPI_REAL8, MPI_REAL16
 use modprecision
 implicit none
 save

@@ -462,6 +462,7 @@ module daleslib
             !use modprojection,     only : projection
             use modchem,            only : twostep
             use modcanopy,          only : canopy
+            use modadvection,       only : advection
 
             implicit none
 
