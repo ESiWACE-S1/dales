@@ -32,9 +32,6 @@
 
 module modmpi
 use mpi
-!use mpi, only : MPI_DOUBLE_PRECISION, MPI_COMM_SIZE, MPI_SUM, MPI_STATUS_SIZE &
-!              , MPI_COMM_WORLD, MPI_WTIME, MPI_LOGICAL, MPI_IN_PLACE &
-!              , MPI_INTEGER, MPI_MAX, MPI_MIN, MPI_REAL4, MPI_REAL8, MPI_REAL16
 use modprecision
 implicit none
 save
@@ -89,6 +86,8 @@ save
   interface D_MPI_ALLREDUCE
     procedure :: D_MPI_ALLREDUCE_REAL32
     procedure :: D_MPI_ALLREDUCE_REAL64
+    procedure :: D_MPI_ALLREDUCE_REAL32_S
+    procedure :: D_MPI_ALLREDUCE_REAL64_S
   end interface
   interface D_MPI_ALLTOALL
     procedure :: D_MPI_ALLTOALL_REAL32
@@ -98,6 +97,8 @@ save
   interface D_MPI_REDUCE
     procedure :: D_MPI_REDUCE_REAL32
     procedure :: D_MPI_REDUCE_REAL64
+    procedure :: D_MPI_REDUCE_REAL32_S
+    procedure :: D_MPI_REDUCE_REAL64_S
   end interface
   interface D_MPI_GATHER
     procedure :: D_MPI_GATHER_REAL32
@@ -796,17 +797,27 @@ contains
   end subroutine D_MPI_BCAST_REAL128
 
   subroutine D_MPI_ALLREDUCE_REAL32(sendbuf, recvbuf, count, op, comm, ierror)
-    type(*)      :: sendbuf(..)
-    real(real32) :: recvbuf(..)
+    real(real32) :: sendbuf(..), recvbuf(..)
     integer  :: count, datatype, op, comm, ierror
     call MPI_ALLREDUCE(sendbuf, recvbuf, count, MPI_REAL4, op, comm, ierror)
   end subroutine D_MPI_ALLREDUCE_REAL32
   subroutine D_MPI_ALLREDUCE_REAL64(sendbuf, recvbuf, count, op, comm, ierror)
-    type(*)      :: sendbuf(..)
-    real(real64) :: recvbuf(..)
+    real(real64) :: sendbuf(..), recvbuf(..)
     integer  :: count, datatype, op, comm, ierror
     call MPI_ALLREDUCE(sendbuf, recvbuf, count, MPI_REAL8, op, comm, ierror)
   end subroutine D_MPI_ALLREDUCE_REAL64
+  subroutine D_MPI_ALLREDUCE_REAL32_S(sendbuf, recvbuf, count, op, comm, ierror)
+    integer      :: sendbuf
+    real(real32) :: recvbuf(..)
+    integer  :: count, datatype, op, comm, ierror
+    call MPI_ALLREDUCE(sendbuf, recvbuf, count, MPI_REAL4, op, comm, ierror)
+  end subroutine D_MPI_ALLREDUCE_REAL32_S
+  subroutine D_MPI_ALLREDUCE_REAL64_S(sendbuf, recvbuf, count, op, comm, ierror)
+    integer      :: sendbuf
+    real(real64) :: recvbuf(..)
+    integer  :: count, datatype, op, comm, ierror
+    call MPI_ALLREDUCE(sendbuf, recvbuf, count, MPI_REAL8, op, comm, ierror)
+  end subroutine D_MPI_ALLREDUCE_REAL64_S
 
   subroutine D_MPI_ALLTOALL_REAL32(sendbuf, sendcount, recvbuf, recvcount, comm, ierror)
     real(real32) ::  sendbuf(..), recvbuf(..)
@@ -828,17 +839,27 @@ contains
   end subroutine D_MPI_ALLTOALL_REAL128
 
   subroutine D_MPI_REDUCE_REAL32(sendbuf, recvbuf, count, op, root, comm, ierror)
-    type(*)      :: sendbuf(..)
-    real(real32) :: recvbuf(..)
+    real(real32) ::  sendbuf(..), recvbuf(..)
     integer      ::  count, datatype, op, root, comm, ierror
     call MPI_REDUCE(sendbuf, recvbuf, count, MPI_REAL4, op, root, comm, ierror)
   end subroutine D_MPI_REDUCE_REAL32
   subroutine D_MPI_REDUCE_REAL64(sendbuf, recvbuf, count, op, root, comm, ierror)
-    type(*)      :: sendbuf(..)
-    real(real64) :: recvbuf(..)
+    real(real64) ::  sendbuf(..), recvbuf(..)
     integer      ::  count, datatype, op, root, comm, ierror
     call MPI_REDUCE(sendbuf, recvbuf, count, MPI_REAL8, op, root, comm, ierror)
   end subroutine D_MPI_REDUCE_REAL64
+  subroutine D_MPI_REDUCE_REAL32_S(sendbuf, recvbuf, count, op, root, comm, ierror)
+    integer      :: sendbuf
+    real(real32) :: recvbuf(..)
+    integer      ::  count, datatype, op, root, comm, ierror
+    call MPI_REDUCE(sendbuf, recvbuf, count, MPI_REAL4, op, root, comm, ierror)
+  end subroutine D_MPI_REDUCE_REAL32_S
+  subroutine D_MPI_REDUCE_REAL64_S(sendbuf, recvbuf, count, op, root, comm, ierror)
+    integer      :: sendbuf
+    real(real64) :: recvbuf(..)
+    integer      ::  count, datatype, op, root, comm, ierror
+    call MPI_REDUCE(sendbuf, recvbuf, count, MPI_REAL8, op, root, comm, ierror)
+  end subroutine D_MPI_REDUCE_REAL64_S
 
   subroutine D_MPI_GATHER_REAL32(sendbuf, sendcount, recvbuf, recvcount, root, comm, ierror)
     real(real32) ::  sendbuf(..), recvbuf(..)

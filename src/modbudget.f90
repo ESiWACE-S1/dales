@@ -674,8 +674,8 @@ end subroutine do_genbudget
     !----------------------------
     integer i,j,k
     real(field_r), allocatable :: sbshrav(:),sbbuoav(:) ,sbdissav(:),&
-         ekmav(:),khkmav(:)
-    real, allocatable :: sbtkeavl(:),khkmavl(:)
+         ekmav(:),khkmav(:),khkmavl(:)
+    real, allocatable :: sbtkeavl(:)
 
     !----------------------------
     ! 1.2 Allocate variables
