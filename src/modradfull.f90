@@ -29,7 +29,6 @@
 module modradfull
 
   use RandomNumbers
-  use modprecision, only : field_r
   use modglobal, only : pi
   implicit none
   private
@@ -109,7 +108,7 @@ module modradfull
 
   real, allocatable ::  rhof_b(:),exnf_b(:)
   real, allocatable ::  temp_b(:,:,:),qv_b(:,:,:),ql_b(:,:,:),rr_b(:,:,:)
-  real(field_r), allocatable ::  tempskin(:,:)
+  real, allocatable ::  tempskin(:,:)
 contains
     subroutine radfull
   !   use radiation,    only : d4stream
@@ -209,7 +208,7 @@ contains
       real, optional, dimension (2-ih:i1+ih,2-jh:j1+jh,k1), intent (in) :: rr
       logical, optional, intent(in) :: lclear
       real, dimension (2-ih:i1+ih,2-jh:j1+jh,k1), intent (out) :: fus3D,fds3D,fuir3D,fdir3D
-      real(field_r), dimension (1:i1+1,1:j1+1), intent (in) :: tskin
+      real, dimension (1:i1+1,1:j1+1), intent (in) :: tskin
       real, dimension (1:i1+1,1:j1+1), intent (in) :: albedo
 
       integer :: kk
@@ -1194,7 +1193,7 @@ contains
          ee, & ! broadband surface emissivity (all IR bands given this value)
          u0, & ! cosine of solar zenith angle
          ss    ! Solar constant
-    real(field_r), intent(in) ::  pts   ! Surface skin temperature
+    real, intent(in) ::  pts   ! Surface skin temperature
 
     logical, optional, intent (in ) :: useMcICA
 
@@ -1236,7 +1235,7 @@ contains
 !          pgwc    ! graupel water content
 
     real, intent (in) ::  ee ! broadband surface emissivity (all IR bands given this value)
-    real(field_r), intent(in) ::  pts   ! Surface skin temperature
+    real, intent(in) ::  pts   ! Surface skin temperature
 
     logical, optional, intent (in ) :: useMcICA
 
@@ -1635,7 +1634,7 @@ contains
   !>
   subroutine planck ( pt, tskin, llimit, rlimit, bf)
     real, intent (in)    :: pt(nv), llimit, rlimit
-    real(field_r), intent(in) :: tskin
+    real, intent(in) :: tskin
     real, intent (out)   :: bf(nv1) ! intensity [W/m^2/Sr]
 
     real, parameter :: xk = 10.

@@ -535,7 +535,7 @@ contains
 
     real(field_r), intent(in)    :: putin(2-ih:i1+ih,2-jh:j1+jh,k1)
     real(field_r), intent(inout) :: putout(2-ih:i1+ih,2-jh:j1+jh,k1)
-    real(field_r), intent(in)    :: flux (i2,j2)
+    real, intent(in)    :: flux (i2,j2)
 
     integer i,j,k,jm,jp,km,kp
 

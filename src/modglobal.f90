@@ -194,9 +194,9 @@ save
 
       ! modphsgrd.f90
 
-      real(field_r) :: dx              !<  grid spacing in x-direction
-      real(field_r) :: dy              !<  grid spacing in y-direction
-      real(field_r) :: dz              !<  grid spacing in z-direction
+      real :: dx              !<  grid spacing in x-direction
+      real :: dy              !<  grid spacing in y-direction
+      real :: dz              !<  grid spacing in z-direction
       real :: dxi             !<  1/dx
       real :: dyi             !<  1/dy
       real :: dzi             !<  1/dz
@@ -211,10 +211,10 @@ save
 
 
       real :: ijtot
-      real(field_r), allocatable :: dzf(:)         !<  thickness of full level
-      real(field_r), allocatable :: dzh(:)         !<  thickness of half level
-      real(field_r), allocatable :: zh(:)          !<  height of half level [m]
-      real(field_r), allocatable :: zf(:)          !<  height of full level [m]
+      real, allocatable :: dzf(:)         !<  thickness of full level
+      real, allocatable :: dzh(:)         !<  thickness of half level
+      real, allocatable :: zh(:)          !<  height of half level [m]
+      real, allocatable :: zf(:)          !<  height of full level [m]
       real :: xsize    = -1 !<  domain size in x-direction
       real :: ysize    = -1 !<  domain size in y-direction
       real, allocatable :: delta(:)       !<  (dx*dy*dz)**(1/3)

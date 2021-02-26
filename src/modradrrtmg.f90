@@ -249,13 +249,12 @@ contains
 ! ==============================================================================;
 
   subroutine readSounding(ptop_model,npatch_start,npatch_end)
-    use modprecision, only  : field_r
     use modglobal, only     : cexpnr
     use modmpi, only        : myid
     use netcdf
     implicit none
 
-    real(field_r),intent(in) :: ptop_model
+    real,intent(in) :: ptop_model
     integer,intent(out)    :: npatch_start,npatch_end        ! the level#s of the sounding above the model
 
     real,allocatable,dimension(:,:) :: psnd_in,qsnd_in,tsnd_in,o3snd_in

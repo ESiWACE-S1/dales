@@ -1117,8 +1117,9 @@ contains
   subroutine testwctime
     use modmpi,    only : mpi_get_time
     use modglobal, only : timeleft
+    use modprecision, only : real32
     implicit none
-    real, save :: tstart = -1., tend = -1.
+    real(real32), save :: tstart = -1., tend = -1.
 
     if (tstart < 0) then
       call mpi_get_time(tstart)

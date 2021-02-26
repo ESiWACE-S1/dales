@@ -127,7 +127,7 @@
                                        ,nuc & !<  width parameter of cloud DSD
                                        ,rhoz  !< slab averaged density in 3 dimensions
 
-  real(field_r),allocatable, dimension(:,:,:) :: qr_spl, Nr_spl
+  real,allocatable, dimension(:,:,:) :: qr_spl, Nr_spl
                              !< prec. liq. water and conc. for sedim. time splitting
   real,allocatable, dimension(:,:,:) :: sedc,   & !<  sedimentation cloud droplets mix. ratio
                                         sed_qr, & !<  sedimentation rain drops mix. ratio
@@ -158,7 +158,8 @@
   real, parameter ::  D_eq = 1.1E-3,  & !<  Parameters for break-up
             k_br = 1000       !<
 
-   real(field_r),allocatable,dimension(:,:,:) :: Nr,Nrp,qltot,qr,qrp,thlpmcr,qtpmcr
+   real,allocatable,dimension(:,:,:) :: Nr,qltot,qr,thlpmcr,qtpmcr
+   real(field_r),allocatable,dimension(:,:,:) :: Nrp,qrp
    real,allocatable,dimension(:,:,:) :: precep
 
   real :: delt

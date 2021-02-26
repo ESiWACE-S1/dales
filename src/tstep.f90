@@ -41,7 +41,6 @@
 !! and the diffusion number $d$. The timestep is further limited by the needs of other modules, e.g. the statistics.
 !! \endlatexonly
 module tstep
-use modprecision, only : field_r
 implicit none
 
 contains

@@ -21,7 +21,7 @@
 !  Copyright 2014 Netherlands eScience Center
 !
 module modfftw
-use modprecision, only : pois_r
+use modprecision, only : pois_r, real64
 use, intrinsic  :: iso_c_binding
 implicit none
 include 'fftw3.f03'
@@ -30,7 +30,7 @@ save
   integer                         :: method
   integer                         :: konx, kony
   integer                         :: iony, jonx
-  real, dimension(:), allocatable :: bufin, bufout
+  real(pois_r), dimension(:), allocatable :: bufin, bufout
 
   ! C pointer to the actual (aligned) memory for FFTW
   type (C_ptr)                    :: ptr
@@ -48,7 +48,7 @@ save
   ! FFTW plan and memory pointers for 1D transforms
   ! NOTE: these pointers point to sub arrays of ptr
   type (C_ptr)                    :: planx, planxi, plany, planyi
-  real, pointer                   :: p210(:,:,:), p201(:,:,:)
+  real(real64), pointer                   :: p210(:,:,:), p201(:,:,:)
 
   ! Method 2:
   !   no domain decomposition nprocx = nprocy = 1
@@ -59,9 +59,17 @@ save
   ! FFTW plan and memory pointers for 2D transforms
   ! NOTE: these pointers point to sub arrays of ptr
   type (C_ptr)                    :: planxy, planxyi
-  real, pointer                   :: p_nohalo(:)
+  real(real64), pointer                   :: p_nohalo(:)
 
 contains
+  subroutine static_checks_dontcall
+    implicit none
+    real                :: static_check
+! Statically check for correct double precisions, FFTW C-library breaks without it
+    static_check = sign(1._real64, p201(1,1,1))
+    static_check = sign(1._real64, p210(1,1,1))
+    static_check = sign(1._real64, p_nohalo(1))
+  end subroutine
 
   subroutine fftwinit(p, Fp, d, xyrt, ps,pe,qs,qe)
 
@@ -72,12 +80,12 @@ contains
 
     real(pois_r), pointer              :: p(:,:,:)
     real(pois_r), pointer              :: Fp(:,:,:)
-    real, allocatable          :: d(:,:,:)
-    real, allocatable          :: xyrt(:,:)
+    real(pois_r), allocatable          :: d(:,:,:)
+    real(pois_r), allocatable          :: xyrt(:,:)
     integer,intent(out)        :: ps,pe,qs,qe
 
     integer(kind=8)     :: sz
-    real, pointer       :: fptr(:)
+    real(real64),pointer:: fptr(:) !fftw is always real64
     integer             :: embed(1), kinds(2)
     type (fftw_iodim)   :: dimij(2), dimk(1)
 
@@ -349,14 +357,14 @@ contains
 !
   subroutine transpose_a1(p,p210)
     use mpi
-    use modmpi, only : commrow, mpierr, my_real, nprocx
+    use modmpi, only : commrow, mpierr, nprocx, D_MPI_ALLTOALL
     use modglobal, only : i1,j1, itot, imax,jmax, kmax, ih, jh
     implicit none
 
     !real, intent(in)    :: p(2-ih:i1+ih,2-jh:j1+jh,kmax)
     !real, intent(out)   :: p210(itot,jmax,konx)
-    real, pointer :: p(:,:,:)
-    real, pointer :: p210(:,:,:)
+    real(pois_r), pointer :: p(:,:,:)
+    real(real64), pointer :: p210(:,:,:)
 
     integer :: n, i,j,k, ii
 
@@ -374,9 +382,9 @@ contains
     enddo
     enddo
 
-    call MPI_ALLTOALL(bufin,   (imax*jmax*konx),my_real, &
-                      bufout,  (imax*jmax*konx),my_real, &
-                      commrow,mpierr)
+    call D_MPI_ALLTOALL(bufin,   (imax*jmax*konx), &
+                        bufout,  (imax*jmax*konx), &
+                        commrow,mpierr)
 
     ii = 0
     do n=0,nprocx-1
@@ -394,14 +402,14 @@ contains
 
   subroutine transpose_a1inv(p,p210)
     use mpi
-    use modmpi, only : commrow, mpierr, my_real, nprocx
+    use modmpi, only : commrow, mpierr, nprocx, D_MPI_ALLTOALL
     use modglobal, only : i1,j1, itot, imax,jmax, kmax, ih,jh
     implicit none
 
     !real, intent(out)   :: p(2-ih:i1+ih,2-jh:j1+jh,kmax)
     !real, intent(in)    :: p210(itot,jmax,konx)
-    real, pointer :: p(:,:,:)
-    real, pointer :: p210(:,:,:)
+    real(pois_r), pointer :: p(:,:,:)
+    real(real64), pointer :: p210(:,:,:)
 
     integer :: n, i,j,k, ii
 
@@ -417,9 +425,9 @@ contains
     enddo
     enddo
 
-    call MPI_ALLTOALL(bufin,   (imax*jmax*konx),my_real, &
-                      bufout,  (imax*jmax*konx),my_real, &
-                      commrow,mpierr)
+    call D_MPI_ALLTOALL(bufin,   (imax*jmax*konx), &
+                        bufout,  (imax*jmax*konx), &
+                        commrow,mpierr)
 
     ii = 0
     do n=0,nprocx-1
@@ -439,7 +447,7 @@ contains
 
   subroutine transpose_a2(p210, p201)
     use mpi
-    use modmpi, only : commcol, mpierr, my_real, nprocy
+    use modmpi, only : commcol, mpierr, nprocy, D_MPI_ALLTOALL
     use modglobal, only : itot, jtot, jmax
     implicit none
 
@@ -464,9 +472,9 @@ contains
     enddo
     enddo
 
-    call MPI_ALLTOALL(bufin,   (iony*jmax*konx),my_real, &
-                      bufout,  (iony*jmax*konx),my_real, &
-                      commcol,mpierr)
+    call D_MPI_ALLTOALL(bufin,   (iony*jmax*konx), &
+                        bufout,  (iony*jmax*konx), &
+                        commcol,mpierr)
 
     ii = 0
     do n=0,nprocy-1
@@ -484,7 +492,7 @@ contains
 
   subroutine transpose_a2inv(p210, p201)
     use mpi
-    use modmpi, only : commcol, mpierr, my_real, nprocy
+    use modmpi, only : commcol, mpierr, nprocy, D_MPI_ALLTOALL
     use modglobal, only : itot, jtot, jmax
     implicit none
 
@@ -507,9 +515,9 @@ contains
     enddo
     enddo
 
-    call MPI_ALLTOALL(bufin,   (iony*jmax*konx),my_real, &
-                      bufout,  (iony*jmax*konx),my_real, &
-                      commcol,mpierr)
+    call D_MPI_ALLTOALL(bufin,   (iony*jmax*konx), &
+                        bufout,  (iony*jmax*konx), &
+                        commcol,mpierr)
 
     ii = 0
     do n=0,nprocy-1
@@ -529,14 +537,14 @@ contains
 
   subroutine transpose_a3(p201, Fp)
     use mpi
-    use modmpi, only : commrow, mpierr, my_real, nprocx
+    use modmpi, only : commrow, mpierr, nprocx,D_MPI_ALLTOALL
     use modglobal, only : itot, jtot, jmax, kmax
     implicit none
 
     !real, intent(in)    :: p201(jtot,konx,iony)
     !real, intent(out)   :: Fp(iony,jonx,kmax)
-    real, pointer :: p201(:,:,:)
-    real, pointer :: Fp(:,:,:)
+    real(real64), pointer :: p201(:,:,:)
+    real(pois_r), pointer :: Fp(:,:,:)
 
     integer :: n, i,j,k, ii
 
@@ -554,9 +562,9 @@ contains
     enddo
     enddo
 
-    call MPI_ALLTOALL(bufin,   (iony*jonx*konx),my_real, &
-                      bufout,  (iony*jonx*konx),my_real, &
-                      commrow,mpierr)
+    call D_MPI_ALLTOALL(bufin,   (iony*jonx*konx), &
+                        bufout,  (iony*jonx*konx), &
+                        commrow,mpierr)
 
     ii = 0
     do n=0,nprocx-1
@@ -576,14 +584,14 @@ contains
 
   subroutine transpose_a3inv(p201, Fp)
     use mpi
-    use modmpi, only : commrow, mpierr, my_real, nprocx
+    use modmpi, only : commrow, mpierr, nprocx, D_MPI_ALLTOALL
     use modglobal, only : itot, jtot, jmax, kmax
     implicit none
 
     !real, intent(out)   :: p201(jtot,konx,iony)
     !real, intent(in)    :: Fp(iony,jonx,kmax)
-    real, pointer :: p201(:,:,:)
-    real, pointer :: Fp(:,:,:)
+    real(real64), pointer :: p201(:,:,:)
+    real(pois_r), pointer :: Fp(:,:,:)
 
     integer :: n, i,j,k, ii
 
@@ -601,9 +609,9 @@ contains
     enddo
     enddo
 
-    call MPI_ALLTOALL(bufin,   (iony*jonx*konx),my_real, &
-                      bufout,  (iony*jonx*konx),my_real, &
-                      commrow,mpierr)
+    call D_MPI_ALLTOALL(bufin,   (iony*jonx*konx), &
+                        bufout,  (iony*jonx*konx), &
+                        commrow,mpierr)
 
     ii = 0
     do n=0,nprocx-1
@@ -628,8 +636,8 @@ contains
 
     implicit none
 
-    real(4), pointer :: p(:,:,:)
-    real(4), pointer :: Fp(:,:,:)
+    real(pois_r), pointer :: p(:,:,:)
+    real(pois_r), pointer :: Fp(:,:,:)
 
     if (method == 1) then
       call transpose_a1(p, p210)
