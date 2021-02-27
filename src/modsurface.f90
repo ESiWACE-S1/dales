@@ -115,15 +115,15 @@ contains
       close(ifnamopt)
     end if
 
-    call MPI_BCAST(isurf        , 1       , MPI_INTEGER, 0, comm3d, mpierr)
+    call D_MPI_BCAST(isurf        , 1       ,  0, comm3d, mpierr)
     call D_MPI_BCAST(tsoilav      , ksoilmax, 0, comm3d, mpierr)
     call D_MPI_BCAST(tsoildeepav  , 1       , 0, comm3d, mpierr)
     call D_MPI_BCAST(phiwav       , ksoilmax, 0, comm3d, mpierr)
     call D_MPI_BCAST(rootfav      , ksoilmax, 0, comm3d, mpierr)
 
-    call MPI_BCAST(lmostlocal   , 1, MPI_LOGICAL, 0, comm3d, mpierr)
-    call MPI_BCAST(lsmoothflux  , 1, MPI_LOGICAL, 0, comm3d, mpierr)
-    call MPI_BCAST(lneutral     , 1, MPI_LOGICAL, 0, comm3d, mpierr)
+    call D_MPI_BCAST(lmostlocal   , 1,  0, comm3d, mpierr)
+    call D_MPI_BCAST(lsmoothflux  , 1,  0, comm3d, mpierr)
+    call D_MPI_BCAST(lneutral     , 1,  0, comm3d, mpierr)
     call D_MPI_BCAST(z0mav        , 1, 0, comm3d, mpierr)
     call D_MPI_BCAST(z0hav        , 1, 0, comm3d, mpierr)
     call D_MPI_BCAST(rsisurf2     , 1, 0, comm3d, mpierr)
@@ -147,24 +147,24 @@ contains
     call D_MPI_BCAST(ps         ,1,0,comm3d,mpierr)
     call D_MPI_BCAST(thls       ,1,0,comm3d,mpierr)
 
-    call MPI_BCAST(lhetero                    ,            1, MPI_LOGICAL, 0, comm3d, mpierr)
-    call MPI_BCAST(loldtable                  ,            1, MPI_LOGICAL, 0, comm3d, mpierr)
-    call MPI_BCAST(lrsAgs                     ,            1, MPI_LOGICAL, 0, comm3d, mpierr)
-    call MPI_BCAST(lCO2Ags                    ,            1, MPI_LOGICAL, 0, comm3d, mpierr)
-    call MPI_BCAST(xpatches                   ,            1, MPI_INTEGER, 0, comm3d, mpierr)
-    call MPI_BCAST(ypatches                   ,            1, MPI_INTEGER, 0, comm3d, mpierr)
-    call MPI_BCAST(planttype                  ,            1, MPI_INTEGER, 0, comm3d, mpierr)
-    call MPI_BCAST(lrelaxgc                   ,            1, MPI_LOGICAL, 0, comm3d, mpierr)
-    call MPI_BCAST(lrelaxci                   ,            1, MPI_LOGICAL, 0, comm3d, mpierr)
+    call D_MPI_BCAST(lhetero                    ,            1,  0, comm3d, mpierr)
+    call D_MPI_BCAST(loldtable                  ,            1,  0, comm3d, mpierr)
+    call D_MPI_BCAST(lrsAgs                     ,            1,  0, comm3d, mpierr)
+    call D_MPI_BCAST(lCO2Ags                    ,            1,  0, comm3d, mpierr)
+    call D_MPI_BCAST(xpatches                   ,            1,  0, comm3d, mpierr)
+    call D_MPI_BCAST(ypatches                   ,            1,  0, comm3d, mpierr)
+    call D_MPI_BCAST(planttype                  ,            1,  0, comm3d, mpierr)
+    call D_MPI_BCAST(lrelaxgc                   ,            1,  0, comm3d, mpierr)
+    call D_MPI_BCAST(lrelaxci                   ,            1,  0, comm3d, mpierr)
     call D_MPI_BCAST(kgc                        ,            1, 0, comm3d, mpierr)
     call D_MPI_BCAST(kci                        ,            1, 0, comm3d, mpierr)
     call D_MPI_BCAST(phi                        ,            1, 0, comm3d, mpierr)
     call D_MPI_BCAST(phifc                      ,            1, 0, comm3d, mpierr)
     call D_MPI_BCAST(phiwp                      ,            1, 0, comm3d, mpierr)
     call D_MPI_BCAST(R10                        ,            1, 0, comm3d, mpierr)
-    call MPI_BCAST(lsplitleaf                 ,            1, MPI_LOGICAL, 0, comm3d, mpierr)
+    call D_MPI_BCAST(lsplitleaf                 ,            1,  0, comm3d, mpierr)
     
-    call MPI_BCAST(land_use(1:mpatch,1:mpatch),mpatch*mpatch, MPI_INTEGER, 0, comm3d, mpierr)
+    call D_MPI_BCAST(land_use(1:mpatch,1:mpatch),mpatch*mpatch,  0, comm3d, mpierr)
 
     if(lCO2Ags .and. (.not. lrsAgs)) then
       if(myid==0) print *,"WARNING::: You set lCO2Ags to .true., but lrsAgs to .false."
@@ -749,8 +749,8 @@ contains
       xpatches*ypatches,MPI_SUM, comm3d,mpierr)
       call D_MPI_ALLREDUCE(vpatch(1:xpatches,1:ypatches),Svpatch(1:xpatches,1:ypatches),&
       xpatches*ypatches,MPI_SUM, comm3d,mpierr)
-      call MPI_ALLREDUCE(Npatch(1:xpatches,1:ypatches),SNpatch(1:xpatches,1:ypatches),&
-      xpatches*ypatches,MPI_INTEGER,MPI_SUM, comm3d,mpierr)
+      call D_MPI_ALLREDUCE(Npatch(1:xpatches,1:ypatches),SNpatch(1:xpatches,1:ypatches),&
+      xpatches*ypatches,MPI_SUM, comm3d,mpierr)
 
       horvpatch = sqrt(((Supatch/SNpatch) + cu) **2. + ((Svpatch/SNpatch) + cv) ** 2.)
       horvpatch = max(horvpatch, 0.1)
@@ -1016,8 +1016,8 @@ contains
         xpatches*ypatches, MPI_SUM, comm3d,mpierr)
         call D_MPI_ALLREDUCE(lqts_patch(1:xpatches,1:ypatches),  qts_patch(1:xpatches,1:ypatches),&
         xpatches*ypatches, MPI_SUM, comm3d,mpierr)
-        call MPI_ALLREDUCE(Npatch(1:xpatches,1:ypatches)     , SNpatch(1:xpatches,1:ypatches),&
-        xpatches*ypatches, MPI_INTEGER ,MPI_SUM, comm3d,mpierr)
+        call D_MPI_ALLREDUCE(Npatch(1:xpatches,1:ypatches)     , SNpatch(1:xpatches,1:ypatches),&
+        xpatches*ypatches, MPI_SUM, comm3d,mpierr)
         thls_patch = thls_patch / SNpatch
         qts_patch  = qts_patch  / SNpatch
         thvs_patch = thls_patch * (1. + (rv/rd - 1.) * qts_patch)
@@ -1092,8 +1092,8 @@ contains
         enddo
         call D_MPI_ALLREDUCE(lqts_patch(1:xpatches,1:ypatches), qts_patch(1:xpatches,1:ypatches),&
         xpatches*ypatches,MPI_SUM, comm3d,mpierr)
-        call MPI_ALLREDUCE(Npatch(1:xpatches,1:ypatches)    , SNpatch(1:xpatches,1:ypatches)  ,&
-        xpatches*ypatches,MPI_INTEGER ,MPI_SUM, comm3d,mpierr)
+        call D_MPI_ALLREDUCE(Npatch(1:xpatches,1:ypatches)    , SNpatch(1:xpatches,1:ypatches)  ,&
+        xpatches*ypatches,MPI_SUM, comm3d,mpierr)
         qts_patch = qts_patch / SNpatch
         thvs_patch = thls_patch * (1. + (rv/rd - 1.) * qts_patch)
       endif
@@ -1211,8 +1211,8 @@ contains
       MPI_SUM, comm3d,mpierr)
       call D_MPI_ALLREDUCE(vpatch(1:xpatches,1:ypatches)   ,Svpatch(1:xpatches,1:ypatches) ,xpatches*ypatches,&
       MPI_SUM, comm3d,mpierr)
-      call MPI_ALLREDUCE(Npatch(1:xpatches,1:ypatches)   ,SNpatch(1:xpatches,1:ypatches) ,xpatches*ypatches,&
-      MPI_INTEGER,MPI_SUM, comm3d,mpierr)
+      call D_MPI_ALLREDUCE(Npatch(1:xpatches,1:ypatches)   ,SNpatch(1:xpatches,1:ypatches) ,xpatches*ypatches,&
+      MPI_SUM, comm3d,mpierr)
       call D_MPI_ALLREDUCE(lthlpatch(1:xpatches,1:ypatches),thlpatch(1:xpatches,1:ypatches),xpatches*ypatches,&
       MPI_SUM, comm3d,mpierr)
       call D_MPI_ALLREDUCE(lqpatch(1:xpatches,1:ypatches)  ,qpatch(1:xpatches,1:ypatches)  ,xpatches*ypatches,&
@@ -2208,8 +2208,8 @@ contains
     if (lhetero) then
       call D_MPI_ALLREDUCE(lthls_patch(1:xpatches,1:ypatches), thls_patch(1:xpatches,1:ypatches),&
       xpatches*ypatches, MPI_SUM, comm3d,mpierr)
-      call MPI_ALLREDUCE(Npatch(1:xpatches,1:ypatches)     , SNpatch(1:xpatches,1:ypatches)   ,&
-      xpatches*ypatches, MPI_INTEGER ,MPI_SUM, comm3d,mpierr)
+      call D_MPI_ALLREDUCE(Npatch(1:xpatches,1:ypatches)     , SNpatch(1:xpatches,1:ypatches)   ,&
+      xpatches*ypatches, MPI_SUM, comm3d,mpierr)
       thls_patch = thls_patch / SNpatch
     endif
 

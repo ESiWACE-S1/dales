@@ -105,11 +105,11 @@ contains
     end if
 
     call D_MPI_BCAST(dtav     ,1,0,comm3d,mpierr)
-    call MPI_BCAST(ltimestat  ,1,MPI_LOGICAL,0,comm3d,mpierr)
+    call D_MPI_BCAST(ltimestat  ,1,0,comm3d,mpierr)
     call D_MPI_BCAST(blh_thres,1,0,comm3d,mpierr)
-    call MPI_BCAST(iblh_meth  ,1,MPI_INTEGER,0,comm3d,mpierr)
-    call MPI_BCAST(iblh_var   ,1,MPI_INTEGER,0,comm3d,mpierr)
-    call MPI_BCAST(blh_nsamp  ,1,MPI_INTEGER,0,comm3d,mpierr)
+    call D_MPI_BCAST(iblh_meth  ,1,0,comm3d,mpierr)
+    call D_MPI_BCAST(iblh_var   ,1,0,comm3d,mpierr)
+    call D_MPI_BCAST(blh_nsamp  ,1,0,comm3d,mpierr)
     idtav = dtav/tres
 
     tnext = idtav+btime

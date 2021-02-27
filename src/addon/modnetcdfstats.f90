@@ -119,9 +119,9 @@ contains
       close(ifnamopt)
     end if
 
-    call MPI_BCAST(dtav       ,1,MY_REAL,     0,comm3d,mpierr)
-    call MPI_BCAST(lnetcdf    ,1,MPI_LOGICAL, 0,comm3d,mpierr)
-    call MPI_BCAST(ncklimit   ,1,MPI_INTEGER, 0,comm3d,mpierr)
+    call D_MPI_BCAST(dtav       ,1, 0,comm3d,mpierr)
+    call D_MPI_BCAST(lnetcdf    ,1, 0,comm3d,mpierr)
+    call D_MPI_BCAST(ncklimit   ,1, 0,comm3d,mpierr)
 
     if(.not.(lnetcdf)) return
     tnext = dtav-1e-6

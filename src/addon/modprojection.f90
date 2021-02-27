@@ -87,9 +87,9 @@ contains
       if (zf(ksplit)>=projectheight) exit
     end do
     ksplit = ksplit - 1
-    call MPI_BCAST(dtav       ,1,MY_REAL    ,0,comm3d,mpierr)
-    call MPI_BCAST(lproject     ,1,MPI_LOGICAL,0,comm3d,mpierr)
-    call MPI_BCAST(ksplit,1,MPI_INTEGER,0,comm3d,mpierr)
+    call D_MPI_BCAST(dtav     ,1,0,comm3d,mpierr)
+    call D_MPI_BCAST(lproject ,1,0,comm3d,mpierr)
+    call D_MPI_BCAST(ksplit   ,1,0,comm3d,mpierr)
     idtav = dtav/tres
 
     tnext      = idtav   +btime

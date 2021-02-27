@@ -87,13 +87,13 @@ contains
 
     call D_MPI_BCAST(timeav    ,1,0,comm3d,mpierr)
     call D_MPI_BCAST(dtav      ,1,0,comm3d,mpierr)
-!    call MPI_BCAST(lsampall  ,1,MPI_LOGICAL,0,comm3d,mpierr)
-    call MPI_BCAST(lsampcl   ,1,MPI_LOGICAL,0,comm3d,mpierr)
-    call MPI_BCAST(lsampco   ,1,MPI_LOGICAL,0,comm3d,mpierr)
-    call MPI_BCAST(lsampup   ,1,MPI_LOGICAL,0,comm3d,mpierr)
-    call MPI_BCAST(lsampbuup ,1,MPI_LOGICAL,0,comm3d,mpierr)
-    call MPI_BCAST(lsampcldup,1,MPI_LOGICAL,0,comm3d,mpierr)
-    call MPI_BCAST(lsamptend, 1,MPI_LOGICAL,0,comm3d,mpierr)
+!    call D_MPI_BCAST(lsampall  ,1,MPI_LOGICAL,0,comm3d,mpierr)
+    call D_MPI_BCAST(lsampcl   ,1,0,comm3d,mpierr)
+    call D_MPI_BCAST(lsampco   ,1,0,comm3d,mpierr)
+    call D_MPI_BCAST(lsampup   ,1,0,comm3d,mpierr)
+    call D_MPI_BCAST(lsampbuup ,1,0,comm3d,mpierr)
+    call D_MPI_BCAST(lsampcldup,1,0,comm3d,mpierr)
+    call D_MPI_BCAST(lsamptend, 1,0,comm3d,mpierr)
 
     isamptot = 0
     if (lsampall) then
@@ -718,7 +718,7 @@ contains
       end if
     enddo
 
-    call MPI_ALLREDUCE(nrsamph0l   ,nrsamph0 ,k1,MPI_INTEGER,MPI_SUM,comm3d,mpierr)
+    call D_MPI_ALLREDUCE(nrsamph0l   ,nrsamph0 ,k1,MPI_SUM,comm3d,mpierr)
     call D_MPI_ALLREDUCE(whav0l      ,whav0    ,k1,MPI_SUM,comm3d,mpierr)
     call D_MPI_ALLREDUCE(wwthav0l    ,wwthav0  ,k1,MPI_SUM,comm3d,mpierr)
 

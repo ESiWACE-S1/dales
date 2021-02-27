@@ -75,15 +75,15 @@ contains
       write(6 ,NAMFIELDDUMP)
       close(ifnamopt)
     end if
-    call MPI_BCAST(ncoarse     ,1,MPI_INTEGER,0,comm3d,ierr)
-    call MPI_BCAST(klow        ,1,MPI_INTEGER,0,comm3d,ierr)
-    call MPI_BCAST(khigh       ,1,MPI_INTEGER,0,comm3d,ierr)
+    call D_MPI_BCAST(ncoarse     ,1,0,comm3d,ierr)
+    call D_MPI_BCAST(klow        ,1,0,comm3d,ierr)
+    call D_MPI_BCAST(khigh       ,1,0,comm3d,ierr)
     call D_MPI_BCAST(dtav        ,1,0,comm3d,ierr)
     call D_MPI_BCAST(tmin        ,1,0,comm3d,ierr)
     call D_MPI_BCAST(tmax        ,1,0,comm3d,ierr)
-    call MPI_BCAST(lfielddump  ,1,MPI_LOGICAL,0,comm3d,ierr)
-    call MPI_BCAST(ldiracc     ,1,MPI_LOGICAL,0,comm3d,ierr)
-    call MPI_BCAST(lbinary     ,1,MPI_LOGICAL,0,comm3d,ierr)
+    call D_MPI_BCAST(lfielddump  ,1,0,comm3d,ierr)
+    call D_MPI_BCAST(ldiracc     ,1,0,comm3d,ierr)
+    call D_MPI_BCAST(lbinary     ,1,0,comm3d,ierr)
     if (ncoarse==-1) then
       ncoarse = 1
     end if

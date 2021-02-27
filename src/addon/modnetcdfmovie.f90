@@ -92,12 +92,12 @@ contains
       close(ifnamopt)
     end if
 
-    call MPI_BCAST(dtmovie         ,1,MY_REAL,      0, comm3d, mpierr)
-    call MPI_BCAST(lnetcdfmovie    ,1,MPI_LOGICAL,  0, comm3d, mpierr)
-    call MPI_BCAST(ncklimit        ,1,MPI_INTEGER,  0, comm3d, mpierr)
-    call MPI_BCAST(lmoviez         ,1,MPI_LOGICAL, 0, comm3d, mpierr)
-    call MPI_BCAST(slicex          ,1,MPI_INTEGER,  0, comm3d, mpierr)
-    call MPI_BCAST(slicez          ,1,MPI_INTEGER,  0, comm3d, mpierr)
+    call D_MPI_BCAST(dtmovie         ,1, 0, comm3d, mpierr)
+    call D_MPI_BCAST(lnetcdfmovie    ,1, 0, comm3d, mpierr)
+    call D_MPI_BCAST(ncklimit        ,1, 0, comm3d, mpierr)
+    call D_MPI_BCAST(lmoviez         ,1, 0, comm3d, mpierr)
+    call D_MPI_BCAST(slicex          ,1, 0, comm3d, mpierr)
+    call D_MPI_BCAST(slicez          ,1, 0, comm3d, mpierr)
     
     tnext = dtmovie-1e-3+btime
 

@@ -276,21 +276,21 @@ SUBROUTINE initchem
   endif
 
 
-  call MPI_BCAST(lchem     ,1,mpi_logical , 0,comm3d, mpierr)
-  call MPI_BCAST(ldiuvar   ,1,mpi_logical , 0,comm3d, mpierr)
-  call MPI_BCAST(lchconst  ,1,mpi_logical , 0,comm3d, mpierr)
-  call MPI_BCAST(lchmovie  ,1,mpi_logical , 0,comm3d, mpierr)
-  call MPI_BCAST(lsegr     ,1,mpi_logical , 0,comm3d, mpierr)
-  call MPI_BCAST(lcloudKconst,1,mpi_logical ,0,comm3d,mpierr)
-  call MPI_BCAST(tnor      ,1,mpi_integer , 0,comm3d, mpierr)
-  call MPI_BCAST(firstchem ,1,mpi_integer , 0,comm3d, mpierr)
-  call MPI_BCAST(lastchem  ,1,mpi_integer , 0,comm3d, mpierr)
-  call D_MPI_BCAST(t_ref     ,1, 0,comm3d, mpierr)
-  call D_MPI_BCAST(q_ref     ,1, 0,comm3d, mpierr)
-  call D_MPI_BCAST(p_ref     ,1, 0,comm3d, mpierr)
-  call D_MPI_BCAST(h_ref     ,1, 0,comm3d, mpierr)
-  call D_MPI_BCAST(itermin   ,1, 0,comm3d, mpierr)
-  call D_MPI_BCAST(dtchmovie ,1, 0,comm3d, mpierr)
+  call D_MPI_BCAST(lchem       ,1, 0,comm3d, mpierr)
+  call D_MPI_BCAST(ldiuvar     ,1, 0,comm3d, mpierr)
+  call D_MPI_BCAST(lchconst    ,1, 0,comm3d, mpierr)
+  call D_MPI_BCAST(lchmovie    ,1, 0,comm3d, mpierr)
+  call D_MPI_BCAST(lsegr       ,1, 0,comm3d, mpierr)
+  call D_MPI_BCAST(lcloudKconst,1, 0,comm3d,mpierr)
+  call D_MPI_BCAST(tnor        ,1, 0,comm3d, mpierr)
+  call D_MPI_BCAST(firstchem   ,1, 0,comm3d, mpierr)
+  call D_MPI_BCAST(lastchem    ,1, 0,comm3d, mpierr)
+  call D_MPI_BCAST(t_ref       ,1, 0,comm3d, mpierr)
+  call D_MPI_BCAST(q_ref       ,1, 0,comm3d, mpierr)
+  call D_MPI_BCAST(p_ref       ,1, 0,comm3d, mpierr)
+  call D_MPI_BCAST(h_ref       ,1, 0,comm3d, mpierr)
+  call D_MPI_BCAST(itermin     ,1, 0,comm3d, mpierr)
+  call D_MPI_BCAST(dtchmovie   ,1, 0,comm3d, mpierr)
 
   lCHon = lchem
 

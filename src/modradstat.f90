@@ -104,10 +104,10 @@ contains
       close(ifnamopt)
     end if
 
-    call D_MPI_BCAST(timeav     ,1,0,comm3d,mpierr)
-    call D_MPI_BCAST(dtav       ,1,0,comm3d,mpierr)
-    call MPI_BCAST(lstat   ,1,MPI_LOGICAL,0,comm3d,mpierr)
-    call MPI_BCAST(lradclearair,1,MPI_LOGICAL,0,comm3d,mpierr)
+    call D_MPI_BCAST(timeav      ,1,0,comm3d,mpierr)
+    call D_MPI_BCAST(dtav        ,1,0,comm3d,mpierr)
+    call D_MPI_BCAST(lstat       ,1,0,comm3d,mpierr)
+    call D_MPI_BCAST(lradclearair,1,0,comm3d,mpierr)
     idtav = dtav/tres
     itimeav = timeav/tres
 

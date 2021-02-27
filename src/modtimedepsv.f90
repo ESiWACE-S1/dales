@@ -162,8 +162,8 @@ contains
     call D_MPI_BCAST(timesvsurf(1:kflux),kflux,0,comm3d,mpierr)
     call D_MPI_BCAST(svst             ,kflux*nsv,0,comm3d,mpierr)
     call D_MPI_BCAST(timesvz(1:kls)    ,kls,0,comm3d,mpierr)
-    call MPI_BCAST(ltimedepsvsurf ,1,MPI_LOGICAL,0,comm3d,mpierr)
-    call MPI_BCAST(ltimedepsvz    ,1,MPI_LOGICAL,0,comm3d,mpierr)
+    call D_MPI_BCAST(ltimedepsvsurf ,1,0,comm3d,mpierr)
+    call D_MPI_BCAST(ltimedepsvz    ,1,0,comm3d,mpierr)
     do n=1,nsv
          call D_MPI_BCAST(svzt(1:k1,1:kls,n),kmax*kls,0,comm3d,mpierr)
     enddo

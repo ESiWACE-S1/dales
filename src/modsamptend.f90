@@ -673,7 +673,7 @@ subroutine initsamptend
     nrpmn = 0.
     nrsamptot=0
 
-    call MPI_ALLREDUCE(nrsamp   ,nrsamptot ,k1*isamptot,MPI_INTEGER,MPI_SUM,comm3d,mpierr)
+    call D_MPI_ALLREDUCE(nrsamp   ,nrsamptot ,k1*isamptot         ,MPI_SUM,comm3d,mpierr)
     call D_MPI_ALLREDUCE(upav     ,upmn      ,k1*nrfields*isamptot,MPI_SUM,comm3d,mpierr)
     call D_MPI_ALLREDUCE(vpav     ,vpmn      ,k1*nrfields*isamptot,MPI_SUM,comm3d,mpierr)
     call D_MPI_ALLREDUCE(wpav     ,wpmn      ,k1*nrfields*isamptot,MPI_SUM,comm3d,mpierr)

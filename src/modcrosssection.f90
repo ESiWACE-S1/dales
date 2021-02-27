@@ -97,11 +97,11 @@ contains
     end if
 
     call D_MPI_BCAST(dtav       ,1,0,comm3d,mpierr)
-    call MPI_BCAST(lcross     ,1,MPI_LOGICAL,0,comm3d,mpierr)
-    call MPI_BCAST(lbinary    ,1,MPI_LOGICAL,0,comm3d,mpierr)
-    call MPI_BCAST(crossheight(1:100),100,MPI_INTEGER,0,comm3d,mpierr)
-    call MPI_BCAST(crossplane ,1,MPI_INTEGER,0,comm3d,mpierr)
-    call MPI_BCAST(crossortho ,1,MPI_INTEGER,0,comm3d,mpierr)
+    call D_MPI_BCAST(lcross     ,1,0,comm3d,mpierr)
+    call D_MPI_BCAST(lbinary    ,1,0,comm3d,mpierr)
+    call D_MPI_BCAST(crossheight(1:100),100,0,comm3d,mpierr)
+    call D_MPI_BCAST(crossplane ,1,0,comm3d,mpierr)
+    call D_MPI_BCAST(crossortho ,1,0,comm3d,mpierr)
 
     nxy=0
     k=1

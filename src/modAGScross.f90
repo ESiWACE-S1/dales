@@ -75,8 +75,8 @@ contains
 
     if (.not. lrsAgs) lAGScross = .false.
 
-    call D_MPI_BCAST(dtav    ,1 ,0,comm3d,mpierr)
-    call MPI_BCAST(lAGScross ,1,MPI_LOGICAL,0,comm3d,mpierr)
+    call D_MPI_BCAST(dtav     ,1 ,0,comm3d,mpierr)
+    call D_MPI_BCAST(lAGScross,1 ,0,comm3d,mpierr)
 
     idtav = dtav/tres
     tnext   = idtav+btime

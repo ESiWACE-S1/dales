@@ -333,8 +333,8 @@ contains
     call D_MPI_BCAST(thlproft,kmax*kls ,0,comm3d,mpierr)
     call D_MPI_BCAST(qtproft ,kmax*kls ,0,comm3d,mpierr)
 
-    call MPI_BCAST(ltimedepsurf ,1,MPI_LOGICAL,0,comm3d,mpierr)
-    call MPI_BCAST(ltimedepz    ,1,MPI_LOGICAL,0,comm3d,mpierr)
+    call D_MPI_BCAST(ltimedepsurf ,1,0,comm3d,mpierr)
+    call D_MPI_BCAST(ltimedepz    ,1,0,comm3d,mpierr)
 
     call inittimedepsv
     call timedep

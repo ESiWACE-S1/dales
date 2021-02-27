@@ -145,11 +145,11 @@ contains
 
 
 
-    call MPI_BCAST(ltilted ,1,MPI_LOGICAL,0,comm3d,mpierr)
-    call MPI_BCAST(lstat   ,1,MPI_LOGICAL,0,comm3d,mpierr)
-    call MPI_BCAST(alfa    ,1,MY_REAL    ,0,comm3d,mpierr)
-    call MPI_BCAST(dtav    ,1,MY_REAL    ,0,comm3d,mpierr)
-    call MPI_BCAST(timeav  ,1,MY_REAL    ,0,comm3d,mpierr)
+    call D_MPI_BCAST(ltilted ,1,0,comm3d,mpierr)
+    call D_MPI_BCAST(lstat   ,1,0,comm3d,mpierr)
+    call D_MPI_BCAST(alfa    ,1,0,comm3d,mpierr)
+    call D_MPI_BCAST(dtav    ,1,0,comm3d,mpierr)
+    call D_MPI_BCAST(timeav  ,1,0,comm3d,mpierr)
     idtav = dtav/tres
     itimeav = timeav/tres
 

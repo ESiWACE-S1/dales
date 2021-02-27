@@ -286,12 +286,12 @@ contains
 !    sv0al(n) = sum(sv0(2:i1,2:j1,kmax,n))
 !  enddo
 !
-!  call MPI_ALLREDUCE(thl0al, thl0a, 1,    MY_REAL, &
+!  call D_MPI_ALLREDUCE(thl0al, thl0a, 1,    &
 !                         MPI_SUM, comm3d,mpierr)
-!  call MPI_ALLREDUCE(qt0al, qt0a , 1,     MY_REAL, &
+!  call D_MPI_ALLREDUCE(qt0al, qt0a , 1,     &
 !                         MPI_SUM, comm3d,mpierr)
 !  if(nsv > 0) then
-!    call MPI_ALLREDUCE(sv0al, sv0a , nsv,   MY_REAL, &
+!    call D_MPI_ALLREDUCE(sv0al, sv0a , nsv, &
 !                           MPI_SUM, comm3d,mpierr)
 !  end if
 !

@@ -85,9 +85,9 @@ contains
        close(ifnamopt)
     end if
 
-    call MPI_BCAST(timeav     ,1,MY_REAL    ,0,comm3d,mpierr)
-    call MPI_BCAST(dtav       ,1,MY_REAL    ,0,comm3d,mpierr)
-    call MPI_BCAST(lstress    ,1,MPI_LOGICAL,0,comm3d,mpierr)
+    call D_MPI_BCAST(timeav     ,1,0,comm3d,mpierr)
+    call D_MPI_BCAST(dtav       ,1,0,comm3d,mpierr)
+    call D_MPI_BCAST(lstress    ,1,0,comm3d,mpierr)
     idtav = dtav/tres
     itimeav = timeav/tres
 
@@ -360,7 +360,7 @@ contains
 
     do m=1,3
       do n=1,3
-        call MPI_ALLREDUCE(fstrl(:,m,n), fstr(:,m,n), k1,  MY_REAL, &
+        call D_MPI_ALLREDUCE(fstrl(:,m,n), fstr(:,m,n), k1,   &
                            MPI_SUM, comm3d,mpierr)
       enddo
     enddo
@@ -391,7 +391,7 @@ contains
        thv0h_avl(k) =  sum(thv0h(2:i1,2:j1,k))/ijtot
     enddo
 
-    call MPI_ALLREDUCE(thv0h_avl, thv0h_av, k1,  MY_REAL, &
+    call D_MPI_ALLREDUCE(thv0h_avl, thv0h_av, k1,   &
                            MPI_SUM, comm3d,mpierr)
 
     do k=1,k1
@@ -431,7 +431,7 @@ contains
 
     do m=1,3
       do n=1,3
-        call MPI_ALLREDUCE(fbuol(:,m,n), fbuo(:,m,n), k1,  MY_REAL, &
+        call D_MPI_ALLREDUCE(fbuol(:,m,n), fbuo(:,m,n), k1,   &
                            MPI_SUM, comm3d,mpierr)
       enddo
     enddo
@@ -533,7 +533,7 @@ contains
 
     do m=1,3
         do n=1,3
-          call MPI_ALLREDUCE(fshrl(:,m,n), fshr(:,m,n), k1,  MY_REAL, &
+          call D_MPI_ALLREDUCE(fshrl(:,m,n), fshr(:,m,n), k1,   &
                              MPI_SUM, comm3d,mpierr)
         enddo
     enddo
@@ -634,7 +634,7 @@ contains
 
    do m=1,3
       do n=1,3
-        call MPI_ALLREDUCE(fttrl(:,m,n), fttr(:,m,n), k1,  MY_REAL, &
+        call D_MPI_ALLREDUCE(fttrl(:,m,n), fttr(:,m,n), k1,   &
                           MPI_SUM, comm3d, mpierr)
       enddo
    enddo
@@ -735,7 +735,7 @@ contains
 
     do m=1,3
         do n=1,3
-          call MPI_ALLREDUCE(fadvl(:,m,n), fadv(:,m,n), k1,  MY_REAL, &
+          call D_MPI_ALLREDUCE(fadvl(:,m,n), fadv(:,m,n), k1,   &
                              MPI_SUM, comm3d,mpierr)
         enddo
     enddo
@@ -817,7 +817,7 @@ contains
 
     do m=1,3
         do n=1,3
-          call MPI_ALLREDUCE(fcorl(:,m,n), fcor(:,m,n), k1,  MY_REAL, &
+          call D_MPI_ALLREDUCE(fcorl(:,m,n), fcor(:,m,n), k1,   &
                              MPI_SUM, comm3d,mpierr)
         enddo
     enddo
@@ -884,7 +884,7 @@ contains
 
     do m=1,3
         do n=1,3
-           call MPI_ALLREDUCE(fptrl(:,m,n), fptr(:,m,n), k1,  MY_REAL, &
+           call D_MPI_ALLREDUCE(fptrl(:,m,n), fptr(:,m,n), k1,   &
                            MPI_SUM, comm3d, mpierr)
        enddo
     enddo
@@ -912,11 +912,11 @@ contains
        wterm_avl(k) = sum(w_term(2:i1,2:j1,k))/ijtot
     enddo
 
-    call MPI_ALLREDUCE(uterm_avl, uterm_av, k1,  MY_REAL, &
+    call D_MPI_ALLREDUCE(uterm_avl, uterm_av, k1,   &
                            MPI_SUM, comm3d, mpierr)
-    call MPI_ALLREDUCE(vterm_avl, vterm_av, k1,  MY_REAL, &
+    call D_MPI_ALLREDUCE(vterm_avl, vterm_av, k1,   &
                            MPI_SUM, comm3d, mpierr)
-    call MPI_ALLREDUCE(wterm_avl, wterm_av, k1,  MY_REAL, &
+    call D_MPI_ALLREDUCE(wterm_avl, wterm_av, k1,   &
                            MPI_SUM, comm3d, mpierr)
 
     do k=1,k1
@@ -970,7 +970,7 @@ contains
 
     do m=1,3
         do n=1,3
-           call MPI_ALLREDUCE(fdisl(:,m,n), fdis(:,m,n), k1,  MY_REAL, &
+           call D_MPI_ALLREDUCE(fdisl(:,m,n), fdis(:,m,n), k1,   &
                            MPI_SUM, comm3d, mpierr)
        enddo
     enddo
@@ -1038,7 +1038,7 @@ contains
 
     do m=1,3
       do n=1,3
-        call MPI_ALLREDUCE(rstrel(:,m,n), rstre(:,m,n), k1,  MY_REAL, &
+        call D_MPI_ALLREDUCE(rstrel(:,m,n), rstre(:,m,n), k1,   &
                            MPI_SUM, comm3d,mpierr)
       enddo
     enddo

@@ -62,7 +62,6 @@ module modbulkmicro3
   subroutine initbulkmicro3
     use modglobal, only : lwarmstart,ifnamopt,fname_options,i1,ih,j1,jh,k1
     use modmpi,    only : myid,comm3d,mpi_logical,D_MPI_BCAST
-    use mpi,       only : MPI_BCAST
     implicit none
     integer :: ierr
 
@@ -143,28 +142,28 @@ module modbulkmicro3
      ! #sb3 END
 
     ! send values
-     call MPI_BCAST(l_sb_classic,      1, MPI_LOGICAL ,0,comm3d,ierr)
-     call MPI_BCAST(l_sb_dumpall,      1, MPI_LOGICAL ,0,comm3d,ierr)
-     call MPI_BCAST(l_sb_all_or,       1, MPI_LOGICAL ,0,comm3d,ierr)
-     call MPI_BCAST(l_sb_dbg,          1, MPI_LOGICAL ,0,comm3d,ierr)
-     call MPI_BCAST(l_clouds_init,     1, MPI_LOGICAL ,0,comm3d,ierr)
-     call MPI_BCAST(l_ccn_init,        1, MPI_LOGICAL ,0,comm3d,ierr)
-     call MPI_BCAST(l_corr_neg_qt,     1, MPI_LOGICAL ,0,comm3d,ierr)
+     call D_MPI_BCAST(l_sb_classic,      1, 0,comm3d,ierr)
+     call D_MPI_BCAST(l_sb_dumpall,      1, 0,comm3d,ierr)
+     call D_MPI_BCAST(l_sb_all_or,       1, 0,comm3d,ierr)
+     call D_MPI_BCAST(l_sb_dbg,          1, 0,comm3d,ierr)
+     call D_MPI_BCAST(l_clouds_init,     1, 0,comm3d,ierr)
+     call D_MPI_BCAST(l_ccn_init,        1, 0,comm3d,ierr)
+     call D_MPI_BCAST(l_corr_neg_qt,     1, 0,comm3d,ierr)
      !
-     call MPI_BCAST(l_sb_lim_aggr,     1, MPI_LOGICAL ,0,comm3d,ierr)
-     call MPI_BCAST(l_sb_stickyice,    1, MPI_LOGICAL ,0,comm3d,ierr)
-     call MPI_BCAST(l_sb_conv_par ,    1, MPI_LOGICAL ,0,comm3d,ierr)
+     call D_MPI_BCAST(l_sb_lim_aggr,     1, 0,comm3d,ierr)
+     call D_MPI_BCAST(l_sb_stickyice,    1, 0,comm3d,ierr)
+     call D_MPI_BCAST(l_sb_conv_par ,    1, 0,comm3d,ierr)
      !
-     call MPI_BCAST(l_c_ccn,           1, MPI_LOGICAL ,0,comm3d,ierr)
-     call MPI_BCAST(l_sb_sat_max,      1, MPI_LOGICAL ,0,comm3d,ierr)
-     call MPI_BCAST(l_sb_nuc_sat,      1, MPI_LOGICAL ,0,comm3d,ierr)
-     call MPI_BCAST(l_sb_nuc_expl,     1, MPI_LOGICAL ,0,comm3d,ierr)
-     call MPI_BCAST(l_sb_nuc_diff,     1, MPI_LOGICAL ,0,comm3d,ierr)
-     call MPI_BCAST(l_sb_inuc_sat,     1, MPI_LOGICAL ,0,comm3d,ierr)
-     call MPI_BCAST(l_sb_inuc_expl,    1, MPI_LOGICAL ,0,comm3d,ierr)
-     call MPI_BCAST(l_sb_reisner,      1, MPI_LOGICAL ,0,comm3d,ierr)
+     call D_MPI_BCAST(l_c_ccn,           1, 0,comm3d,ierr)
+     call D_MPI_BCAST(l_sb_sat_max,      1, 0,comm3d,ierr)
+     call D_MPI_BCAST(l_sb_nuc_sat,      1, 0,comm3d,ierr)
+     call D_MPI_BCAST(l_sb_nuc_expl,     1, 0,comm3d,ierr)
+     call D_MPI_BCAST(l_sb_nuc_diff,     1, 0,comm3d,ierr)
+     call D_MPI_BCAST(l_sb_inuc_sat,     1, 0,comm3d,ierr)
+     call D_MPI_BCAST(l_sb_inuc_expl,    1, 0,comm3d,ierr)
+     call D_MPI_BCAST(l_sb_reisner,      1, 0,comm3d,ierr)
      !
-     call MPI_BCAST(l_sb_reisner,      1, MPI_LOGICAL ,0,comm3d,ierr)
+     call D_MPI_BCAST(l_sb_reisner,      1, 0,comm3d,ierr)
      !
      call D_MPI_BCAST(N_inuc_R ,         1, 0,comm3d,ierr)
      call D_MPI_BCAST(c_inuc_R ,         1, 0,comm3d,ierr)

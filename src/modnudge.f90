@@ -71,7 +71,7 @@ contains
       write(6 ,NAMNUDGE)
       close(ifnamopt)
     end if
-    call MPI_BCAST(lnudge    , 1,MPI_LOGICAL,0,comm3d,mpierr)
+    call D_MPI_BCAST(lnudge    , 1,0,comm3d,mpierr)
 
     if (.not. lnudge) return
     if(myid==0) then

@@ -91,13 +91,13 @@ contains
       if (khigh .gt. kmax) khigh  = kmax
     end if ! myid = 0
 
-    call MPI_BCAST(lquadrant ,1,MPI_LOGICAL,0,comm3d,mpierr)
+    call D_MPI_BCAST(lquadrant ,1,0,comm3d,mpierr)
     call D_MPI_BCAST(dtav      ,1,0,comm3d,mpierr)
     call D_MPI_BCAST(timeav    ,1,0,comm3d,mpierr)
     call D_MPI_BCAST(hole      ,1,0,comm3d,mpierr)
-    call MPI_BCAST(iwind     ,1,MPI_INTEGER,0,comm3d,mpierr)
-    call MPI_BCAST(klow      ,1,MPI_INTEGER,0,comm3d,mpierr)
-    call MPI_BCAST(khigh     ,1,MPI_INTEGER,0,comm3d,mpierr)
+    call D_MPI_BCAST(iwind     ,1,0,comm3d,mpierr)
+    call D_MPI_BCAST(klow      ,1,0,comm3d,mpierr)
+    call D_MPI_BCAST(khigh     ,1,0,comm3d,mpierr)
 
     if(.not. lquadrant) return
 

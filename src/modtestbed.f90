@@ -97,8 +97,8 @@ contains
 
     end if
  
-    call MPI_BCAST(ltestbed     , 1,MPI_LOGICAL,0,comm3d,mpierr)
-    call MPI_BCAST(ltb_nudge    , 1,MPI_LOGICAL,0,comm3d,mpierr)
+    call D_MPI_BCAST(ltestbed     , 1,0,comm3d,mpierr)
+    call D_MPI_BCAST(ltb_nudge    , 1,0,comm3d,mpierr)
     
     if (.not. ltestbed) return
     
@@ -134,10 +134,10 @@ contains
         if (STATUS .ne. nf90_noerr) call handle_err(STATUS)
     end if
 
-    call MPI_BCAST(ntnudge    , 1,MPI_INTEGER,0,comm3d,mpierr)
-    call MPI_BCAST(nknudge    , 1,MPI_INTEGER,0,comm3d,mpierr)
-    call MPI_BCAST(nknudgep1  , 1,MPI_INTEGER,0,comm3d,mpierr)
-    call MPI_BCAST(nknudges   , 1,MPI_INTEGER,0,comm3d,mpierr)
+    call D_MPI_BCAST(ntnudge    , 1,0,comm3d,mpierr)
+    call D_MPI_BCAST(nknudge    , 1,0,comm3d,mpierr)
+    call D_MPI_BCAST(nknudgep1  , 1,0,comm3d,mpierr)
+    call D_MPI_BCAST(nknudges   , 1,0,comm3d,mpierr)
 
     !--- allocate space for input variables & reset---
     allocate(    tnudge    (ntnudge,k1), &
@@ -637,7 +637,7 @@ contains
 
     end if
 
-    call MPI_BCAST(ntnudge    , 1,MPI_INTEGER,0,comm3d,mpierr)
+    call D_MPI_BCAST(ntnudge    , 1,0,comm3d,mpierr)
 
     call D_MPI_BCAST(tb_time    ,ntnudge   ,0,comm3d,mpierr)
     call D_MPI_BCAST(tb_ps      ,ntnudge   ,0,comm3d,mpierr)

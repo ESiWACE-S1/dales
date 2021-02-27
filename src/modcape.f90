@@ -68,7 +68,7 @@ contains
     end if
 
     call D_MPI_BCAST(dtav    ,1,0,comm3d,mpierr)
-    call MPI_BCAST(lcape     ,1,MPI_LOGICAL,0,comm3d,mpierr)
+    call D_MPI_BCAST(lcape   ,1,0,comm3d,mpierr)
 
     idtav = dtav/tres
     tnext   = idtav+btime
@@ -220,7 +220,7 @@ contains
     enddo
     enddo
 
-    call MPI_ALLREDUCE(kdmaxl,kdmax,1,MPI_INTEGER,MPI_MAX,comm3d,mpierr)
+    call D_MPI_ALLREDUCE(kdmaxl,kdmax,1,MPI_MAX,comm3d,mpierr)
 
     do j=2,j1
     do i=2,i1
