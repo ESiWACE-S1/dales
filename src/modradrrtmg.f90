@@ -1,5 +1,6 @@
 module modradrrtmg
   use modraddata
+  use modprecision, only : field_r
   implicit none
 
   private
@@ -46,7 +47,7 @@ contains
 
 
     if(.not.isReadSounding) then
-      call readSounding(initial_presh(k1)/100.,npatch_start,npatch_end)
+      call readSounding(initial_presh(k1)/100._field_r,npatch_start,npatch_end)
 
       if(npatch_end.ne.npatch_start) then
         npatch = npatch_end - npatch_start + 1
@@ -254,7 +255,7 @@ contains
     use netcdf
     implicit none
 
-    real,intent(in) :: ptop_model
+    real(field_r),intent(in) :: ptop_model
     integer,intent(out)    :: npatch_start,npatch_end        ! the level#s of the sounding above the model
 
     real,allocatable,dimension(:,:) :: psnd_in,qsnd_in,tsnd_in,o3snd_in
