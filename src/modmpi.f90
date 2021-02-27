@@ -88,9 +88,11 @@ save
   interface D_MPI_ALLREDUCE
     procedure :: D_MPI_ALLREDUCE_REAL32
     procedure :: D_MPI_ALLREDUCE_REAL64
+    procedure :: D_MPI_ALLREDUCE_REAL128
     procedure :: D_MPI_ALLREDUCE_INT32
     procedure :: D_MPI_ALLREDUCE_REAL32_S
     procedure :: D_MPI_ALLREDUCE_REAL64_S
+    procedure :: D_MPI_ALLREDUCE_REAL128_S
 
   end interface
   interface D_MPI_ALLTOALL
@@ -838,6 +840,12 @@ contains
     integer  :: count, op, comm, ierror
     call MPI_ALLREDUCE(sendbuf, recvbuf, count, MPI_REAL8, op, comm, ierror)
   end subroutine D_MPI_ALLREDUCE_REAL64
+  subroutine D_MPI_ALLREDUCE_REAL128(sendbuf, recvbuf, count, op, comm, ierror)
+    implicit none
+    real(real128) :: sendbuf(..), recvbuf(..)
+    integer  :: count, op, comm, ierror
+    call MPI_ALLREDUCE(sendbuf, recvbuf, count, MPI_REAL16, op, comm, ierror)
+  end subroutine D_MPI_ALLREDUCE_REAL128
   subroutine D_MPI_ALLREDUCE_INT32(sendbuf, recvbuf, count, op, comm, ierror)
     implicit none
     integer(int32) :: sendbuf(..), recvbuf(..)
@@ -858,6 +866,13 @@ contains
     integer  :: count, op, comm, ierror
     call MPI_ALLREDUCE(sendbuf, recvbuf, count, MPI_REAL8, op, comm, ierror)
   end subroutine D_MPI_ALLREDUCE_REAL64_S
+  subroutine D_MPI_ALLREDUCE_REAL128_S(sendbuf, recvbuf, count, op, comm, ierror)
+    implicit none
+    integer      :: sendbuf
+    real(real128) :: recvbuf(..)
+    integer  :: count, op, comm, ierror
+    call MPI_ALLREDUCE(sendbuf, recvbuf, count, MPI_REAL16, op, comm, ierror)
+  end subroutine D_MPI_ALLREDUCE_REAL128_S
 
   subroutine D_MPI_ALLTOALL_REAL32(sendbuf, sendcount, recvbuf, recvcount, comm, ierror)
     implicit none
