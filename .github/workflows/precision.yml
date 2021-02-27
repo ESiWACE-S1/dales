@@ -34,7 +34,7 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y cmake gfortran-10 libnetcdff-dev libfftw3-dev libhypre-dev libopenmpi-dev
+          sudo apt-get install -y cmake libnetcdff-dev libfftw3-dev libhypre-dev libopenmpi-dev
       - name : Set up Build
         run: |
           mkdir build
