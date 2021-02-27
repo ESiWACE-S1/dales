@@ -23,8 +23,8 @@ jobs:
       fail-fast: false
       matrix:
         fftw:    ["", "-DUSE_FFTW=T"]
-        field_r: [real32,real64]
-        pois_r:  [real32,real64] 
+        field_r: [real32,real64,real128]
+        pois_r:  [real64] 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
