@@ -162,7 +162,7 @@ contains
     implicit none
     real(pois_r),allocatable :: pup(:,:,:), pvp(:,:,:), pwp(:,:,:)
     integer i,j,k
-    real rk3coef
+    real(pois_r) :: rk3coef
 
     allocate(pup(2-ih:i1+ih,2-jh:j1+jh,kmax))
     allocate(pvp(2-ih:i1+ih,2-jh:j1+jh,kmax))
@@ -308,8 +308,8 @@ contains
     use modfields, only : rhobf, rhobh
     implicit none
 
-    real    :: a(kmax),b(kmax),c(kmax)
-    real    :: z,ak,bk,bbk
+    real(pois_r) :: a(kmax),b(kmax),c(kmax)
+    real(pois_r) :: z,ak,bk,bbk
     integer :: i, j, k
 
   ! Generate tridiagonal matrix

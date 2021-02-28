@@ -106,8 +106,8 @@ contains
     real(pois_r), allocatable :: xyrt(:,:)
 
     integer :: i,j,iv,jv
-    real    :: fac
-    real    :: xrt(itot), yrt(jtot)
+    real(pois_r) :: fac
+    real(pois_r) :: xrt(itot), yrt(jtot)
 
   ! Generate Eigenvalues xrt and yrt
   ! NOTE / BUG: the code below seems incorrect for odd-itot and
