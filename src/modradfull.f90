@@ -199,10 +199,11 @@ contains
       use modraddata,only : useMcICA,zenith,sw0,SW_up_TOA, SW_dn_TOA, LW_up_TOA, LW_dn_TOA, &
                             SW_up_ca_TOA, SW_dn_ca_TOA, LW_up_ca_TOA, LW_dn_ca_TOA
       use modtestbed, only : ltestbed
+      use modprecision, only : micro_r
       implicit none
 
       integer, intent (in) :: i1,ih,j1,jh,k1
-      real, intent (in)    :: CCN
+      real(micro_r), intent (in)    :: CCN
       real, dimension (k1), intent (in)                 :: dn0, pi0
       real, dimension (2-ih:i1+ih,2-jh:j1+jh,k1), intent (in)  :: tk, rv, rc
       real, optional, dimension (2-ih:i1+ih,2-jh:j1+jh,k1), intent (in) :: rr

@@ -1,5 +1,5 @@
 module modbulkmicro3_point
-  use modprecision, only : field_r
+  use modprecision, only : field_r, micro_r
   use modglobal, only :    rdt,rk3step
   use modmicrodata, only : Dv,Kt,delt,nu_a,Sc_num,D_eq, &
                            k_br,k_l,k_r,k_rr,kappa_r, phi, pirhow, &
@@ -13,7 +13,8 @@ module modbulkmicro3_point
   private
   public point_processes
 
-  real ::  tmp0     &
+  real(micro_r) &
+       ::  tmp0     &
           ,ql0      &
           ,qt0      &
           ,esl      &
@@ -73,10 +74,10 @@ module modbulkmicro3_point
           ,dn_cl_sc       &    !< cloud self-collection
           ,ret_cc              !< recovery of ccn
 
-  real ::   qtpmcr                    &
+  real(micro_r) ::   qtpmcr                    &
            ,thlpmcr
 
-  real, allocatable :: statistics   (:)     &
+  real(micro_r), allocatable :: statistics   (:)     &
                       ,tend         (:)
 
 contains
@@ -93,10 +94,10 @@ contains
                               in_ci,iq_ci,in_hs,iq_hs,in_hg,iq_hg
     implicit none
     real(field_r), intent(in)    :: exnf_k_in, rhof_k_in,presf_k_in
-    real, intent(in)    :: sv0(ncols),svm(ncols),prg(nprgs)
-    real, intent(inout) :: svp(ncols)
-    real, intent(out)   :: thlpmcr_out,qtpmcr_out
-    real, intent(out)   :: tend_out(ntends),statistics_out(nmphys)
+    real(micro_r), intent(in)    :: sv0(ncols),svm(ncols),prg(nprgs)
+    real(micro_r), intent(inout) :: svp(ncols)
+    real(micro_r), intent(out)   :: thlpmcr_out,qtpmcr_out
+    real(micro_r), intent(out)   :: tend_out(ntends),statistics_out(nmphys)
 
     if (l_statistics) then
       allocate(statistics(nmphys))
@@ -355,7 +356,7 @@ end subroutine point_processes
 subroutine integrals_bulk3
   implicit none
 
-  real :: N_r0, mur
+  real(micro_r) :: N_r0, mur
 
   if (q_hr_mask) then
     ! NOTE: code is duplicated in subroutine sedim_rain3
@@ -444,9 +445,9 @@ end subroutine integrals_bulk3
 subroutine icenucle3
   implicit none
 
-  real :: ssice
-  real :: n_in,n_tid
-  real :: dn_ci_inu    !< ice nucleation rate
+  real(micro_r) :: ssice
+  real(micro_r) :: n_in,n_tid
+  real(micro_r) :: dn_ci_inu    !< ice nucleation rate
 
   dn_ci_inu = 0.
 
@@ -537,13 +538,13 @@ subroutine homfreez3
   use modglobal, only : rlv
   implicit none
 
-  real    :: J_hom   ! freezing rate
-  real    :: tmpj    ! adjusted temperature
+  real(micro_r)    :: J_hom   ! freezing rate
+  real(micro_r)    :: tmpj    ! adjusted temperature
 
   ! calculate constants
-  real, parameter :: expC_30 = exp(C_30_Cf02)
+  real(micro_r), parameter :: expC_30 = exp(C_30_Cf02)
 
-  real :: dq_cl_hom = 0. !< homogeneous freezing of cloud water
+  real(micro_r) :: dq_cl_hom = 0. !< homogeneous freezing of cloud water
 
   ! inserting temperature values
   !  -- can be later adjusted to include the effect of chemicals in clouds
@@ -596,8 +597,8 @@ subroutine hetfreez3
   use modglobal, only : rlv
   implicit none
 
-  real :: J_het   ! freezing rate
-  real :: dq_cl_het = 0.   !< heterogeneou freezing of cloud water
+  real(micro_r) :: J_het   ! freezing rate
+  real(micro_r) :: dq_cl_het = 0.   !< heterogeneou freezing of cloud water
 
   J_het = A_het *exp( B_het*(T_3-tmp0) -1)
 
@@ -643,9 +644,9 @@ subroutine deposit_ice3
   use modglobal, only : rv,rd,pi
   implicit none
 
-  real :: esi
+  real(micro_r) :: esi
 
-  real :: F       & ! ventilation factor
+  real(micro_r) :: F       & ! ventilation factor
          ,q_avail & ! available water for deposition
          ,Si      & ! super or undersaturation with respect to ice
          ,G       & ! G_iv function
@@ -706,9 +707,9 @@ subroutine deposit_snow3
   use modglobal, only : rv,rd,pi
   implicit none
 
-  real :: esi
+  real(micro_r) :: esi
 
-  real :: F_hs    & ! ventilation factor
+  real(micro_r) :: F_hs    & ! ventilation factor
          ,q_avail & ! available water for deposition
          ,Si      & ! super or undersaturation with respect to ice
          ,G       & ! G_iv function
@@ -768,9 +769,9 @@ subroutine deposit_graupel3
   use modglobal, only : rv,rd,pi
   implicit none
 
-  real :: esi
+  real(micro_r) :: esi
 
-  real :: F_hg    & ! ventilation factor
+  real(micro_r) :: F_hg    & ! ventilation factor
          ,q_avail & ! available water for deposition
          ,Si      & ! super or undersaturation with respect to ice
          ,G       & ! G_iv function
@@ -830,8 +831,8 @@ end subroutine deposit_graupel3
 subroutine cor_deposit3
   implicit none
 
-  real    :: tocon,precon,cond_cf
-  real    :: cor_dqci_dep,cor_dqhs_dep,cor_dqhg_dep
+  real(micro_r)    :: tocon,precon,cond_cf
+  real(micro_r)    :: cor_dqci_dep,cor_dqhs_dep,cor_dqhg_dep
 
   ! available water vapour for deposition
   tocon = (qt0-q_clm-qvsi)/delt
@@ -897,16 +898,16 @@ subroutine ice_aggr3
   use modglobal, only : pi
   implicit none
 
-  real    :: dlt_0aa_i &
+  real(micro_r)    :: dlt_0aa_i &
             ,dlt_1aa_i &
             ,th_0aa_i  &
             ,th_1aa_i
 
-  real :: dif_D_10, x_minagg_ii, rem_cf_i
-  real :: E_ab, E_stick, x_crit_ii
+  real(micro_r) :: dif_D_10, x_minagg_ii, rem_cf_i
+  real(micro_r) :: E_ab, E_stick, x_crit_ii
 
-  real :: dq_ci_col_iis = 0. !< self-collection of cloud ice
-  real :: dn_ci_col_iis = 0. !< self-collection of cloud ice
+  real(micro_r) :: dq_ci_col_iis = 0. !< self-collection of cloud ice
+  real(micro_r) :: dn_ci_col_iis = 0. !< self-collection of cloud ice
 
   x_crit_ii   = (D_crit_ii/a_ci)**(1.0/b_ci)  ! TODO: this is a constant, precalculate
 
@@ -1002,10 +1003,10 @@ subroutine snow_self3
   use modglobal, only : pi
   implicit none
 
-  real :: dlt_0aa, th_0aa
-  real :: rem_cf_s, E_ab_s
-  real :: E_stick
-  real :: dn_hs_col_sss = 0.  !< self-collection of snow
+  real(micro_r) :: dlt_0aa, th_0aa
+  real(micro_r) :: rem_cf_s, E_ab_s
+  real(micro_r) :: E_stick
+  real(micro_r) :: dn_hs_col_sss = 0.  !< self-collection of snow
 
   ! adjusting coefficient
   ! prepare coefficient for remaining water number
@@ -1055,10 +1056,10 @@ subroutine coll_sis3
   use modglobal, only : pi
   implicit none
 
-  real :: E_ab, E_stick, rem_cf_i
+  real(micro_r) :: E_ab, E_stick, rem_cf_i
 
-  real :: dq_hsci_col   = 0.  !< collection s+i - trend in q_hs
-  real :: dn_ci_col_hs  = 0.  !< collection s+i - trend in n_ci
+  real(micro_r) :: dq_hsci_col   = 0.  !< collection s+i - trend in q_hs
+  real(micro_r) :: dn_ci_col_hs  = 0.  !< collection s+i - trend in n_ci
 
   ! adjusting coefficient
   ! prepare coefficient for remaining water number
@@ -1123,9 +1124,9 @@ subroutine coll_gsg3
   use modglobal, only : pi
   implicit none
 
-  real :: E_ab, E_stick, rem_cf_s
-  real :: dq_hghs_col  = 0.   !< collection g+s - trend in q_hg
-  real :: dn_hs_col_hg = 0.   !< collection g+s - trend in n_hs
+  real(micro_r) :: E_ab, E_stick, rem_cf_s
+  real(micro_r) :: dq_hghs_col  = 0.   !< collection g+s - trend in q_hg
+  real(micro_r) :: dn_hs_col_hg = 0.   !< collection g+s - trend in n_hs
 
   ! adjusting coefficient
   ! prepare coefficient for remaining water number
@@ -1202,15 +1203,15 @@ subroutine coll_ici3
   use modglobal, only : pi
   implicit none
 
-  real :: E_ab
-  real :: dif_D_10
-  real :: k_enhm
-  real :: rem_cf
+  real(micro_r) :: E_ab
+  real(micro_r) :: dif_D_10
+  real(micro_r) :: k_enhm
+  real(micro_r) :: rem_cf
 
-  real :: dn_col_ici   = 0.
-  real :: dq_col_ici   = 0.
-  real :: dn_ci_eme_ic = 0.   !< number tendency enhanced melting of cloud ice by cloud water
-  real :: dq_ci_eme_ic = 0.   !< mass tendency enhanced melting of cloud ice by cloud water
+  real(micro_r) :: dn_col_ici   = 0.
+  real(micro_r) :: dq_col_ici   = 0.
+  real(micro_r) :: dn_ci_eme_ic = 0.   !< number tendency enhanced melting of cloud ice by cloud water
+  real(micro_r) :: dq_ci_eme_ic = 0.   !< mass tendency enhanced melting of cloud ice by cloud water
 
   if( D_cl.gt.D_c_b ) then
     E_ab = E_i_m
@@ -1308,12 +1309,12 @@ subroutine coll_scs3
   use modglobal, only : pi
   implicit none
 
-  real :: E_ab
-  real :: dif_D_10
-  real :: k_enhm
-  real :: dn_col_b, dq_col_a
-  real :: dn_hs_eme_sc = 0.   !< number tendency enhanced melting of snow by cloud water
-  real :: dq_hs_eme_sc = 0.   !< mass tendency enhanced melting of snow by cloud water
+  real(micro_r) :: E_ab
+  real(micro_r) :: dif_D_10
+  real(micro_r) :: k_enhm
+  real(micro_r) :: dn_col_b, dq_col_a
+  real(micro_r) :: dn_hs_eme_sc = 0.   !< number tendency enhanced melting of snow by cloud water
+  real(micro_r) :: dq_hs_eme_sc = 0.   !< mass tendency enhanced melting of snow by cloud water
 
   if( D_cl.gt.D_c_b ) then
     E_ab = E_s_m
@@ -1457,13 +1458,13 @@ subroutine coll_gcg3
   use modglobal, only : pi
   implicit none
 
-  real :: E_ab
-  real :: dif_D_10
-  real :: k_enhm
-  real :: rem_cf
-  real :: dn_col_b, dq_col_a
-  real :: dn_hg_eme_gc = 0.  !< number tendency enhanced melting of graupel
-  real :: dq_hg_eme_gc = 0.  !< mass tendency enhanced melting of graupel
+  real(micro_r) :: E_ab
+  real(micro_r) :: dif_D_10
+  real(micro_r) :: k_enhm
+  real(micro_r) :: rem_cf
+  real(micro_r) :: dn_col_b, dq_col_a
+  real(micro_r) :: dn_hg_eme_gc = 0.  !< number tendency enhanced melting of graupel
+  real(micro_r) :: dq_hg_eme_gc = 0.  !< mass tendency enhanced melting of graupel
 
   ! collision efficiency
   if( D_cl.gt.D_c_b ) then
@@ -1591,14 +1592,14 @@ subroutine coll_grg3
   use modglobal, only : pi
   implicit none
 
-  real :: E_ab
-  real :: k_enhm
-  real :: rem_cf
-  real :: dn_col_b, dq_col_a
+  real(micro_r) :: E_ab
+  real(micro_r) :: k_enhm
+  real(micro_r) :: rem_cf
+  real(micro_r) :: dn_col_b, dq_col_a
 
-  real :: dn_hr_rime_hg = 0.
-  real :: dn_hg_eme_gr  = 0.   !< number tendency enhanced melting of graupel by rain
-  real :: dq_hg_eme_gr  = 0.   !< mass tendency enhanced melting of graupel by rain
+  real(micro_r) :: dn_hr_rime_hg = 0.
+  real(micro_r) :: dn_hg_eme_gr  = 0.   !< number tendency enhanced melting of graupel by rain
+  real(micro_r) :: dq_hg_eme_gr  = 0.   !< mass tendency enhanced melting of graupel by rain
 
   E_ab =  E_er_m
 
@@ -1717,9 +1718,9 @@ endsubroutine coll_grg3
 subroutine rainhetfreez3
   implicit none
 
-  real :: J_het
-  real :: dq_hr_het = 0. !< heterogeneou freezing of raindrops
-  real :: dn_hr_het = 0. !< heterogeneou freezing of raindrops
+  real(micro_r) :: J_het
+  real(micro_r) :: dq_hr_het = 0. !< heterogeneou freezing of raindrops
+  real(micro_r) :: dn_hr_het = 0. !< heterogeneou freezing of raindrops
 
   ! maybe only for temperatures below T_3 ?
   J_het = A_het *exp( B_het*(T_3-tmp0) -1)
@@ -1761,13 +1762,13 @@ subroutine coll_rig3
   use modglobal, only : pi
   implicit none
 
-  real :: rem_ci_cf,rem_hr_cf,k_enhm
-  real :: E_ab, dn_col_b, dq_col_a, dq_col_b
+  real(micro_r) :: rem_ci_cf,rem_hr_cf,k_enhm
+  real(micro_r) :: E_ab, dn_col_b, dq_col_a, dq_col_b
 
-  real :: dn_ci_col_ri  = 0.  !< ice number loss from riming of ice+rain->gr
-  real :: dn_hr_col_ri  = 0.  !< rain number loss from riming of ice+rain->gr
-  real :: dn_ci_eme_ri  = 0.  !< number tendency enhanced melting of cloud ice by rain
-  real :: dq_ci_eme_ri  = 0.  !< mass tendency enhanced melting of cloud ice  by rain
+  real(micro_r) :: dn_ci_col_ri  = 0.  !< ice number loss from riming of ice+rain->gr
+  real(micro_r) :: dn_hr_col_ri  = 0.  !< rain number loss from riming of ice+rain->gr
+  real(micro_r) :: dn_ci_eme_ri  = 0.  !< number tendency enhanced melting of cloud ice by rain
+  real(micro_r) :: dq_ci_eme_ri  = 0.  !< mass tendency enhanced melting of cloud ice  by rain
 
   ! setting up extra coefficients
   ! remain coefficients
@@ -1886,13 +1887,13 @@ subroutine coll_rsg3
   use modglobal, only : pi
   implicit none
 
-  real :: rem_cf, k_enhm
-  real :: E_ab, dn_col_b, dq_col_a, dq_col_b
+  real(micro_r) :: rem_cf, k_enhm
+  real(micro_r) :: E_ab, dn_col_b, dq_col_a, dq_col_b
 
-  real :: dn_hr_col_rs  = 0. !< snow loss from riming of ice+snow->gr
-  real :: dn_hs_col_rs  = 0. !< snow number loss from riming of ice+snow->gr
-  real :: dn_hs_eme_rs  = 0. !< number tendency enhanced melting of snow by rain
-  real :: dq_hs_eme_rs  = 0. !< mass tendency enhanced melting of snow by rain
+  real(micro_r) :: dn_hr_col_rs  = 0. !< snow loss from riming of ice+snow->gr
+  real(micro_r) :: dn_hs_col_rs  = 0. !< snow number loss from riming of ice+snow->gr
+  real(micro_r) :: dn_hs_eme_rs  = 0. !< number tendency enhanced melting of snow by rain
+  real(micro_r) :: dq_hs_eme_rs  = 0. !< mass tendency enhanced melting of snow by rain
 
   dn_col_b = 0.0
   dq_col_a = 0.0
@@ -2006,9 +2007,9 @@ end subroutine coll_rsg3
 subroutine ice_multi3
   implicit none
 
-  real :: dq_ci_spl, dn_ci_spl, dq_hg_temp
-  real :: dn_ci_mul = 0.  !< ice multiplication
-  real :: dq_ci_mul = 0.  !< ice multiplication
+  real(micro_r) :: dq_ci_spl, dn_ci_spl, dq_hg_temp
+  real(micro_r) :: dn_ci_mul = 0.  !< ice multiplication
+  real(micro_r) :: dq_ci_mul = 0.  !< ice multiplication
 
   dq_hg_temp = 0.0
   dq_ci_spl  = 0.0
@@ -2083,16 +2084,16 @@ subroutine conv_partial3
   use modmicrodata3, only : rhoeps,al_0ice,al_0snow
   implicit none
 
-  real, parameter  :: pi6rhoe = (pi/6.0)*rhoeps    &
+  real(micro_r), parameter  :: pi6rhoe = (pi/6.0)*rhoeps    &
                      ,cc_ci = al_0ice*rhow/rhoeps  &
                      ,cc_hs = al_0snow*rhow/rhoeps
 
-  real :: rem_ci_cf, rem_hs_cf
+  real(micro_r) :: rem_ci_cf, rem_hs_cf
 
-  real :: dq_ci_cv = 0. !< partial conversion ice -> graupel
-  real :: dn_ci_cv = 0.
-  real :: dq_hs_cv = 0. !< partial conversion snow-> graupel
-  real :: dn_hs_cv = 0.
+  real(micro_r) :: dq_ci_cv = 0. !< partial conversion ice -> graupel
+  real(micro_r) :: dn_ci_cv = 0.
+  real(micro_r) :: dq_hs_cv = 0. !< partial conversion snow-> graupel
+  real(micro_r) :: dn_hs_cv = 0.
 
   ! remain coefficients
   rem_ci_cf = (1.0-rem_n_min_cv)/delt
@@ -2192,18 +2193,18 @@ subroutine evapmelting3
   use modglobal, only : rlv
   implicit none
 
-  real :: dn_ci_me = 0.   !< number tendency melting of cloud ice
-  real :: dq_ci_me = 0.   !< mass tendency melting of cloud ice
-  real :: dn_hs_me = 0.   !< number tendency melting of snow
-  real :: dq_hs_me = 0.   !< mass tendency melting of snow
-  real :: dn_hg_me = 0.   !< number tendency melting of graupel
-  real :: dq_hg_me = 0.   !< mass tendency melting of graupel
-  real :: dn_ci_ev = 0.   !< number tendency evaporation of cloud ice
-  real :: dq_ci_ev = 0.   !< mass tendency evaporation of cloud ice
-  real :: dn_hs_ev = 0.   !< number tendency evaporation of snow
-  real :: dq_hs_ev = 0.   !< mass tendency evaporation of snow
-  real :: dn_hg_ev = 0.   !< number tendency evaporation of graupel
-  real :: dq_hg_ev = 0.   !< mass tendency evaporation of graupel
+  real(micro_r) :: dn_ci_me = 0.   !< number tendency melting of cloud ice
+  real(micro_r) :: dq_ci_me = 0.   !< mass tendency melting of cloud ice
+  real(micro_r) :: dn_hs_me = 0.   !< number tendency melting of snow
+  real(micro_r) :: dq_hs_me = 0.   !< mass tendency melting of snow
+  real(micro_r) :: dn_hg_me = 0.   !< number tendency melting of graupel
+  real(micro_r) :: dq_hg_me = 0.   !< mass tendency melting of graupel
+  real(micro_r) :: dn_ci_ev = 0.   !< number tendency evaporation of cloud ice
+  real(micro_r) :: dq_ci_ev = 0.   !< mass tendency evaporation of cloud ice
+  real(micro_r) :: dn_hs_ev = 0.   !< number tendency evaporation of snow
+  real(micro_r) :: dq_hs_ev = 0.   !< mass tendency evaporation of snow
+  real(micro_r) :: dn_hg_ev = 0.   !< number tendency evaporation of graupel
+  real(micro_r) :: dq_hg_ev = 0.   !< mass tendency evaporation of graupel
 
   ! ------------------------------------
   ! calling separate melting processes
@@ -2307,10 +2308,10 @@ subroutine autoconversion3
   use modglobal, only : rlv
   implicit none
 
-  real :: rem_cf
-  real :: tau, phi, nuc
-  real :: dq_hr_au = 0.   !< change in mass of raindrops due to autoconversion
-  real :: dn_hr_au = 0.   !< change in number of raindrops due to autoconversion
+  real(micro_r) :: rem_cf
+  real(micro_r) :: tau, phi, nuc
+  real(micro_r) :: dq_hr_au = 0.   !< change in mass of raindrops due to autoconversion
+  real(micro_r) :: dn_hr_au = 0.   !< change in number of raindrops due to autoconversion
 
   if (l_sb) then
     !
@@ -2399,9 +2400,9 @@ subroutine cloud_self3
   use modmicrodata3, only : k_cc,rho0s
   implicit none
 
-  real, parameter :: k_clsc = - k_cc*rho0s
+  real(micro_r), parameter :: k_clsc = - k_cc*rho0s
 
-  real    :: rem_cf
+  real(micro_r)    :: rem_cf
 
   ! calculate constant
   rem_cf = (1.0-rem_n_cl_min)/delt
@@ -2442,11 +2443,11 @@ subroutine accretion3
   use modglobal, only : rlv
   implicit none
 
-  real :: phi, Dvrf, tau
-  real :: rem_cf
-  real :: dq_hr_ac = 0.
-  real :: dn_hr_br = 0.
-  real :: dn_hr_sc = 0.
+  real(micro_r) :: phi, Dvrf, tau
+  real(micro_r) :: rem_cf
+  real(micro_r) :: dq_hr_ac = 0.
+  real(micro_r) :: dn_hr_br = 0.
+  real(micro_r) :: dn_hr_sc = 0.
 
   if (l_sb) then
 
@@ -2582,7 +2583,7 @@ subroutine evap_rain3
   use modglobal, only    : rv,rlv,pi
   implicit none
 
-  real :: f0    & ! ventilation factor - moment 0
+  real(micro_r) :: f0    & ! ventilation factor - moment 0
          ,f1    & ! ventilation factor - moment 1
          ,S     & ! super or undersaturation
          ,G     & ! cond/evap rate of a drop
@@ -2590,8 +2591,8 @@ subroutine evap_rain3
          ,nrex  & ! Reynolds number N_re(xr)
          ,x_hrf   ! full x_hr without bounds
 
-  real :: dq_hr_ev = 0.
-  real :: dn_hr_ev = 0.
+  real(micro_r) :: dq_hr_ev = 0.
+  real(micro_r) :: dn_hr_ev = 0.
 
   ! adjusting the calculation for saturation
   S = min(0.,((qt0-q_cl)/qvsl- 1.0))
@@ -2663,9 +2664,9 @@ end subroutine evap_rain3
 subroutine satadj3
   implicit none
 
-  real :: n_bmax, cogr_max, ql_res
-  real :: dq_cl_sa = 0.  !< saturation adjustment
-  real :: dn_cl_sa = 0.  !< change in n_cl due to saturation adjustment
+  real(micro_r) :: n_bmax, cogr_max, ql_res
+  real(micro_r) :: dq_cl_sa = 0.  !< saturation adjustment
+  real(micro_r) :: dn_cl_sa = 0.  !< change in n_cl due to saturation adjustment
 
   ! NOTE: threshold for adjustment might be lower then threshold for cloud computations, obviously.
   ! The reason is that we want to perform saturation adjustment even for newly nucleated clouds.
@@ -2821,21 +2822,21 @@ subroutine hallet_mossop3(t0,dq_rime,q_e,dq_i_hm,dn_i_hm)
   implicit none
 
   ! inputs
-  real, intent(in)  :: t0        ! tmp0 at this gridpoint
-  real, intent(in)  :: dq_rime   ! riming rate
-  real, intent(in)  :: q_e       ! amount of that ice phase
+  real(micro_r), intent(in)  :: t0        ! tmp0 at this gridpoint
+  real(micro_r), intent(in)  :: dq_rime   ! riming rate
+  real(micro_r), intent(in)  :: q_e       ! amount of that ice phase
 
   ! outputs
-  real, intent(out) :: dq_i_hm   ! tendency in q_i by H-M process
-  real, intent(out) :: dn_i_hm   ! tendency in n_i by H-M process
+  real(micro_r), intent(out) :: dq_i_hm   ! tendency in q_i by H-M process
+  real(micro_r), intent(out) :: dn_i_hm   ! tendency in n_i by H-M process
 
   ! constants in calculation
-  real, parameter :: c_spl  = c_spl_hm74 &
+  real(micro_r), parameter :: c_spl  = c_spl_hm74 &
                     ,c_1_hm = 1.0/(tmp_opt_hm74-tmp_min_hm74) &
                     ,c_2_hm = 1.0/(tmp_opt_hm74-tmp_max_hm74)
 
   ! local variables
-  real :: mult_1,mult_2,mint_1,mint_2    &  ! calculation variables
+  real(micro_r) :: mult_1,mult_2,mint_1,mint_2    &  ! calculation variables
          ,dn_try,dq_try,rem_cf              ! trial variables
 
   ! only if riming going on temperature below 0
@@ -2897,37 +2898,37 @@ subroutine sb_evmelt3(avent0,avent1,bvent0,bvent1,x_bmin,n_e,n_ep,n_em &
   implicit none
 
   ! inputs -------------------------------------------------------------
-  real, intent(in)  :: n_e       ! number density of ice particles
-  real, intent(in)  :: n_ep      !   and its tendency
-  real, intent(in)  :: n_em      !   and the svm value
-  real, intent(in)  :: q_e       ! mass density of ice particles
-  real, intent(in)  :: q_ep      !   and its tendency
-  real, intent(in)  :: q_em      !   and the svm value
-  real, intent(in)  :: x_e       ! mean size of the ice particles
-  real, intent(in)  :: D_e       ! mean diameter of particles
-  real, intent(in)  :: v_e       ! mean terminal velocity of particles
-  real, intent(in)  :: avent0    ! ventilation coefficient
-  real, intent(in)  :: avent1    ! ventilation coefficient
-  real, intent(in)  :: bvent0    ! ventilation coefficient
-  real, intent(in)  :: bvent1    ! ventilation coefficient
-  real, intent(in)  :: x_bmin    ! minimal size of the hydrometeor
-  ! real, intent(in)  :: k_melt  ! depositional growth constant
+  real(micro_r), intent(in)  :: n_e       ! number density of ice particles
+  real(micro_r), intent(in)  :: n_ep      !   and its tendency
+  real(micro_r), intent(in)  :: n_em      !   and the svm value
+  real(micro_r), intent(in)  :: q_e       ! mass density of ice particles
+  real(micro_r), intent(in)  :: q_ep      !   and its tendency
+  real(micro_r), intent(in)  :: q_em      !   and the svm value
+  real(micro_r), intent(in)  :: x_e       ! mean size of the ice particles
+  real(micro_r), intent(in)  :: D_e       ! mean diameter of particles
+  real(micro_r), intent(in)  :: v_e       ! mean terminal velocity of particles
+  real(micro_r), intent(in)  :: avent0    ! ventilation coefficient
+  real(micro_r), intent(in)  :: avent1    ! ventilation coefficient
+  real(micro_r), intent(in)  :: bvent0    ! ventilation coefficient
+  real(micro_r), intent(in)  :: bvent1    ! ventilation coefficient
+  real(micro_r), intent(in)  :: x_bmin    ! minimal size of the hydrometeor
+  ! real(micro_r), intent(in)  :: k_melt  ! depositional growth constant
 
   ! outputs  -----------------------------------------------------------
-  real, intent(out) :: dq_me     ! melting tendency in q_e
-  real, intent(out) :: dn_me     ! melting tendency in n_e
-  real, intent(out) :: dq_ev     ! evaporation tendency in q_e
-  real, intent(out) :: dn_ev     ! evaporation tendency in n_e
+  real(micro_r), intent(out) :: dq_me     ! melting tendency in q_e
+  real(micro_r), intent(out) :: dn_me     ! melting tendency in n_e
+  real(micro_r), intent(out) :: dq_ev     ! evaporation tendency in q_e
+  real(micro_r), intent(out) :: dn_ev     ! evaporation tendency in n_e
 
   ! local variables ----------------------------------------------------
-  real, parameter    :: k_melt = 2*pi/rlme
-  real, parameter    :: k_ev   = 2*pi
+  real(micro_r), parameter    :: k_melt = 2*pi/rlme
+  real(micro_r), parameter    :: k_ev   = 2*pi
 
-  real, parameter    :: dvleorv   = Dv*rlvi/rv
-  real, parameter    :: ktdtodv   = Kt**2/(cp*rho0s*Dv) ! K_T * D_T / D_v and D_T = K_T/(c_p \rho_s)
+  real(micro_r), parameter    :: dvleorv   = Dv*rlvi/rv
+  real(micro_r), parameter    :: ktdtodv   = Kt**2/(cp*rho0s*Dv) ! K_T * D_T / D_v and D_T = K_T/(c_p \rho_s)
 
   ! allocate fields and fill
-  real ::   S      & ! subsaturation
+  real(micro_r) ::   S      & ! subsaturation
            ,g_me   & ! thermodynamic term for melting
            ,g_ev   & ! thermodynamic term for evaporation
            ,x_er   & ! mean size of particles

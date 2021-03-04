@@ -34,12 +34,12 @@ subroutine column_processes(sv0, svp, thlpmcr, qtpmcr, &
                             tend)
   use modglobal, only : k1
   implicit none
-  real, intent(in),    dimension(ncols,k1)     :: sv0
-  real, intent(inout), dimension(ncols,k1)     :: svp
+  real(micro_r), intent(in),    dimension(ncols,k1)     :: sv0
+  real(micro_r), intent(inout), dimension(ncols,k1)     :: svp
 
-  real, intent(inout), dimension(k1)        :: thlpmcr, qtpmcr
-  real, intent(out)                         :: precep_hr, precep_ci, precep_hs, precep_hg
-  real, intent(out),   dimension(ntends,k1) :: tend
+  real(micro_r), intent(inout), dimension(k1)        :: thlpmcr, qtpmcr
+  real(micro_r), intent(out)                         :: precep_hr, precep_ci, precep_hs, precep_hg
+  real(micro_r), intent(out),   dimension(ntends,k1) :: tend
 
   ! sedimentation
   ! -----------------------------------------------------------------
@@ -73,20 +73,20 @@ end subroutine column_processes
 subroutine nucleation3(qt0, qvsl, w0, q_cl, q_clp, n_cl, n_clp, n_cc, statistics,tend)
   use modglobal, only : dzf,k1
   implicit none
-  real, intent(in)    :: qt0(k1), qvsl(k1), w0(k1)
-  real, intent(in)    :: q_cl(k1), n_cl(k1), n_cc(k1)
-  real, intent(inout) :: q_clp(k1), n_clp(k1)
-  real, intent(out)   :: tend(ntends, k1)
-  real, intent(inout) :: statistics(nmphys,k1)
+  real(micro_r), intent(in)    :: qt0(k1), qvsl(k1), w0(k1)
+  real(micro_r), intent(in)    :: q_cl(k1), n_cl(k1), n_cc(k1)
+  real(micro_r), intent(inout) :: q_clp(k1), n_clp(k1)
+  real(micro_r), intent(out)   :: tend(ntends, k1)
+  real(micro_r), intent(inout) :: statistics(nmphys,k1)
 
-  real    :: dn_cl_nu(k1)  !< droplet nucleation rate
+  real(micro_r)    :: dn_cl_nu(k1)  !< droplet nucleation rate
   integer :: k
-  real    :: coef_ccn, n_act
+  real(micro_r)    :: coef_ccn, n_act
 
   ! note that supersaturation is
   ! not always how supersaturated is water vapour,
   ! depending on a flag, it can also include water already in droplets
-  real :: ssat_u      & ! supersaturation at (...,k+1)
+  real(micro_r) :: ssat_u      & ! supersaturation at (...,k+1)
          ,ssat(k1)    & !                 at (...,k)
          ,ssat_d      & !                 at (...,k-1)
          ,wdssatdz(k1)  ! derivation of supersaturation
@@ -298,16 +298,16 @@ subroutine sedim_rain3(q_hr, n_hr, q_hrp, n_hrp, precep_hr, tend)
   use modglobal, only : k1,kmax,eps1,dzf
   use modfields, only : rhof
   implicit none
-  real, intent(in)     :: q_hr(k1), n_hr(k1)
-  real, intent(inout)  :: q_hrp(k1), n_hrp(k1)
-  real, intent(out)    :: precep_hr
-  real, intent(out)    :: tend(ntends, k1)
+  real(micro_r), intent(in)     :: q_hr(k1), n_hr(k1)
+  real(micro_r), intent(inout)  :: q_hrp(k1), n_hrp(k1)
+  real(micro_r), intent(out)    :: precep_hr
+  real(micro_r), intent(out)    :: tend(ntends, k1)
 
   integer :: k,jn,n_spl
   integer :: k_low1,k_high1  & ! Boundaries for the first k loop
             ,k_low2,k_high2    ! Boundaries for the second k loop
 
-  real :: wvar        &!< work variable
+  real(micro_r) :: wvar        &!< work variable
          ,dt_spl      &!<
          ,xr_spl      &!< for time splitting
          ,Dvr_spl     &!<     -
@@ -317,10 +317,10 @@ subroutine sedim_rain3(q_hr, n_hr, q_hrp, n_hrp, precep_hr, tend)
          ,N_r0        &!< rain integral stuff
          ,pwcont       !<
 
-  real :: qr_spl(k1), Nr_spl(k1)
-  real :: sed_qr(k1), sed_Nr(k1)
+  real(micro_r) :: qr_spl(k1), Nr_spl(k1)
+  real(micro_r) :: sed_qr(k1), sed_Nr(k1)
 
-  real :: wfall
+  real(micro_r) :: wfall
 
   n_spl = ceiling(split_factor*wfallmax_hr*delt/(minval(dzf)))
   dt_spl = delt/real(n_spl)
@@ -463,20 +463,20 @@ subroutine sedim_snow3(q_hs, n_hs, q_hsp, n_hsp, precep_hs, tend)
   use modglobal, only : k1,kmax,dzf
   use modfields, only : rhof
   implicit none
-  real, intent(in)    :: q_hs(k1), n_hs(k1)
-  real, intent(inout) :: q_hsp(k1), n_hsp(k1)
-  real, intent(out)   :: precep_hs
-  real, intent(out)   :: tend(ntends, k1)
+  real(micro_r), intent(in)    :: q_hs(k1), n_hs(k1)
+  real(micro_r), intent(inout) :: q_hsp(k1), n_hsp(k1)
+  real(micro_r), intent(out)   :: precep_hs
+  real(micro_r), intent(out)   :: tend(ntends, k1)
 
   integer :: k,jn,n_spl
   integer :: k_low1,k_high1  & ! Boundaries for the first k loop
             ,k_low2,k_high2    ! Boundaries for the second k loop
 
-  real  :: qip_spl(k1), nip_spl(k1)
-  real  :: sed_qip(k1), sed_nip(k1)
+  real(micro_r)  :: qip_spl(k1), nip_spl(k1)
+  real(micro_r)  :: sed_qip(k1), sed_nip(k1)
 
-  real :: wfall, xip_spl, wvar
-  real :: dt_spl
+  real(micro_r) :: wfall, xip_spl, wvar
+  real(micro_r) :: dt_spl
 
   qip_spl = q_hs
   nip_spl = n_hs
@@ -554,20 +554,20 @@ subroutine sedim_graupel3(q_hg, n_hg, q_hgp, n_hgp, precep_hg, tend)
   use modglobal, only : k1,kmax,dzf
   use modfields, only : rhof
   implicit none
-  real, intent(in)    :: q_hg(k1), n_hg(k1)
-  real, intent(inout) :: q_hgp(k1), n_hgp(k1)
-  real, intent(out)   :: precep_hg
-  real, intent(out)   :: tend(ntends, k1)
+  real(micro_r), intent(in)    :: q_hg(k1), n_hg(k1)
+  real(micro_r), intent(inout) :: q_hgp(k1), n_hgp(k1)
+  real(micro_r), intent(out)   :: precep_hg
+  real(micro_r), intent(out)   :: tend(ntends, k1)
 
   integer :: k,jn,n_spl
   integer :: k_low1,k_high1  & ! Boundaries for the first k loop
             ,k_low2,k_high2    ! Boundaries for the second k loop
 
-  real  :: qip_spl(k1), nip_spl(k1)
-  real  :: sed_qip(k1), sed_nip(k1)
+  real(micro_r)  :: qip_spl(k1), nip_spl(k1)
+  real(micro_r)  :: sed_qip(k1), sed_nip(k1)
 
-  real :: wvar,xip_spl
-  real :: dt_spl,wfall
+  real(micro_r) :: wvar,xip_spl
+  real(micro_r) :: dt_spl,wfall
 
   qip_spl = q_hg
   nip_spl = n_hg
@@ -644,19 +644,19 @@ subroutine sedim_ice3(q_ci, n_ci, q_cip, n_cip, precep_ci, tend)
   use modglobal, only : k1,kmax,dzf
   use modfields, only : rhof
   implicit none
-  real, intent(in)    :: q_ci(k1), n_ci(k1)
-  real, intent(inout) :: q_cip(k1), n_cip(k1)
-  real, intent(out)   :: precep_ci
-  real, intent(out)   :: tend(ntends, k1)
+  real(micro_r), intent(in)    :: q_ci(k1), n_ci(k1)
+  real(micro_r), intent(inout) :: q_cip(k1), n_cip(k1)
+  real(micro_r), intent(out)   :: precep_ci
+  real(micro_r), intent(out)   :: tend(ntends, k1)
 
   integer :: k,jn,n_spl
   integer :: k_low1,k_high1  & ! Boundaries for the first k loop
             ,k_low2,k_high2    ! Boundaries for the second k loop
 
-  real :: qip_spl(k1), nip_spl(k1)
-  real :: sed_qip(k1), sed_nip(k1)
+  real(micro_r) :: qip_spl(k1), nip_spl(k1)
+  real(micro_r) :: sed_qip(k1), sed_nip(k1)
 
-  real :: dt_spl, xip_spl, wvar, wfall
+  real(micro_r) :: dt_spl, xip_spl, wvar, wfall
 
   n_spl = ceiling(split_factor*wfallmax_ci*delt/(minval(dzf)))
   dt_spl = delt/real(n_spl)
@@ -736,19 +736,19 @@ subroutine sedim_cl3(q_cl, n_cl, q_clp, n_clp, n_ccp, qtpmcr, thlpmcr, tend)
   use modglobal, only : k1,kmax,dzf,rlv,cp
   use modfields, only : rhof, exnf
   implicit none
-  real, intent(in)    :: q_cl(k1), n_cl(k1)
-  real, intent(inout) :: q_clp(k1), n_clp(k1), n_ccp(k1)
-  real, intent(inout) :: qtpmcr(k1), thlpmcr(k1)
-  real, intent(out)   :: tend(ntends, k1)
+  real(micro_r), intent(in)    :: q_cl(k1), n_cl(k1)
+  real(micro_r), intent(inout) :: q_clp(k1), n_clp(k1), n_ccp(k1)
+  real(micro_r), intent(inout) :: qtpmcr(k1), thlpmcr(k1)
+  real(micro_r), intent(out)   :: tend(ntends, k1)
 
   integer :: k, jn, n_spl
   integer :: k_low1,k_high1  & ! Boundaries for the first k loop
             ,k_low2,k_high2    ! Boundaries for the second k loop
 
-  real :: qip_spl(k1), nip_spl(k1)
-  real :: sed_qip(k1), sed_nip(k1)
+  real(micro_r) :: qip_spl(k1), nip_spl(k1)
+  real(micro_r) :: sed_qip(k1), sed_nip(k1)
 
-  real :: dt_spl, xip_spl, wvar, wfall
+  real(micro_r) :: dt_spl, xip_spl, wvar, wfall
 
   qip_spl = q_cl
   nip_spl = n_cl
@@ -835,20 +835,20 @@ end subroutine sedim_cl3
 !
 ! M.C. van Zanten    August 2005
 ! ---------------------------------------------------------------------
-real function sed_flux3(Nin,Din,sig2,Ddiv,nnn)
+real(micro_r) function sed_flux3(Nin,Din,sig2,Ddiv,nnn)
   use modglobal, only : pi,rhow
   implicit none
 
-  real, intent(in)    :: Nin, Din, sig2, Ddiv
+  real(micro_r), intent(in)    :: Nin, Din, sig2, Ddiv
   integer, intent(in) :: nnn
 
   ! para. def. lognormal DSD (sig2 = ln^2 sigma_g), D sep. droplets from drops
   !,power of of D in integral
-  real, parameter ::   C = rhow*pi/6.     &
+  real(micro_r), parameter ::   C = rhow*pi/6.     &
                       ,D_intmin = 1e-6    &
                       ,D_intmax = 4.3e-3
 
-  real ::  alfa         & ! constant in fall velocity relation
+  real(micro_r) ::  alfa         & ! constant in fall velocity relation
           ,beta         & ! power in fall vel. rel.
           ,D_min        & ! min integration limit
           ,D_max        & ! max integration limit
@@ -892,21 +892,21 @@ end function sed_flux3
 !
 ! M.C. van Zanten    September 2005
 ! -----------------------------------------------------------------
-real function liq_cont3(Nin,Din,sig2,Ddiv,nnn)
+real(micro_r) function liq_cont3(Nin,Din,sig2,Ddiv,nnn)
   use modglobal, only : pi,rhow
   implicit none
 
-  real, intent(in)    :: Nin, Din, sig2, Ddiv
+  real(micro_r), intent(in)    :: Nin, Din, sig2, Ddiv
   integer, intent(in) :: nnn
 
   ! para. def. lognormal DSD (sig2 = ln^2 sigma_g), D sep. droplets from drops
   ! ,power of of D in integral
-  real, parameter :: beta = 0           &
+  real(micro_r), parameter :: beta = 0           &
                     ,C = pi/6.*rhow     &
                     ,D_intmin = 80e-6   &   ! value of start of rain D
                     ,D_intmax = 3e-3        !4.3e-3    ! value is now max value for sqrt fall speed rel.
 
-  real ::  D_min        & ! min integration limit
+  real(micro_r) ::  D_min        & ! min integration limit
           ,D_max          ! max integration limit
 
   if (Din < Ddiv) then
@@ -925,17 +925,17 @@ end function liq_cont3
 ! specified in 7.1.27 in Abramowitz and Stegun
 ! NB phi(x) = 0.5(erf(0.707107*x)+1) but 1 disappears by substraction
 ! -------------------------------------------------------------------
-real function erfint3(beta, D, D_min, D_max, sig2,nnn )
+real(micro_r) function erfint3(beta, D, D_min, D_max, sig2,nnn )
   implicit none
-  real, intent(in)    :: beta, D, D_min, D_max, sig2
+  real(micro_r), intent(in)    :: beta, D, D_min, D_max, sig2
   integer, intent(in) :: nnn
 
-  real, parameter :: eps = 1e-10      &
+  real(micro_r), parameter :: eps = 1e-10      &
                     ,a1 = 0.278393    & !a1 till a4 constants in polynomial fit to the error
                     ,a2 = 0.230389    & !function 7.1.27 in Abramowitz and Stegun
                     ,a3 = 0.000972    &
                     ,a4 = 0.078108
-  real :: nn, ymin, ymax, erfymin, erfymax, D_inv
+  real(micro_r) :: nn, ymin, ymax, erfymin, erfymax, D_inv
 
   D_inv = 1./(eps + D)
   nn = beta + nnn

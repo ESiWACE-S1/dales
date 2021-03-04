@@ -23,7 +23,7 @@
 !
 
   module modmicrodata
-  use modprecision, only : field_r, dp
+  use modprecision, only : field_r, dp, micro_r
 
   use modglobal, only : rhow,lacz_gamma
   implicit none
@@ -43,16 +43,16 @@
              l_rain      = .true. , & !<  rain formation / evolution flag              (in namelist NAMMICROPHYSICS)
              l_mur_cst   = .false. ! false = no constant value of mur (mur=f(Dv)) (in namelist NAMMICROPHYSICS)
 
-  real    :: mur_cst     = 5        & !<  mur value if l_mur_cst=T                     (in namelist NAMMICROPHYSICS)
-                 ,Nc_0 = 70e6       & !<  initial cloud droplet number (#/m3)
-                 ,sig_g = 1.34      & !<  geom. std dev of cloud droplet DSD
-                 ,sig_gr = 1.5        !<  geometric std dev of rain drop DSD
+  real(micro_r) :: mur_cst     = 5        & !<  mur value if l_mur_cst=T                     (in namelist NAMMICROPHYSICS)
+                 , Nc_0 = 70e6       & !<  initial cloud droplet number (#/m3)
+                 , sig_g = 1.34      & !<  geom. std dev of cloud droplet DSD
+                 , sig_gr = 1.5        !<  geometric std dev of rain drop DSD
 
   logical :: l_lognormal = .false.    !<  log param of rain terminal velocities for rain sedim
 
   integer :: inr = 1, iqr=2
 
-  real, parameter ::  D0_kk = 50e-6     & !<  diameter sep. cloud and prec. in KK00 scheme
+  real(micro_r), parameter ::  D0_kk = 50e-6     & !<  diameter sep. cloud and prec. in KK00 scheme
                      ,qcmin = 1.0e-7     & !<  Cloud specific mixing ratio treshold for calculations
                      ,qrmin = 1.0e-13    & !<  Rain  specific mixing ratio treshold for calculations
 !                     ,nuc = 0           & !< width parameter of cloud DSD
@@ -122,19 +122,19 @@
          ,b_tvsb = 9.8     & !<  coeff in terminal velocity param
          ,c_tvsb = 600.      !<  coeff in terminal velocity param
 
-  real,allocatable, dimension(:,:,:) :: qc  & !<  cloud droplets specific mixing ratio [kg_w/kg_a]
+  real(micro_r),allocatable, dimension(:,:,:) :: qc  & !<  cloud droplets specific mixing ratio [kg_w/kg_a]
                                        ,Nc  & !<  cloud droplets number conc.  [#/m^3]
                                        ,nuc & !<  width parameter of cloud DSD
                                        ,rhoz  !< slab averaged density in 3 dimensions
 
-  real,allocatable, dimension(:,:,:) :: qr_spl, Nr_spl
+  real(micro_r),allocatable, dimension(:,:,:) :: qr_spl, Nr_spl
                              !< prec. liq. water and conc. for sedim. time splitting
-  real,allocatable, dimension(:,:,:) :: sedc,   & !<  sedimentation cloud droplets mix. ratio
+  real(micro_r),allocatable, dimension(:,:,:) :: sedc,   & !<  sedimentation cloud droplets mix. ratio
                                         sed_qr, & !<  sedimentation rain drops mix. ratio
                                         sed_Nr    !<  sedimentation rain drop number conc.
-  real ::  rho_c             &      !<  term to correct for density dep. of fall vel.
+  real(micro_r) ::  rho_c             &      !<  term to correct for density dep. of fall vel.
     ,k_au                     !<  coeff. for autoconversion rate
-  real,allocatable, dimension(:,:,:) ::  &
+  real(micro_r),allocatable, dimension(:,:,:) ::  &
     presz              &      !<  3D pressure
     ,Dvc               &      !<  cloud water mean diameter
     ,xc                &      !<  mean mass of cloud water droplets
@@ -153,16 +153,16 @@
     ,wfall_qr          &      !<  fall velocity for qr
     ,wfall_Nr                 !<  fall velocity for Nr
 
-  real :: csed                      !<  parameter in cloud water grav. settling formula
+  real(micro_r) :: csed                      !<  parameter in cloud water grav. settling formula
 
-  real, parameter ::  D_eq = 1.1E-3,  & !<  Parameters for break-up
+  real(micro_r), parameter ::  D_eq = 1.1E-3,  & !<  Parameters for break-up
             k_br = 1000       !<
 
-   real,allocatable,dimension(:,:,:) :: Nr,qltot,qr,thlpmcr,qtpmcr
+   real(micro_r),allocatable,dimension(:,:,:) :: Nr,qltot,qr,thlpmcr,qtpmcr
    real(field_r),allocatable,dimension(:,:,:) :: Nrp,qrp
-   real,allocatable,dimension(:,:,:) :: precep
+   real(micro_r),allocatable,dimension(:,:,:) :: precep
 
-  real :: delt
+  real(micro_r) :: delt
 
   logical ,allocatable,dimension(:,:,:):: qcmask,qrmask
 
@@ -178,8 +178,8 @@
   logical :: l_graupel = .true. !  Switch for graupel
   logical :: l_warm = .false.   !  Run ice micro in warm mode, as a check
   logical :: l_mp = .true.      !  Use marshall-palmer distribution for rain?
-  real :: evapfactor = 1.0      !  Prefactor to reduce evaporation
-  real :: courantp = 1.0        !  CFLmax-criterion for precipitation
+  real(micro_r) :: evapfactor = 1.0      !  Prefactor to reduce evaporation
+  real(micro_r) :: courantp = 1.0        !  CFLmax-criterion for precipitation
 
   real(dp), parameter :: &
       bbg=3.&
@@ -189,7 +189,7 @@
      ,ddr=0.5 &
      ,dds=0.25 
 
-  real, parameter :: &
+  real(micro_r), parameter :: &
      ! Mass-diameter parameters A and B, terminal velocity parameters C, and D
      ! GRABOWSKI
      aar=5.2e2 &
@@ -236,8 +236,8 @@
      ,tdnsg=223.   ! Following Khairoutdinov and Randall
 
    ! Fields related to ice-liquid partitioning and slope of distribution
-   real,allocatable,dimension(:,:,:) :: ilratio,rsgratio,sgratio,lambdar,lambdas,lambdag
+   real(micro_r),allocatable,dimension(:,:,:) :: ilratio,rsgratio,sgratio,lambdar,lambdas,lambdag
    ! Density-corrected A coefficients for terminal velocity
-   real,allocatable,dimension(:) :: ccrz,ccsz,ccgz
-   real,allocatable,dimension(:) :: ccrz2,ccsz2,ccgz2
+   real(micro_r),allocatable,dimension(:) :: ccrz,ccsz,ccgz
+   real(micro_r),allocatable,dimension(:) :: ccrz2,ccsz2,ccgz2
   end module modmicrodata

@@ -27,6 +27,7 @@
 !
 
   module modmicrodata3
+  use modprecision, only : micro_r
 
   implicit none
   save
@@ -67,7 +68,7 @@
             ,l_tendencies     = .true.   &  !<- if to write full tendencies TODO: check if there is an existing flag
             ,l_statistics     = .true.      !<- if to write statistics
 
-  real ::  Nc0             = 70.0e6   &  !<- proposed number of droplet in namelist
+  real(micro_r) ::  Nc0             = 70.0e6   &  !<- proposed number of droplet in namelist
              ,xc0_min         = 4.2e-15  &  !<- xcmin  min mean mass of cloud water
              ,Nccn0           = 100.0e6     !<- proposed initial number of cc
 
@@ -93,7 +94,7 @@
 
   ! adding values for setting of microphysiscs
   ! thresholds
-  real, parameter ::  q_hr_min     = 1.0e-14    & !<  Rain  specific mixing ratio treshold min
+  real(micro_r), parameter ::  q_hr_min     = 1.0e-14    & !<  Rain  specific mixing ratio treshold min
                      ,q_hs_min     = 1.0e-14    & !<  Snow  specific mixing ratio treshold min
                      ,q_hg_min     = 1.0e-14    & !<  Graupel  specific mixing ratio treshold min
                      ,qicemin      = 1.0e-14    & !< ice mixing ratio treshold -have  to be GE q_hs_min, q_hg_min
@@ -133,7 +134,7 @@
                      ! ->> continue from here
 
   ! settings of physics
-  real, parameter ::  rlvi       = 2.834e6      & !< latent heat for sublimation ice (value ams glossary)
+  real(micro_r), parameter ::  rlvi       = 2.834e6      & !< latent heat for sublimation ice (value ams glossary)
                      ,rlme       = 3.337e5      & !< latent heat for melting (value ams glossary)
                      ,c_water    = 4.186e3      & !< specific heat of water vapour
                      ,rho0s      = 1.225        & !< reference density
@@ -141,12 +142,12 @@
                      ,k2nuc      = 0.72           !< 2nd constant in nuc calculation (G09a)
 
   ! settings of physics
-  real, parameter ::  k_cr       = 5.25         & !< kernel for accretion
+  real(micro_r), parameter ::  k_cr       = 5.25         & !< kernel for accretion
                      ,k_cc       = 4.44e9       & !< kernel cloud-cloud
                      ,kappa_br   = 2.3e3          !< kappa kernel for collision brakeup
 
   ! parameters in liquid droplet nucleation scheme
-  real, parameter ::  x_inuc_SB   = 1.0e-12     & !< mass of nucleated ice particle
+  real(micro_r), parameter ::  x_inuc_SB   = 1.0e-12     & !< mass of nucleated ice particle
                      ,x_cnuc_SB   = 1.0e-12     & !< mass of nucleated liquid droplet
                      ,sat_min_SB  = 1.0e-5      & ! 0.01 ! < min supersaturation for nucleation [%]
                      ,sat_max_SB  = 1.1         & ! 1.1  ! < max supersaturation for nucleation [%]
@@ -159,15 +160,15 @@
 
 
   ! additional of standard physical parameters
-  real, parameter ::  T_3     = 273.15     & !< T_3 temperature of freezing point for water
+  real(micro_r), parameter ::  T_3     = 273.15     & !< T_3 temperature of freezing point for water
                      ,rhoeps  = 900.0        !< turbulent ice density [kg m^{-3}]
 
   ! setting for statistics
-  real, parameter ::  eps_hprec = 1.0e-8     !< threshold for precipitation :,epsqr = 1.0e-8
+  real(micro_r), parameter ::  eps_hprec = 1.0e-8     !< threshold for precipitation :,epsqr = 1.0e-8
 
   ! parameters for cloud particles and hydrometeors
   !   taken directly from S&B, Table 1
-  real, parameter ::  a_cl    = 0.124      & !< a param for: cloud
+  real(micro_r), parameter ::  a_cl    = 0.124      & !< a param for: cloud
                      ,a_hr    = 0.124      & !<              raindrop
                      ,a_ci    = 0.217      & !<              cloud ice
                      ,a_hs    = 8.156      & !<              snow
@@ -214,12 +215,12 @@
                      ,c_tvsbc     = 600.0        !<  coeff in terminal velocity param
 
   ! rain scheme
-  real, parameter ::  mur0_G09b   = 30.0       & !< N in G09b rain scheme
+  real(micro_r), parameter ::  mur0_G09b   = 30.0       & !< N in G09b rain scheme
                      ,c_G09b      = 0.008      & !< N in G09b rain scheme
                      ,exp_G09b    = 0.6            !< N in G09b rain scheme
 
   ! ice scheme
-  real, parameter ::  N_M92       = 1.0e3      & !< N in M92 ice nucleation scheme
+  real(micro_r), parameter ::  N_M92       = 1.0e3      & !< N in M92 ice nucleation scheme
                      ,a_M92       = -0.639     & !< a in M92 ice nucleation scheme
                      ,b_M92       = 12.96      & !< b in M92 ice nucleation scheme
                      ,tmp_inuc_sb = 268.15     & !< temperature limit below shich is ice nucleation possible
@@ -233,7 +234,7 @@
 
 
   ! parameters for homogeneous freezing - based on Cotton & Field (2002)
-  real, parameter :: C_CF02        = -7.36    & !< additive constant in exponential term in CF02
+  real(micro_r), parameter :: C_CF02        = -7.36    & !< additive constant in exponential term in CF02
                     ,B_CF02        = -2.996   & !< multiplicative constant in exponential term in CF02
                     ,CC_CF02       = -243.15  & !< additive constant next to T in CF02
                     ,tmp_lim1_CF02 = 243.15   & !< Te boundary for slow freezing
@@ -247,7 +248,7 @@
                     ,C_30_CF02     = 25.63      !< constant in exponential term in CF02 for very low temp
 
   ! parameters for heterogeneous freezing and riming
-  real, parameter :: A_het      = 0.2         & !< mult const. in heterogeneous freezing
+  real(micro_r), parameter :: A_het      = 0.2         & !< mult const. in heterogeneous freezing
                     ,B_het      = 0.65        & !< mult const. in exp in heterogeneous freezing
                     ,al_0snow   = 0.01        & !< parameter alpha_0,snow in partial conv. s-->g
                     ,al_0ice    = 0.68        & !< parameter alpha_0,snow in partial conv. i-->g
@@ -255,7 +256,7 @@
                     !-> close it later here
 
   ! parameters for ventilation coefficients
-   real, parameter :: a_v_i      = 0.86       & ! a_v for ice
+   real(micro_r), parameter :: a_v_i      = 0.86       & ! a_v for ice
                      ,a_v_r      = 0.78       & ! a_v for rain
                      ,a_v_s      = 0.78       & ! a_v for snow
                      ,a_v_g      = 0.78       & ! a_v for graupel
@@ -266,7 +267,7 @@
 
 
   ! parameters for ice multiplication
-   real, parameter :: c_spl_hm74 = 3.5e8      & !< c_{spl} in Hallet-Mossop process (1974)
+   real(micro_r), parameter :: c_spl_hm74 = 3.5e8      & !< c_{spl} in Hallet-Mossop process (1974)
                      ,tmp_min_hm74 = 265.0    & !< T_{spl,min} in Hallet-Mossop process (1974)
                      ,tmp_opt_hm74 = 268.0    & !< T_{spl,opt} in Hallet-Mossop process (1974)
                      ,tmp_max_hm74 = 270.0    & !< T_{spl,max} in Hallet-Mossop process (1974)
@@ -275,7 +276,7 @@
 
 
   ! parameters for collisions
-  real, parameter ::  D_c_a      = 15.0e-6    & !< \bar{D}_c,a : droplet min size for collision effic.
+  real(micro_r), parameter ::  D_c_a      = 15.0e-6    & !< \bar{D}_c,a : droplet min size for collision effic.
                      ,D_c_b      = 40.0e-6    & !< \bar{D}_c,b : droplet size for high coll. effic.
                      ,D_i_a      = 75.0e-6    & !< \bar{D}_i,a : minimal ice size for coll. effic. - taken from ICON, 2017
                      ,D_i_b      = 398.0e-6   & !< \bar{D}_i,b : ice size for high coll. effic
@@ -316,7 +317,7 @@
                      ! ->later should also include different sticking efficiencies
 
     ! and now the default value of parameters that can be adjusted  by namelist
-    real ::  x_cnuc          = x_cnuc_SB      & !< mass of nucleated liquid droplet
+    real(micro_r) ::  x_cnuc          = x_cnuc_SB      & !< mass of nucleated liquid droplet
             ,c_ccn           = c_ccn_marit    & !< C_CCN parameter for maritime conditions
             ,n_clmax         = n_clmax_marit  & !< maximum number concentration in case of constant C_CCN
             ,kappa_ccn       = kappa_marit    & !< kappa_ccn parameter for maritime conditions
@@ -336,12 +337,12 @@
 
 
   ! parameters for statistics
-  real, parameter ::    q_cl_statmin    = 1.0e-5         & !< minimal cloud liqud water content to be counted as cloud
+  real(micro_r), parameter ::    q_cl_statmin    = 1.0e-5         & !< minimal cloud liqud water content to be counted as cloud
                        ,q_ci_statmin    = 1.0e-5         & !< minimal cloud ice water content to be counted as cloud
                        ,def_hdump_dtav  = 900.             !< default for time outputs
 
   ! parameters for field outputs
-  ! real            ::  cdump_mul          = 1.0e5    !< a factor by which are hydrometeor specie multiplied for recording
+  ! real(micro_r)            ::  cdump_mul          = 1.0e5    !< a factor by which are hydrometeor specie multiplied for recording
   ! integer         ::  cdump_byte         = 4        !< how many byte integer used
 
   integer, parameter :: nmphys        = 8       ! rounded to power of 2 for alignment (performance)
@@ -450,18 +451,18 @@
     ,iret_cc         = 93        !< recovery of ccn
 
   ! ventilation parameters
-  real :: aven_0r,aven_0i,aven_0s,aven_0g                 &
+  real(micro_r) :: aven_0r,aven_0i,aven_0s,aven_0g                 &
          ,aven_1r,aven_1i,aven_1s,aven_1g                 &
          ,bven_0r,bven_0i,bven_0s,bven_0g                 &
          ,bven_1r,bven_1i,bven_1s,bven_1g
 
   ! constants in calculation of moments and wall velocities
-  real :: c_mmt_1cl, c_mmt_1hr, c_mmt_2cl,c_mmt_2hr       &
+  real(micro_r) :: c_mmt_1cl, c_mmt_1hr, c_mmt_2cl,c_mmt_2hr       &
          ,c_v_c0, c_v_i0, c_v_s0, c_v_g0                  &
          ,c_v_c1, c_v_i1, c_v_s1, c_v_g1
 
   ! collision coefficients
-  real ::  dlt_c0, dlt_r0, dlt_i0, dlt_s0,dlt_g0          &
+  real(micro_r) ::  dlt_c0, dlt_r0, dlt_i0, dlt_s0,dlt_g0          &
           ,dlt_i0c, dlt_i0r, dlt_i0i                      &
           ,dlt_r0i, dlt_r0s, dlt_r0g                      &
           ,dlt_s0c, dlt_s0r, dlt_s0i, dlt_s0s, dlt_s0g    &
@@ -482,7 +483,7 @@
           ,th_s1c, th_s1r, th_s1i, th_s1s                 &
           ,th_g1c, th_g1r, th_g1i, th_g1s, th_g1g
 
-  real :: wfallmax_hr     & !< max sedim w for: rain
+  real(micro_r) :: wfallmax_hr     & !< max sedim w for: rain
          ,wfallmax_ci     & !<              cloud ice
          ,wfallmax_cl     & !<              cloud water
          ,wfallmax_hs     & !<              snow
@@ -490,11 +491,11 @@
          ,c_lbdr            !< coefficient in lbdr calculation l_sb_classic
 
   ! adding variables for calculations
-  real:: k_mphys   & !< generic microphysics constant
+  real(micro_r):: k_mphys   & !< generic microphysics constant
         ,eslt3       !< saturated vapour pressure over water at T_3
 
   ! pre-processed precipitation fields to output in bulkmicrostat3
-  real, allocatable ::  precep_l(:,:) & !< liquid surface precipitation (precep_hr)
+  real(micro_r), allocatable ::  precep_l(:,:) & !< liquid surface precipitation (precep_hr)
                        ,precep_i(:,:)   !< frozen surface precipitation (precep_[ci+hs+hg])
 
   logical :: q_hr_mask,q_hs_mask,q_hg_mask,q_cl_mask,q_ci_mask

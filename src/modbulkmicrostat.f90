@@ -30,7 +30,7 @@
 !  Copyright 1993-2009 Delft University of Technology, Wageningen University, Utrecht University, KNMI
 !
 module modbulkmicrostat
-  use modprecision, only : l_i, field_r
+  use modprecision, only : l_i, field_r, micro_r
 
 implicit none
 private
@@ -40,7 +40,7 @@ save
   integer,parameter :: nvar = 23
   character(80),dimension(nvar,4) :: ncname
   character(80),dimension(1,4) :: tncname
-  real          :: dtav, timeav
+  real(micro_r)          :: dtav, timeav
   integer(kind=l_i):: idtav, itimeav, tnext, tnextwrite
   integer          :: nsamples
   logical          :: lmicrostat = .false.
@@ -49,13 +49,13 @@ save
                   iaccr    = 3 , &
                ievap    = 4 , &
                ised      = 5
-  real, allocatable, dimension(:,:)  :: Npav    , &
+  real(micro_r), allocatable, dimension(:,:)  :: Npav    , &
                Npmn    , &
                qlpav  , &
                qlpmn  , &
                qtpav  , &
                qtpmn
-  real, allocatable, dimension(:)    :: precavl  , &
+  real(micro_r), allocatable, dimension(:)    :: precavl  , &
                precav  , &
                precmn  , &
                preccountavl  , &

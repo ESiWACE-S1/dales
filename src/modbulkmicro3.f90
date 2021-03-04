@@ -466,7 +466,7 @@ subroutine bulkmicro3
   integer :: k_low(ncols)    & ! lowest k with non-zero values for svp(:,:,k,i)
             ,k_high(ncols)     ! highest k with non-zero values for svp(:,:,k,i)
 
-  real :: sv0_t   (ncols,k1,i1+3,j1) &
+  real(micro_r) :: sv0_t   (ncols,k1,i1+3,j1) &
          ,svp_t   (ncols,k1,i1+3,j1) &
          ,svm_t   (ncols,k1,i1+3,j1) &
          ,prg_t   (nprgs,k1,i1+3,j1) &
@@ -474,11 +474,11 @@ subroutine bulkmicro3
          ,qtp_t   (      k1,i1  ,j1)
 
   ! column variables
-  real :: tend_col (ntends, k1)  &
+  real(micro_r) :: tend_col (ntends, k1)  &
          ,mphys_col(nmphys, k1)
 
   ! and variables as the surface (k=1) of the column
-  real :: precep_hr,precep_ci,precep_hs,precep_hg
+  real(micro_r) :: precep_hr,precep_ci,precep_hs,precep_hg
 
 
   ! check if ccn and clouds were already initialised
@@ -737,7 +737,7 @@ subroutine transpose_svs(sv0_t, svm_t, svp_t, prg_t)
   use modfields, only : sv0, svm, svp
   use modglobal, only : i1,j1,k1,rk3step
   implicit none
-  real, intent(out) ::  sv0_t   (ncols,k1,i1+3,j1) &
+  real(micro_r), intent(out) ::  sv0_t   (ncols,k1,i1+3,j1) &
                        ,svp_t   (ncols,k1,i1+3,j1) &
                        ,svm_t   (ncols,k1,i1+3,j1) &
                        ,prg_t   (nprgs,k1,i1+3,j1)
@@ -809,7 +809,7 @@ subroutine untranspose_svs(svp_t,thlp_t,qtp_t,k_low,k_high)
   use modfields, only : svp,thlp,qtp
   use modglobal, only : i1,j1,k1
   implicit none
-  real, intent(in) ::  svp_t(ncols,k1,i1+3,j1) &
+  real(micro_r), intent(in) ::  svp_t(ncols,k1,i1+3,j1) &
                       ,thlp_t(k1,i1,j1)        &
                       ,qtp_t (k1,i1,j1)
   integer, intent(in) :: k_low(ncols), k_high(ncols)
@@ -884,7 +884,7 @@ use modfields, only : rhof, qt0, svm, sv0, qvsl
 implicit none
 
 integer :: i,j,k
-real :: x_min, Nc_set, q_tocl,n_prop  ! availabel water and proposed size
+real(micro_r) :: x_min, Nc_set, q_tocl,n_prop  ! availabel water and proposed size
 
 x_min = xc0_min  ! minimal size of droplets
 Nc_set =  Nc0    ! prescribed number of droplets
@@ -948,7 +948,7 @@ use modfields, only : rhof, svm, sv0
 implicit none
 
 integer :: i,j,k
-real ::   Nccn_set, n_prop            ! available water and proposed size
+real(micro_r) ::   Nccn_set, n_prop            ! available water and proposed size
 
 Nccn_set = Nccn0                      ! prescribed number of ccn
 
@@ -975,15 +975,15 @@ subroutine correct_neg_qt(svp_col,svm_col,thlp_col,qtp_col,k_low,k_high)
   use modglobal, only : cp, rlv, k1
   use modfields, only : exnf
   implicit none
-  real, intent(in)    :: svm_col(ncols,k1)
-  real, intent(inout) :: svp_col(ncols,k1),thlp_col(k1),qtp_col(k1)
+  real(micro_r), intent(in)    :: svm_col(ncols,k1)
+  real(micro_r), intent(inout) :: svp_col(ncols,k1),thlp_col(k1),qtp_col(k1)
   integer, intent(inout) :: k_low(ncols), k_high(ncols)
 
   integer :: k
-  real :: nrtest, qrtest
+  real(micro_r) :: nrtest, qrtest
 
   ! correction, after Jerome's implementation in Gales
-  real :: qtp_cor(k1), thlp_cor(k1)
+  real(micro_r) :: qtp_cor(k1), thlp_cor(k1)
 
   ! Prevent doing unnecessary calculations (updating tendencies etc.)
   ! for levels without any non-zero values for svp.
@@ -1111,10 +1111,10 @@ end subroutine correct_neg_qt
 ! specified in Appendix B in S&B
 !
 !*********************************************************************
-real function calc_avent (nn, mu_a, nu_a, a_a,b_a, av)
+real(micro_r) function calc_avent (nn, mu_a, nu_a, a_a,b_a, av)
   use modglobal, only : lacz_gamma ! LACZ_GAMMA
   implicit none
-  real, intent(in) ::  mu_a, nu_a, a_a,b_a, av
+  real(micro_r), intent(in) ::  mu_a, nu_a, a_a,b_a, av
   integer, intent(in) :: nn
   real(dp) :: arg11, arg12, arg21, arg22, mtt11, mtt12, mtt21,mtt22, expon02
 
@@ -1141,10 +1141,10 @@ end function calc_avent
 ! for ventilation parameter
 ! specified in Appendix B in S&B
 !*********************************************************************
-real function calc_bvent (nn, mu_a, nu_a, a_a, b_a, beta_a, bv)
+real(micro_r) function calc_bvent (nn, mu_a, nu_a, a_a, b_a, beta_a, bv)
   use modglobal, only : lacz_gamma ! LACZ_GAMMA
   implicit none
-  real, intent(in) ::  mu_a, nu_a, a_a,b_a, beta_a, bv
+  real(micro_r), intent(in) ::  mu_a, nu_a, a_a,b_a, beta_a, bv
   integer, intent(in) :: nn
   real(dp) :: arg11, arg12, arg21, arg22, mtt11, mtt12, mtt21,mtt22, expon02
 
@@ -1170,10 +1170,10 @@ end function calc_bvent
 !  for collision/collection
 ! specified in Appendix C in S&B
 !*********************************************************************
-real function calc_delta_b (kk, mu_b, nu_b, b_b)
+real(micro_r) function calc_delta_b (kk, mu_b, nu_b, b_b)
   use modglobal, only : lacz_gamma ! LACZ_GAMMA
   implicit none
-  real, intent(in) ::  mu_b, nu_b, b_b
+  real(micro_r), intent(in) ::  mu_b, nu_b, b_b
   integer, intent(in) :: kk
   real(dp) :: arg11, arg12, arg21, arg22, mtt11, mtt12, mtt21,mtt22, expon02
 
@@ -1200,10 +1200,10 @@ end function calc_delta_b
 ! specified in Appendix C in S&B
 !
 !*********************************************************************
-real function calc_delta_ab (kk, mu_a, nu_a, b_a, mu_b, nu_b, b_b)
+real(micro_r) function calc_delta_ab (kk, mu_a, nu_a, b_a, mu_b, nu_b, b_b)
   use modglobal, only : lacz_gamma ! LACZ_GAMMA
   implicit none
-  real, intent(in) ::  mu_a, nu_a, b_a, mu_b, nu_b, b_b
+  real(micro_r), intent(in) ::  mu_a, nu_a, b_a, mu_b, nu_b, b_b
   integer, intent(in) :: kk
   real(dp) :: arg11, arg12, arg21, arg22     &
             , arg13, arg14, arg23, arg24     &
@@ -1244,11 +1244,11 @@ end function calc_delta_ab
 ! specified in Appendix C in S&B
 !
 !*********************************************************************
-real function calc_th_b (kk, mu_b, nu_b, b_b, beta_b)
+real(micro_r) function calc_th_b (kk, mu_b, nu_b, b_b, beta_b)
   use modglobal, only : lacz_gamma ! LACZ_GAMMA
   implicit none
 
-  real, intent(in) ::  mu_b, nu_b, b_b, beta_b
+  real(micro_r), intent(in) ::  mu_b, nu_b, b_b, beta_b
   integer, intent(in) :: kk
   real(dp) :: arg11, arg12, arg21, arg22     &
             , mtt11, mtt12, mtt21,mtt22      &
@@ -1278,11 +1278,11 @@ end function calc_th_b
 ! specified in Appendix C in S&B
 !
 !*********************************************************************
-real function calc_th_ab (kk, mu_a, nu_a, b_a, beta_a, mu_b, nu_b, b_b, beta_b)
+real(micro_r) function calc_th_ab (kk, mu_a, nu_a, b_a, beta_a, mu_b, nu_b, b_b, beta_b)
   use modglobal, only : lacz_gamma ! LACZ_GAMMA
   implicit none
 
-  real, intent(in) ::  mu_a, nu_a, b_a, beta_a, mu_b, nu_b, b_b, beta_b
+  real(micro_r), intent(in) ::  mu_a, nu_a, b_a, beta_a, mu_b, nu_b, b_b, beta_b
   integer, intent(in) :: kk
 
   real(dp) :: arg11, arg12, arg21, arg22     &
@@ -1324,11 +1324,11 @@ end function calc_th_ab
 ! specified in Appendix C in S&B
 !
 !*********************************************************************
-real function calc_cons_mmt (kk, mu_a, nu_a)
+real(micro_r) function calc_cons_mmt (kk, mu_a, nu_a)
   use modglobal, only : lacz_gamma ! LACZ_GAMMA
   implicit none
 
-  real, intent(in) ::    mu_a, nu_a
+  real(micro_r), intent(in) ::    mu_a, nu_a
   integer, intent(in) :: kk
   real(dp) :: arg11, arg12, arg21, arg22     &
             , mtt11, mtt12, mtt21,mtt22      &
@@ -1357,11 +1357,11 @@ end function calc_cons_mmt
 ! specified in Appendix C in S&B
 !
 !*********************************************************************
-real function calc_cons_v (kk, mu_a, nu_a, al_a, be_a)
+real(micro_r) function calc_cons_v (kk, mu_a, nu_a, al_a, be_a)
   use modglobal, only : lacz_gamma ! LACZ_GAMMA
   implicit none
 
-  real, intent(in) ::    mu_a, nu_a, al_a, be_a
+  real(micro_r), intent(in) ::    mu_a, nu_a, al_a, be_a
   integer, intent(in) :: kk
   real(dp) :: arg11, arg12, arg21, arg22     &
             , mtt11, mtt12, mtt21,mtt22      &
@@ -1390,11 +1390,11 @@ end function calc_cons_v
 ! specified in Appendix C in S&B
 !
 !*********************************************************************
-real function calc_cons_lbd (mu_a, nu_a)
+real(micro_r) function calc_cons_lbd (mu_a, nu_a)
   use modglobal, only : lacz_gamma ! LACZ_GAMMA
   implicit none
 
-  real, intent(in) ::    mu_a, nu_a
+  real(micro_r), intent(in) ::    mu_a, nu_a
   ! integer, intent(in) :: kk
   real(dp) :: arg11, arg21                   &
             , mtt11, mtt21                   &
@@ -1418,9 +1418,9 @@ end function calc_cons_lbd
 ! copied from subroutine initglobal in modglobal
 !
 !*********************************************************************
-real function  esl_at_te(te_a)
-  real, intent(in) ::    te_a
-  real             :: esl_try
+real(micro_r) function  esl_at_te(te_a)
+  real(micro_r), intent(in) ::    te_a
+  real(micro_r)             :: esl_try
 
    esl_try=exp(54.842763-6763.22/te_a-4.21*log(te_a)+         &
          0.000367*te_a+tanh(0.0415*(te_a-218.8))*                &

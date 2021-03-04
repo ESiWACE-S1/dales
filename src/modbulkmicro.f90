@@ -45,14 +45,14 @@ module modbulkmicro
 !
 !   bulkmicro is called from *modmicrophysics*
 !*********************************************************************
-  use modprecision, only : dp
+  use modprecision, only : dp, micro_r
   implicit none
   private
   public initbulkmicro, exitbulkmicro, bulkmicro
 
-  real :: gamma25
-  real :: gamma3
-  real :: gamma35
+  real(micro_r) :: gamma25
+  real(micro_r) :: gamma3
+  real(micro_r) :: gamma35
   integer :: qrbase, qrroof, qcbase, qcroof
   contains
 
@@ -110,7 +110,7 @@ module modbulkmicro
     use modglobal, only : i1,j1,k1
     use modfields, only : rhof
     implicit none
-    real, intent(in)    :: Nr  (2:i1, 2:j1, 1:k1) &
+    real(micro_r), intent(in)    :: Nr  (2:i1, 2:j1, 1:k1) &
                          , qr  (2:i1, 2:j1, 1:k1)
     integer :: i,j,k
 
@@ -193,7 +193,7 @@ module modbulkmicro
                              mur_cst, inr, iqr
     implicit none
     integer :: i,j,k
-    real :: qrtest,nr_cor,qr_cor
+    real(micro_r) :: qrtest,nr_cor,qr_cor
 
     Nr = sv0(2:i1,2:j1,1:k1,inr)
     qr = sv0(2:i1,2:j1,1:k1,iqr)
@@ -319,7 +319,7 @@ module modbulkmicro
     do j=2,j1
     do i=2,i1
       qrtest=svm(i,j,k,iqr)/delt+svp(i,j,k,iqr)+qrp(i,j,k)
-      qr_cor = (0.5 - sign(0.5, qrtest*delt - qrmin)) * qrtest
+      qr_cor = (0.5 - sign(0.5_micro_r, qrtest*delt - qrmin)) * qrtest
       nr_cor = min(svm(i,j,k,inr)/delt+svp(i,j,k,inr)+Nrp(i,j,k), 0.)
 
       ! correction, after Jerome's implementation in Gales
@@ -351,11 +351,11 @@ module modbulkmicro
                              l_sb
     implicit none
     integer i,j,k
-    real :: au
-    real :: tau  !  internal time scale
-    real :: phi  !  correction function (see SB2001)
-    real :: xc   !  mean mass of cloud water droplets
-    real :: nuc  !  width parameter of cloud DSD
+    real(micro_r) :: au
+    real(micro_r) :: tau  !  internal time scale
+    real(micro_r) :: phi  !  correction function (see SB2001)
+    real(micro_r) :: xc   !  mean mass of cloud water droplets
+    real(micro_r) :: nuc  !  width parameter of cloud DSD
 
     if (qcbase.gt.qcroof) return
 
@@ -431,10 +431,10 @@ module modbulkmicro
     implicit none
     integer :: i,j,k
 
-    real :: ac, sc, br
-    real :: phi     !  correction function (see SB2001)
-    real :: phi_br
-    real :: tau     !  internal time scale
+    real(micro_r) :: ac, sc, br
+    real(micro_r) :: phi     !  correction function (see SB2001)
+    real(micro_r) :: phi_br
+    real(micro_r) :: tau     !  internal time scale
 
     if (l_sb) then
       !
@@ -527,7 +527,7 @@ module modbulkmicro
                              qtpmcr,thlpmcr,qcmask
     implicit none
     integer :: i,j,k
-    real :: sedc
+    real(micro_r) :: sedc
 
     if (qcbase.gt.qcroof) return
 
@@ -572,15 +572,15 @@ module modbulkmicro
     implicit none
     integer :: i,j,k,jn
     integer :: n_spl      !<  sedimentation time splitting loop
-    real    :: pwcont
-    real :: Dgr           !<  lognormal geometric diameter
-    real :: wfall_qr      !<  fall velocity for qr
-    real :: wfall_Nr      !<  fall velocity for Nr
-    real :: sed_qr
-    real :: sed_Nr
-    real, allocatable     :: qr_spl(:,:,:), Nr_spl(:,:,:)
+    real(micro_r)    :: pwcont
+    real(micro_r) :: Dgr           !<  lognormal geometric diameter
+    real(micro_r) :: wfall_qr      !<  fall velocity for qr
+    real(micro_r) :: wfall_Nr      !<  fall velocity for Nr
+    real(micro_r) :: sed_qr
+    real(micro_r) :: sed_Nr
+    real(micro_r), allocatable     :: qr_spl(:,:,:), Nr_spl(:,:,:)
 
-    real,save :: dt_spl,wfallmax
+    real(micro_r),save :: dt_spl,wfallmax
 
     if (qrbase.gt.qrroof) return
 
@@ -739,11 +739,11 @@ module modbulkmicro
     integer :: i,j,k
     integer :: numel
 
-    real :: F !< ventilation factor
-    real :: S !< super or undersaturation
-    real :: G !< cond/evap rate of a drop
+    real(micro_r) :: F !< ventilation factor
+    real(micro_r) :: S !< super or undersaturation
+    real(micro_r) :: G !< cond/evap rate of a drop
 
-    real :: evap, Nevap
+    real(micro_r) :: evap, Nevap
 
     if (qrbase.gt.qrroof) return
 
@@ -813,7 +813,7 @@ module modbulkmicro
   !*********************************************************************
   !*********************************************************************
 
-  real function sed_flux(Nin,Din,sig2,Ddiv,nnn)
+  real(micro_r) function sed_flux(Nin,Din,sig2,Ddiv,nnn)
   !*********************************************************************
   ! Function to calculate numerically the analytical solution of the
   ! sedimentation flux between Dmin and Dmax based on
@@ -829,16 +829,16 @@ module modbulkmicro
     use modglobal, only : pi,rhow
     implicit none
 
-    real, intent(in)    :: Nin, Din, sig2, Ddiv
+    real(micro_r), intent(in)    :: Nin, Din, sig2, Ddiv
     integer, intent(in) :: nnn
     !para. def. lognormal DSD (sig2 = ln^2 sigma_g), D sep. droplets from drops
     !,power of of D in integral
 
-    real, parameter ::   C = rhow*pi/6.     &
+    real(micro_r), parameter ::   C = rhow*pi/6.     &
                         ,D_intmin = 1e-6    &
                         ,D_intmax = 4.3e-3
 
-    real ::  alfa         & ! constant in fall velocity relation
+    real(micro_r) ::  alfa         & ! constant in fall velocity relation
             ,beta         & ! power in fall vel. rel.
             ,D_min        & ! min integration limit
             ,D_max        & ! max integration limit
@@ -880,7 +880,7 @@ module modbulkmicro
   !*********************************************************************
   !*********************************************************************
 
-  real function liq_cont(Nin,Din,sig2,Ddiv,nnn)
+  real(micro_r) function liq_cont(Nin,Din,sig2,Ddiv,nnn)
   !*********************************************************************
   ! Function to calculate numerically the analytical solution of the
   ! liq. water content between Dmin and Dmax based on
@@ -891,21 +891,21 @@ module modbulkmicro
     use modglobal, only : pi,rhow
     implicit none
 
-    real, intent(in) :: Nin, Din, sig2, Ddiv
+    real(micro_r), intent(in) :: Nin, Din, sig2, Ddiv
     integer, intent(in) :: nnn
     !para. def. lognormal DSD (sig2 = ln^2 sigma_g), D sep. droplets from drops
     !,power of of D in integral
 
-    real, parameter :: beta = 0           &
+    real(micro_r), parameter :: beta = 0           &
                       ,C = pi/6.*rhow     &
                       ,D_intmin = 80e-6    &   ! value of start of rain D
                       ,D_intmax = 3e-3         !4.3e-3    !  value is now max value for sqrt fall speed rel.
 
-    real ::  D_min        & ! min integration limit
+    real(micro_r) ::  D_min        & ! min integration limit
             ,D_max        & ! max integration limit
             ,sn
 
-    sn = sign(0.5, Din - Ddiv)
+    sn = sign(0.5_micro_r, Din - Ddiv)
     D_min = (0.5 - sn) * D_intmin + (0.5 + sn) * Ddiv
     D_max = (0.5 - sn) * Ddiv     + (0.5 + sn) * D_intmax
 
@@ -915,7 +915,7 @@ module modbulkmicro
   !*********************************************************************
   !*********************************************************************
 
-  real function erfint(beta, D, D_min, D_max, sig2,nnn )
+  real(micro_r) function erfint(beta, D, D_min, D_max, sig2,nnn )
 
   !*********************************************************************
   ! Function to calculate erf(x) approximated by a polynomial as
@@ -924,15 +924,15 @@ module modbulkmicro
   !
   !*********************************************************************
     implicit none
-    real, intent(in) :: beta, D, D_min, D_max, sig2
+    real(micro_r), intent(in) :: beta, D, D_min, D_max, sig2
     integer, intent(in) :: nnn
 
-    real, parameter :: eps = 1e-10       &
+    real(micro_r), parameter :: eps = 1e-10       &
                       ,a1 = 0.278393    & !a1 till a4 constants in polynomial fit to the error
                       ,a2 = 0.230389    & !function 7.1.27 in Abramowitz and Stegun
                       ,a3 = 0.000972    &
                       ,a4 = 0.078108
-    real :: nn, ymin, ymax, erfymin, erfymax, D_inv
+    real(micro_r) :: nn, ymin, ymax, erfymin, erfymax, D_inv
 
     D_inv = 1./(eps + D)
     nn = beta + nnn

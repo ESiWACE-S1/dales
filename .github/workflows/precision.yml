@@ -23,8 +23,9 @@ jobs:
       fail-fast: false
       matrix:
         fftw:    ["", "-DUSE_FFTW=T"]
-        field_r: [real32,real64,real128]
+        field_r: [real32,real64]
         pois_r:  [real64] 
+        micro_r: [real32,real64]
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
@@ -50,6 +51,9 @@ jobs:
           
           sed -i '/pois_r/d' ./modprecision.f90
           echo "integer, parameter :: pois_r =  ${{ matrix.pois_r }}" >> ./modprecision.f90
+
+          sed -i '/micro_r/d' ./modprecision.f90
+          echo "integer, parameter :: micro_r =  ${{ matrix.micro_r }}" >> ./modprecision.f90
           
           echo "end module" >> ./modprecision.f90
 
