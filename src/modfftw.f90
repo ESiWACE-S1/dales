@@ -61,6 +61,15 @@ save
   real, pointer                   :: p_nohalo(:)
 
 contains
+  subroutine static_checks_dontcall
+    use iso_fortran_env, only : real64
+    implicit none
+    real                :: check
+! Statically check for correct double precisions, FFTW C-library breaks without it
+    check = sign(1._real64, p201(1,1,1))
+    check = sign(1._real64, p210(1,1,1))
+    check = sign(1._real64, p_nohalo(1))
+  end subroutine
 
   subroutine fftwinit(p, Fp, d, xyrt, ps,pe,qs,qe)
 
@@ -347,8 +356,7 @@ contains
 !            p201(      jtot,      konx,iony) <=> p102(iony,jonx,kmax)
 !
   subroutine transpose_a1(p,p210)
-    use mpi
-    use modmpi, only : commrow, mpierr, my_real, nprocx
+    use modmpi, only : commrow, mpierr, nprocx, D_MPI_ALLTOALL
     use modglobal, only : i1,j1, itot, imax,jmax, kmax, ih, jh
     implicit none
 
@@ -373,9 +381,9 @@ contains
     enddo
     enddo
 
-    call MPI_ALLTOALL(bufin,   (imax*jmax*konx),my_real, &
-                      bufout,  (imax*jmax*konx),my_real, &
-                      commrow,mpierr)
+    call D_MPI_ALLTOALL(bufin,   (imax*jmax*konx), &
+                        bufout,  (imax*jmax*konx), &
+                        commrow,mpierr)
 
     ii = 0
     do n=0,nprocx-1
@@ -392,8 +400,7 @@ contains
   end subroutine
 
   subroutine transpose_a1inv(p,p210)
-    use mpi
-    use modmpi, only : commrow, mpierr, my_real, nprocx
+    use modmpi, only : commrow, mpierr, nprocx, D_MPI_ALLTOALL
     use modglobal, only : i1,j1, itot, imax,jmax, kmax, ih,jh
     implicit none
 
@@ -416,9 +423,9 @@ contains
     enddo
     enddo
 
-    call MPI_ALLTOALL(bufin,   (imax*jmax*konx),my_real, &
-                      bufout,  (imax*jmax*konx),my_real, &
-                      commrow,mpierr)
+    call D_MPI_ALLTOALL(bufin,   (imax*jmax*konx), &
+                        bufout,  (imax*jmax*konx), &
+                        commrow,mpierr)
 
     ii = 0
     do n=0,nprocx-1
@@ -437,8 +444,7 @@ contains
   end subroutine
 
   subroutine transpose_a2(p210, p201)
-    use mpi
-    use modmpi, only : commcol, mpierr, my_real, nprocy
+    use modmpi, only : commcol, mpierr, nprocy, D_MPI_ALLTOALL
     use modglobal, only : itot, jtot, jmax
     implicit none
 
@@ -463,9 +469,9 @@ contains
     enddo
     enddo
 
-    call MPI_ALLTOALL(bufin,   (iony*jmax*konx),my_real, &
-                      bufout,  (iony*jmax*konx),my_real, &
-                      commcol,mpierr)
+    call D_MPI_ALLTOALL(bufin,   (iony*jmax*konx), &
+                        bufout,  (iony*jmax*konx), &
+                        commcol,mpierr)
 
     ii = 0
     do n=0,nprocy-1
@@ -482,8 +488,7 @@ contains
   end subroutine
 
   subroutine transpose_a2inv(p210, p201)
-    use mpi
-    use modmpi, only : commcol, mpierr, my_real, nprocy
+    use modmpi, only : commcol, mpierr, nprocy, D_MPI_ALLTOALL
     use modglobal, only : itot, jtot, jmax
     implicit none
 
@@ -506,9 +511,9 @@ contains
     enddo
     enddo
 
-    call MPI_ALLTOALL(bufin,   (iony*jmax*konx),my_real, &
-                      bufout,  (iony*jmax*konx),my_real, &
-                      commcol,mpierr)
+    call D_MPI_ALLTOALL(bufin,   (iony*jmax*konx), &
+                        bufout,  (iony*jmax*konx), &
+                        commcol,mpierr)
 
     ii = 0
     do n=0,nprocy-1
@@ -527,8 +532,7 @@ contains
   end subroutine
 
   subroutine transpose_a3(p201, Fp)
-    use mpi
-    use modmpi, only : commrow, mpierr, my_real, nprocx
+    use modmpi, only : commrow, mpierr, nprocx,D_MPI_ALLTOALL
     use modglobal, only : itot, jtot, jmax, kmax
     implicit none
 
@@ -553,9 +557,9 @@ contains
     enddo
     enddo
 
-    call MPI_ALLTOALL(bufin,   (iony*jonx*konx),my_real, &
-                      bufout,  (iony*jonx*konx),my_real, &
-                      commrow,mpierr)
+    call D_MPI_ALLTOALL(bufin,   (iony*jonx*konx), &
+                        bufout,  (iony*jonx*konx), &
+                        commrow,mpierr)
 
     ii = 0
     do n=0,nprocx-1
@@ -574,8 +578,7 @@ contains
   end subroutine
 
   subroutine transpose_a3inv(p201, Fp)
-    use mpi
-    use modmpi, only : commrow, mpierr, my_real, nprocx
+    use modmpi, only : commrow, mpierr, nprocx, D_MPI_ALLTOALL
     use modglobal, only : itot, jtot, jmax, kmax
     implicit none
 
@@ -600,9 +603,9 @@ contains
     enddo
     enddo
 
-    call MPI_ALLTOALL(bufin,   (iony*jonx*konx),my_real, &
-                      bufout,  (iony*jonx*konx),my_real, &
-                      commrow,mpierr)
+    call D_MPI_ALLTOALL(bufin,   (iony*jonx*konx), &
+                        bufout,  (iony*jonx*konx), &
+                        commrow,mpierr)
 
     ii = 0
     do n=0,nprocx-1
