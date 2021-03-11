@@ -247,46 +247,26 @@ contains
   subroutine excjs_real32(a,sx,ex,sy,ey,sz,ez,ih,jh)
   implicit none
   integer sx, ex, sy, ey, sz, ez, ih, jh
-  real(real32) a(sx-ih:ex+ih, sy-jh:ey+jh, sz:ez)
+  real(real32), asynchronous :: a(sx-ih:ex+ih, sy-jh:ey+jh, sz:ez)
   type(MPI_STATUS)  :: status
-  integer :: xl, yl, zl
   type(MPI_REQUEST) :: reqn, reqs, reqe, reqw
   integer nssize, ewsize
-  real(real32),allocatable, dimension(:) :: sendn,recvn &
-                                          , sends,recvs &
-                                          , sende,recve &
-                                          , sendw,recvw
-
-! Calulate buffer lengths
-  xl = size(a,1)
-  yl = size(a,2)
-  zl = size(a,3)
 
 !   Calculate buffer size
-  nssize = xl*jh*zl
-  ewsize = ih*yl*zl
+  nssize = jh*(ex - sx + 1 + 2*ih)*(ez - sz + 1)
+  ewsize = ih*(ey - sy + 1 + 2*jh)*(ez - sz + 1)
 
-!   Allocate send / receive buffers
-  allocate(sendn(nssize),sends(nssize))
-  allocate(sende(ewsize),sendw(ewsize))
-
-  allocate(recvn(nssize),recvs(nssize))
-  allocate(recve(ewsize),recvw(ewsize))
-
+! We must do the n/s and w/e comm after each other to correctly communicate corners
+! (The communication has overlapping buffers)
   if(nprocy .gt. 1)then
-    sendn = reshape(a(:,ey-jh+1:ey,:),(/nssize/))
-    sends = reshape(a(:,sy:sy+jh-1,:),(/nssize/))
 
-    call D_MPI_ISEND(sendn, nssize, nbrnorth, 4, comm3d, reqn, mpierr)
-    call D_MPI_ISEND(sends, nssize, nbrsouth, 5, comm3d, reqs, mpierr)
+    call D_MPI_ISEND(a(sx-ih:ex+ih,ey-jh+1:ey,sz:ez), nssize, nbrnorth, 4, comm3d, reqn, mpierr)
+    call D_MPI_ISEND(a(sx-ih:ex+ih,sy:sy+jh-1,sz:ez), nssize, nbrsouth, 5, comm3d, reqs, mpierr)
 
     !   Receive south/north
-    call D_MPI_RECV(recvs, nssize, nbrsouth, 4, comm3d, status, mpierr)
-    call D_MPI_RECV(recvn, nssize, nbrnorth, 5, comm3d, status, mpierr)
-
-    a(:,ey+1:ey+jh,:) = reshape(recvn,(/xl,jh,zl/))
-    a(:,sy-jh:sy-1,:) = reshape(recvs,(/xl,jh,zl/))
-
+    call D_MPI_RECV (a(sx-ih:ex+ih,sy-jh:sy-1,sz:ez), nssize, nbrsouth, 4, comm3d, status, mpierr)
+    call D_MPI_RECV (a(sx-ih:ex+ih,ey+1:ey+jh,sz:ez), nssize, nbrnorth, 5, comm3d, status, mpierr)
+    ! Dont corrupt send buffer in next step
     call MPI_WAIT(reqn, status, mpierr)
     call MPI_WAIT(reqs, status, mpierr)
   else
@@ -297,18 +277,12 @@ contains
 
   if(nprocx .gt. 1)then
     !   Send east/west
-    sende = reshape(a(ex-ih+1:ex,:,:),(/ewsize/))
-    sendw = reshape(a(sx:sx+ih-1,:,:),(/ewsize/))
-
-    call D_MPI_ISEND(sende, ewsize, nbreast, 6, comm3d, reqe, mpierr)
-    call D_MPI_ISEND(sendw, ewsize, nbrwest, 7, comm3d, reqw, mpierr)
+    call D_MPI_ISEND(a(ex-ih+1:ex,sy-jh:ey+jh,sz:ez), ewsize, nbreast, 6, comm3d, reqe, mpierr)
+    call D_MPI_ISEND(a(sx:sx+ih-1,sy-jh:ey+jh,sz:ez), ewsize, nbrwest, 7, comm3d, reqw, mpierr)
 
     !   Receive west/east
-    call D_MPI_RECV(recvw, ewsize, nbrwest, 6, comm3d, status, mpierr)
-    call D_MPI_RECV(recve, ewsize, nbreast, 7, comm3d, status, mpierr)
-
-      a(sx-ih:sx-1,:,:) = reshape(recvw,(/ih,yl,zl/))
-      a(ex+1:ex+ih,:,:) = reshape(recve,(/ih,yl,zl/))
+    call D_MPI_RECV(a(sx-ih:sx-1,sy-jh:ey+jh,sz:ez), ewsize, nbrwest, 6, comm3d, status, mpierr)
+    call D_MPI_RECV(a(ex+1:ex+ih,sy-jh:ey+jh,sz:ez), ewsize, nbreast, 7, comm3d, status, mpierr)
 
     call MPI_WAIT(reqe, status, mpierr)
     call MPI_WAIT(reqw, status, mpierr)
@@ -317,9 +291,6 @@ contains
       a(sx-ih:sx-1,sy-jh:ey+jh,sz:ez) = a(ex-ih+1:ex,sy-jh:ey+jh,sz:ez)
       a(ex+1:ex+ih,sy-jh:ey+jh,sz:ez) = a(sx:sx+ih-1,sy-jh:ey+jh,sz:ez)
   endif
-
-  deallocate (sendn, sends, sende, sendw)
-  deallocate (recvn, recvs, recve, recvw)
 
   return
   end subroutine excjs_real32
@@ -327,46 +298,26 @@ contains
   subroutine excjs_real64(a,sx,ex,sy,ey,sz,ez,ih,jh)
   implicit none
   integer sx, ex, sy, ey, sz, ez, ih, jh
-  real(real64) a(sx-ih:ex+ih, sy-jh:ey+jh, sz:ez)
+  real(real64), asynchronous :: a(sx-ih:ex+ih, sy-jh:ey+jh, sz:ez)
   type(MPI_STATUS)  :: status
-  integer :: xl, yl, zl
   type(MPI_REQUEST) :: reqn, reqs, reqe, reqw
   integer nssize, ewsize
-  real(real32),allocatable, dimension(:) :: sendn,recvn &
-                                          , sends,recvs &
-                                          , sende,recve &
-                                          , sendw,recvw
-
-! Calulate buffer lengths
-  xl = size(a,1)
-  yl = size(a,2)
-  zl = size(a,3)
 
 !   Calculate buffer size
-  nssize = xl*jh*zl
-  ewsize = ih*yl*zl
+  nssize = jh*(ex - sx + 1 + 2*ih)*(ez - sz + 1)
+  ewsize = ih*(ey - sy + 1 + 2*jh)*(ez - sz + 1)
 
-!   Allocate send / receive buffers
-  allocate(sendn(nssize),sends(nssize))
-  allocate(sende(ewsize),sendw(ewsize))
-
-  allocate(recvn(nssize),recvs(nssize))
-  allocate(recve(ewsize),recvw(ewsize))
-
+! We must do the n/s and w/e comm after each other to correctly communicate corners
+! (The communication has overlapping buffers)
   if(nprocy .gt. 1)then
-    sendn = reshape(a(:,ey-jh+1:ey,:),(/nssize/))
-    sends = reshape(a(:,sy:sy+jh-1,:),(/nssize/))
 
-    call D_MPI_ISEND(sendn, nssize, nbrnorth, 4, comm3d, reqn, mpierr)
-    call D_MPI_ISEND(sends, nssize, nbrsouth, 5, comm3d, reqs, mpierr)
+    call D_MPI_ISEND(a(sx-ih:ex+ih,ey-jh+1:ey,sz:ez), nssize, nbrnorth, 4, comm3d, reqn, mpierr)
+    call D_MPI_ISEND(a(sx-ih:ex+ih,sy:sy+jh-1,sz:ez), nssize, nbrsouth, 5, comm3d, reqs, mpierr)
 
     !   Receive south/north
-    call D_MPI_RECV(recvs, nssize, nbrsouth, 4, comm3d, status, mpierr)
-    call D_MPI_RECV(recvn, nssize, nbrnorth, 5, comm3d, status, mpierr)
-
-    a(:,ey+1:ey+jh,:) = reshape(recvn,(/xl,jh,zl/))
-    a(:,sy-jh:sy-1,:) = reshape(recvs,(/xl,jh,zl/))
-
+    call D_MPI_RECV (a(sx-ih:ex+ih,sy-jh:sy-1,sz:ez), nssize, nbrsouth, 4, comm3d, status, mpierr)
+    call D_MPI_RECV (a(sx-ih:ex+ih,ey+1:ey+jh,sz:ez), nssize, nbrnorth, 5, comm3d, status, mpierr)
+    ! Dont corrupt send buffer in next step
     call MPI_WAIT(reqn, status, mpierr)
     call MPI_WAIT(reqs, status, mpierr)
   else
@@ -377,18 +328,12 @@ contains
 
   if(nprocx .gt. 1)then
     !   Send east/west
-    sende = reshape(a(ex-ih+1:ex,:,:),(/ewsize/))
-    sendw = reshape(a(sx:sx+ih-1,:,:),(/ewsize/))
-
-    call D_MPI_ISEND(sende, ewsize, nbreast, 6, comm3d, reqe, mpierr)
-    call D_MPI_ISEND(sendw, ewsize, nbrwest, 7, comm3d, reqw, mpierr)
+    call D_MPI_ISEND(a(ex-ih+1:ex,sy-jh:ey+jh,sz:ez), ewsize, nbreast, 6, comm3d, reqe, mpierr)
+    call D_MPI_ISEND(a(sx:sx+ih-1,sy-jh:ey+jh,sz:ez), ewsize, nbrwest, 7, comm3d, reqw, mpierr)
 
     !   Receive west/east
-    call D_MPI_RECV(recvw, ewsize, nbrwest, 6, comm3d, status, mpierr)
-    call D_MPI_RECV(recve, ewsize, nbreast, 7, comm3d, status, mpierr)
-
-      a(sx-ih:sx-1,:,:) = reshape(recvw,(/ih,yl,zl/))
-      a(ex+1:ex+ih,:,:) = reshape(recve,(/ih,yl,zl/))
+    call D_MPI_RECV(a(sx-ih:sx-1,sy-jh:ey+jh,sz:ez), ewsize, nbrwest, 6, comm3d, status, mpierr)
+    call D_MPI_RECV(a(ex+1:ex+ih,sy-jh:ey+jh,sz:ez), ewsize, nbreast, 7, comm3d, status, mpierr)
 
     call MPI_WAIT(reqe, status, mpierr)
     call MPI_WAIT(reqw, status, mpierr)
@@ -397,9 +342,6 @@ contains
       a(sx-ih:sx-1,sy-jh:ey+jh,sz:ez) = a(ex-ih+1:ex,sy-jh:ey+jh,sz:ez)
       a(ex+1:ex+ih,sy-jh:ey+jh,sz:ez) = a(sx:sx+ih-1,sy-jh:ey+jh,sz:ez)
   endif
-
-  deallocate (sendn, sends, sende, sendw)
-  deallocate (recvn, recvs, recve, recvw)
 
   return
   end subroutine excjs_real64
