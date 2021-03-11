@@ -298,6 +298,9 @@ contains
     enddo
     enddo
     enddo
+
+    call MPI_WAIT(reqn, status, mpierr)
+    call MPI_WAIT(reqs, status, mpierr)
   else
     ! Single processor, make sure the field is periodic
     do j=1,jh
@@ -352,14 +355,8 @@ contains
     enddo
   endif
 
-  if(nprocx.gt.1)then
     call MPI_WAIT(reqe, status, mpierr)
     call MPI_WAIT(reqw, status, mpierr)
-  endif
-
-  if(nprocy.gt.1)then
-    call MPI_WAIT(reqn, status, mpierr)
-    call MPI_WAIT(reqs, status, mpierr)
   endif
 
   deallocate (sendn, sends, sende, sendw)
@@ -422,6 +419,9 @@ contains
     enddo
     enddo
     enddo
+
+    call MPI_WAIT(reqn, status, mpierr)
+    call MPI_WAIT(reqs, status, mpierr)
   else
     ! Single processor, make sure the field is periodic
     do j=1,jh
@@ -476,14 +476,8 @@ contains
     enddo
   endif
 
-  if(nprocx.gt.1)then
     call MPI_WAIT(reqe, status, mpierr)
     call MPI_WAIT(reqw, status, mpierr)
-  endif
-
-  if(nprocy.gt.1)then
-    call MPI_WAIT(reqn, status, mpierr)
-    call MPI_WAIT(reqs, status, mpierr)
   endif
 
   deallocate (sendn, sends, sende, sendw)
