@@ -249,7 +249,7 @@ contains
   integer sx, ex, sy, ey, sz, ez, ih, jh
   real(real32) a(sx-ih:ex+ih, sy-jh:ey+jh, sz:ez)
   type(MPI_STATUS)  :: status
-  integer ii, i, j, k
+  integer :: xl, yl, zl
   type(MPI_REQUEST) :: reqn, reqs, reqe, reqw
   integer nssize, ewsize
   real(real32),allocatable, dimension(:) :: sendn,recvn &
@@ -257,9 +257,14 @@ contains
                                           , sende,recve &
                                           , sendw,recvw
 
+! Calulate buffer lengths
+  xl = size(a,1)
+  yl = size(a,2)
+  zl = size(a,3)
+
 !   Calculate buffer size
-  nssize = jh*(ex - sx + 1 + 2*ih)*(ez - sz + 1)
-  ewsize = ih*(ey - sy + 1 + 2*jh)*(ez - sz + 1)
+  nssize = xl*jh*zl
+  ewsize = ih*yl*zl
 
 !   Allocate send / receive buffers
   allocate(sendn(nssize),sends(nssize))
@@ -269,17 +274,8 @@ contains
   allocate(recve(ewsize),recvw(ewsize))
 
   if(nprocy .gt. 1)then
-    !   Send north/south
-    ii = 0
-    do j=1,jh
-    do k=sz,ez
-    do i=sx-ih,ex+ih
-      ii = ii + 1
-      sendn(ii) = a(i,ey-j+1,k)
-      sends(ii) = a(i,sy+j-1,k)
-    enddo
-    enddo
-    enddo
+    sendn = reshape(a(:,ey-jh+1:ey,:),(/nssize/))
+    sends = reshape(a(:,sy:sy+jh-1,:),(/nssize/))
 
     call D_MPI_ISEND(sendn, nssize, nbrnorth, 4, comm3d, reqn, mpierr)
     call D_MPI_ISEND(sends, nssize, nbrsouth, 5, comm3d, reqs, mpierr)
@@ -288,43 +284,21 @@ contains
     call D_MPI_RECV(recvs, nssize, nbrsouth, 4, comm3d, status, mpierr)
     call D_MPI_RECV(recvn, nssize, nbrnorth, 5, comm3d, status, mpierr)
 
-    ii = 0
-    do j=1,jh
-    do k=sz,ez
-    do i=sx-ih,ex+ih
-      ii = ii + 1
-      a(i,sy-j,k) = recvs(ii)
-      a(i,ey+j,k) = recvn(ii)
-    enddo
-    enddo
-    enddo
+    a(:,ey+1:ey+jh,:) = reshape(recvn,(/xl,jh,zl/))
+    a(:,sy-jh:sy-1,:) = reshape(recvs,(/xl,jh,zl/))
 
     call MPI_WAIT(reqn, status, mpierr)
     call MPI_WAIT(reqs, status, mpierr)
   else
     ! Single processor, make sure the field is periodic
-    do j=1,jh
-    do k=sz,ez
-    do i=sx-ih,ex+ih
-      a(i,sy-j,k) = a(i,ey-j+1,k)
-      a(i,ey+j,k) = a(i,sy+j-1,k)
-    enddo
-    enddo
-    enddo
+    a(sx-ih:ex+ih,sy-jh:sy-1,sz:ez) = a(sx-ih:ex+ih,ey-jh+1:ey,sz:ez)
+    a(sx-ih:ex+ih,ey+1:ey+jh,sz:ez) = a(sx-ih:ex+ih,sy:sy+jh-1,sz:ez)
   endif
 
   if(nprocx .gt. 1)then
     !   Send east/west
-    ii = 0
-    do i=1,ih
-    do k=sz,ez
-    do j=sy-jh,ey+jh
-      ii = ii + 1
-      sende(ii) = a(ex-i+1,j,k)
-      sendw(ii) = a(sx+i-1,j,k)
-    enddo
-    enddo
-    enddo
+    sende = reshape(a(ex-ih+1:ex,:,:),(/ewsize/))
+    sendw = reshape(a(sx:sx+ih-1,:,:),(/ewsize/))
 
     call D_MPI_ISEND(sende, ewsize, nbreast, 6, comm3d, reqe, mpierr)
     call D_MPI_ISEND(sendw, ewsize, nbrwest, 7, comm3d, reqw, mpierr)
@@ -333,30 +307,15 @@ contains
     call D_MPI_RECV(recvw, ewsize, nbrwest, 6, comm3d, status, mpierr)
     call D_MPI_RECV(recve, ewsize, nbreast, 7, comm3d, status, mpierr)
 
-    ii = 0
-    do i=1,ih
-    do k=sz,ez
-    do j=sy-jh,ey+jh
-      ii = ii + 1
-      a(sx-i,j,k) = recvw(ii)
-      a(ex+i,j,k) = recve(ii)
-    enddo
-    enddo
-    enddo
-  else
-    ! Single processor, make sure the field is periodic
-    do i=1,ih
-    do k=sz,ez
-    do j=sy-jh,ey+jh
-      a(sx-i,j,k) = a(ex-i+1,j,k)
-      a(ex+i,j,k) = a(sx+i-1,j,k)
-    enddo
-    enddo
-    enddo
-  endif
+      a(sx-ih:sx-1,:,:) = reshape(recvw,(/ih,yl,zl/))
+      a(ex+1:ex+ih,:,:) = reshape(recve,(/ih,yl,zl/))
 
     call MPI_WAIT(reqe, status, mpierr)
     call MPI_WAIT(reqw, status, mpierr)
+  else
+    ! Single processor, make sure the field is periodic
+      a(sx-ih:sx-1,sy-jh:ey+jh,sz:ez) = a(ex-ih+1:ex,sy-jh:ey+jh,sz:ez)
+      a(ex+1:ex+ih,sy-jh:ey+jh,sz:ez) = a(sx:sx+ih-1,sy-jh:ey+jh,sz:ez)
   endif
 
   deallocate (sendn, sends, sende, sendw)
@@ -370,17 +329,22 @@ contains
   integer sx, ex, sy, ey, sz, ez, ih, jh
   real(real64) a(sx-ih:ex+ih, sy-jh:ey+jh, sz:ez)
   type(MPI_STATUS)  :: status
-  integer ii, i, j, k
+  integer :: xl, yl, zl
   type(MPI_REQUEST) :: reqn, reqs, reqe, reqw
   integer nssize, ewsize
-  real(real64),allocatable, dimension(:) :: sendn,recvn &
+  real(real32),allocatable, dimension(:) :: sendn,recvn &
                                           , sends,recvs &
                                           , sende,recve &
                                           , sendw,recvw
 
+! Calulate buffer lengths
+  xl = size(a,1)
+  yl = size(a,2)
+  zl = size(a,3)
+
 !   Calculate buffer size
-  nssize = jh*(ex - sx + 1 + 2*ih)*(ez - sz + 1)
-  ewsize = ih*(ey - sy + 1 + 2*jh)*(ez - sz + 1)
+  nssize = xl*jh*zl
+  ewsize = ih*yl*zl
 
 !   Allocate send / receive buffers
   allocate(sendn(nssize),sends(nssize))
@@ -390,17 +354,8 @@ contains
   allocate(recve(ewsize),recvw(ewsize))
 
   if(nprocy .gt. 1)then
-    !   Send north/south
-    ii = 0
-    do j=1,jh
-    do k=sz,ez
-    do i=sx-ih,ex+ih
-      ii = ii + 1
-      sendn(ii) = a(i,ey-j+1,k)
-      sends(ii) = a(i,sy+j-1,k)
-    enddo
-    enddo
-    enddo
+    sendn = reshape(a(:,ey-jh+1:ey,:),(/nssize/))
+    sends = reshape(a(:,sy:sy+jh-1,:),(/nssize/))
 
     call D_MPI_ISEND(sendn, nssize, nbrnorth, 4, comm3d, reqn, mpierr)
     call D_MPI_ISEND(sends, nssize, nbrsouth, 5, comm3d, reqs, mpierr)
@@ -409,43 +364,21 @@ contains
     call D_MPI_RECV(recvs, nssize, nbrsouth, 4, comm3d, status, mpierr)
     call D_MPI_RECV(recvn, nssize, nbrnorth, 5, comm3d, status, mpierr)
 
-    ii = 0
-    do j=1,jh
-    do k=sz,ez
-    do i=sx-ih,ex+ih
-      ii = ii + 1
-      a(i,sy-j,k) = recvs(ii)
-      a(i,ey+j,k) = recvn(ii)
-    enddo
-    enddo
-    enddo
+    a(:,ey+1:ey+jh,:) = reshape(recvn,(/xl,jh,zl/))
+    a(:,sy-jh:sy-1,:) = reshape(recvs,(/xl,jh,zl/))
 
     call MPI_WAIT(reqn, status, mpierr)
     call MPI_WAIT(reqs, status, mpierr)
   else
     ! Single processor, make sure the field is periodic
-    do j=1,jh
-    do k=sz,ez
-    do i=sx-ih,ex+ih
-      a(i,sy-j,k) = a(i,ey-j+1,k)
-      a(i,ey+j,k) = a(i,sy+j-1,k)
-    enddo
-    enddo
-    enddo
+    a(sx-ih:ex+ih,sy-jh:sy-1,sz:ez) = a(sx-ih:ex+ih,ey-jh+1:ey,sz:ez)
+    a(sx-ih:ex+ih,ey+1:ey+jh,sz:ez) = a(sx-ih:ex+ih,sy:sy+jh-1,sz:ez)
   endif
 
   if(nprocx .gt. 1)then
     !   Send east/west
-    ii = 0
-    do i=1,ih
-    do k=sz,ez
-    do j=sy-jh,ey+jh
-      ii = ii + 1
-      sende(ii) = a(ex-i+1,j,k)
-      sendw(ii) = a(sx+i-1,j,k)
-    enddo
-    enddo
-    enddo
+    sende = reshape(a(ex-ih+1:ex,:,:),(/ewsize/))
+    sendw = reshape(a(sx:sx+ih-1,:,:),(/ewsize/))
 
     call D_MPI_ISEND(sende, ewsize, nbreast, 6, comm3d, reqe, mpierr)
     call D_MPI_ISEND(sendw, ewsize, nbrwest, 7, comm3d, reqw, mpierr)
@@ -454,30 +387,15 @@ contains
     call D_MPI_RECV(recvw, ewsize, nbrwest, 6, comm3d, status, mpierr)
     call D_MPI_RECV(recve, ewsize, nbreast, 7, comm3d, status, mpierr)
 
-    ii = 0
-    do i=1,ih
-    do k=sz,ez
-    do j=sy-jh,ey+jh
-      ii = ii + 1
-      a(sx-i,j,k) = recvw(ii)
-      a(ex+i,j,k) = recve(ii)
-    enddo
-    enddo
-    enddo
-  else
-    ! Single processor, make sure the field is periodic
-    do i=1,ih
-    do k=sz,ez
-    do j=sy-jh,ey+jh
-      a(sx-i,j,k) = a(ex-i+1,j,k)
-      a(ex+i,j,k) = a(sx+i-1,j,k)
-    enddo
-    enddo
-    enddo
-  endif
+      a(sx-ih:sx-1,:,:) = reshape(recvw,(/ih,yl,zl/))
+      a(ex+1:ex+ih,:,:) = reshape(recve,(/ih,yl,zl/))
 
     call MPI_WAIT(reqe, status, mpierr)
     call MPI_WAIT(reqw, status, mpierr)
+  else
+    ! Single processor, make sure the field is periodic
+      a(sx-ih:sx-1,sy-jh:ey+jh,sz:ez) = a(ex-ih+1:ex,sy-jh:ey+jh,sz:ez)
+      a(ex+1:ex+ih,sy-jh:ey+jh,sz:ez) = a(sx:sx+ih-1,sy-jh:ey+jh,sz:ez)
   endif
 
   deallocate (sendn, sends, sende, sendw)
