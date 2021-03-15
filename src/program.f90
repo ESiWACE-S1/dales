@@ -140,6 +140,8 @@ program DALES
   use modbudget,       only : initbudget, budgetstat, exitbudget
   use modheterostats,  only : initheterostats, heterostats, exitheterostats
 
+  use modvarbudget,    only : initvarbudget, varbudget, exitvarbudget
+
   ! modules below are disabled by default to improve compilation time
   !use modstress,       only : initstressbudget, stressbudgetstat, exitstressbudget
 
@@ -185,6 +187,7 @@ program DALES
   call initnudge
   call initbulkmicrostat
   call initbudget
+  call initvarbudget
   !call initstressbudget
 ! call initchem
   call initheterostats
@@ -257,7 +260,10 @@ program DALES
     call poisson
     call samptend(tend_pois,lastterm=.true.)
 
-    call tstep_integrate                        ! Apply tendencies to all variables
+    ! Apply tendencies to all variables
+    call tstep_integrate
+    ! NOTE: the tendencies are not zeroed yet, but kept for analysis and statistcis
+    !       Do not change them below this point.
     call boundary
     !call tiltedboundary
 !-----------------------------------------------------
@@ -289,6 +295,7 @@ program DALES
 
     call bulkmicrostat
     call budgetstat
+    call varbudget
     !call stressbudgetstat
     call heterostats
 
@@ -316,6 +323,7 @@ program DALES
   call exitsamptend
   call exitbulkmicrostat
   call exitbudget
+  call exitvarbudget
   !call exitstressbudget
   call exitcrosssection
   call exitAGScross
