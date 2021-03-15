@@ -70,7 +70,6 @@ save
 contains
 !> Reads the namelists and initialises the soil.
   subroutine initsurface
-
     use modglobal,  only : i1, j1, i2, j2, itot, jtot, nsv, ifnamopt, fname_options, ifinput, cexpnr, checknamelisterror
     use modraddata, only : iradiation,rad_shortw,irad_par,irad_user,irad_rrtmg
     use mpi
@@ -701,6 +700,7 @@ contains
 
 !> Calculates the interaction with the soil, the surface temperature and humidity, and finally the surface fluxes.
   subroutine surface
+    use modsurfdata, only : z0m, obl
     use modglobal,  only : i1,j1,fkar,zf,cu,cv,nsv,ijtot,rd,rv
     use modfields,  only : thl0, qt0, u0, v0, u0av, v0av
     use mpi

@@ -27,7 +27,7 @@
 !
 module modsamptend
   use modglobal, only : longint
-  use modsampdata
+  use modsampdata, only : timeav, lsampup, lsamptend, lsampco, lsampcldup, lsampcl, lsampbuup, lsampall, dtav
   implicit none
   private
   public :: initsamptend, samptend, exitsamptend, leibniztend

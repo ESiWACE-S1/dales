@@ -120,7 +120,8 @@ contains
     use modstat_nc, only : lnetcdf, writestat_nc
     use modgenstat, only : qlmnlast,wthvtmnlast
     use modmicrodata, only : iqr, precep, imicro
-    use modmpi
+    use mpi
+    use modmpi, only : mpierr, comm3d, MY_REAL
     implicit none
 
     real, allocatable :: dcape(:,:),dscape(:,:),dcin(:,:),dscin(:,:),dcintot(:,:),capemax(:,:),&

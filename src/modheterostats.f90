@@ -77,11 +77,11 @@ save
 contains
   subroutine initheterostats
 
-    use typeSizes
     use netcdf
     use mpi
-    use modmpi
-    use modglobal
+    use modmpi, only : comm3d, mpierr, MY_REAL, myid, myidx, myidy
+    use modglobal, only : tres, dt_lim, dtmax, dtav_glob, ladaptive, btime, &
+                          itot, jmax, ifnamopt, fname_options
 
     implicit none
 
@@ -102,9 +102,9 @@ contains
       close(ifnamopt)
     end if
 
-    call MPI_BCAST(dtav       ,1,MY_REAL,     0,comm3d,mpierr)
+    call MPI_BCAST(dtav            ,1,MY_REAL,     0,comm3d,mpierr)
     call MPI_BCAST(lheterostats    ,1,MPI_LOGICAL, 0,comm3d,mpierr)
-    call MPI_BCAST(ncklimit   ,1,MPI_INTEGER, 0,comm3d,mpierr)
+    call MPI_BCAST(ncklimit        ,1,MPI_INTEGER, 0,comm3d,mpierr)
 
     if(.not.(lheterostats)) return
     idtav = dtav/tres
@@ -257,13 +257,13 @@ contains
 
   subroutine do_heterostats
 
-    use typeSizes
     use netcdf
-    use modfields
+    use modfields, only : qt0, qt0h, thl0, thl0h, thv0h, ql0, ql0h, sv0, e120, exnh, exnf, rhof, &
+                          u0, v0, w0
     use mpi
     use modmpi,     only : myidx,commrow,mpierr,gatherrow,MY_REAL,MPI_SUM
-    use modsurfdata
-    use modsubgrid, only : ekm, ekh
+    use modsurfdata, only : thlflux, svflux, qtflux, ustar, thls, qts
+    use modsubgriddata, only : ekm, ekh
     use modglobal,  only : iadv_sv, iadv_kappa, dzf, dzh, rlv, cp, rv, &
                            rd, imax, jmax, i1, j1, k1, ih, jh, itot
 
@@ -1136,7 +1136,6 @@ contains
 
   subroutine exitheterostats
 
-    use typeSizes
     use netcdf
     use modmpi, only : myidx
 
@@ -1162,7 +1161,6 @@ contains
 
   subroutine nchandle_error(status)
 
-    use typeSizes
     use netcdf
     implicit none
 

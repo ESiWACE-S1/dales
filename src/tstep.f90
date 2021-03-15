@@ -48,7 +48,7 @@ subroutine tstep_update
   use modglobal, only : i1,j1,rk3step,timee,rtimee,dtmax,dt,ntrun,courant,peclet,dt_reason, &
                         kmax,dx,dy,dzh,dt_lim,ladaptive,timeleft,idtmax,rdt,tres,longint ,lwarmstart
   use modfields, only : um,vm,wm,up,vp,wp,thlp,svp,qtp,e12p
-  use modsubgrid,only : ekm,ekh
+  use modsubgriddata,only : ekm,ekh
   use mpi
   use modmpi,    only : comm3d,mpierr,mpi_max,my_real
   implicit none

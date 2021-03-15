@@ -34,7 +34,7 @@
 module modsampling
 
 use modglobal, only : longint
-use modsampdata
+use modsampdata, only : timeav, lsampall, lsampup, lsamptend, lsampco, lsampcl, lsampcldup, lsampbuup, dtav
 
 implicit none
 private

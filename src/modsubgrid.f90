@@ -29,7 +29,7 @@
 !
 
 module modsubgrid
-use modsubgriddata
+!use modsubgriddata
 implicit none
 save
   public :: subgrid, initsubgrid, exitsubgrid, subgridnamelist
@@ -37,6 +37,11 @@ save
 contains
   subroutine initsubgrid
     use modglobal, only : ih,i1,jh,j1,k1,delta,deltai,dx,dy,zf,dzf,fkar,pi
+    use modsubgriddata, only : ekm, ekh, zlt, anis_fac, sbshr, sbdiss, sbbuo, &
+                               csz, cs, cn, cm, cf, ce1, ce2, ch1, ch2, &
+                               alpha_kolm, &
+                               Rigc, Prandtl, nmason, &
+                               lmason, lanisotrop
     use mpi
     use modmpi, only : myid
 
@@ -118,6 +123,8 @@ contains
     use modglobal, only : ifnamopt,fname_options,checknamelisterror
     use mpi
     use modmpi,    only : myid, comm3d, mpierr, my_real, mpi_logical
+    use modsubgriddata, only : Rigc, sgs_surface_fix, Prandtl, lmason, nmason, lsmagorinsky, &
+                               ldelta, lanisotrop, cs, cn, cf, ch1
 
     implicit none
 
@@ -159,6 +166,7 @@ contains
     use modglobal, only : nsv, lmoist
     use modfields, only : up,vp,wp,e12p,thl0,thlp,qt0,qtp,sv0,svp
     use modsurfdata,only : thlflux,qtflux,svflux
+    use modsubgriddata, only : lsmagorinsky
     implicit none
     integer n
 
@@ -176,6 +184,7 @@ contains
   end subroutine
 
   subroutine exitsubgrid
+    use modsubgriddata, only : ekm, ekh, zlt, sbdiss, sbbuo, sbshr, csz
     implicit none
     deallocate(ekm,ekh,zlt,sbdiss,sbbuo,sbshr,csz)
   end subroutine exitsubgrid
@@ -219,6 +228,8 @@ contains
   use modfields,   only : dthvdz,e120,u0,v0,w0,thvf
   use modsurfdata, only : dudz,dvdz,z0m
   use modmpi,      only : excjs
+  use modsubgriddata, only : ekh, ekm, zlt, csz, Prandtl, lmason, nmason, lsmagorinsky, ldelta, lanisotrop, &
+                             cn, cm, ch1, ch2, ce1, ce2
   implicit none
 
   real    :: strain2,mlen
@@ -385,7 +396,8 @@ contains
   use modglobal,   only : i1,j1,kmax,dx,dy,dxi,dyi,dzf,dzh,grav,cu,cv,deltai
   use modfields,   only : u0,v0,w0,e120,e12p,dthvdz,thvf
   use modsurfdata,  only : dudz,dvdz,ustar,thlflux
-  use modsubgriddata, only: sgs_surface_fix
+  use modsubgriddata, only: sgs_surface_fix, zlt, ekh, ekm, &
+              sbdiss, sbbuo, sbshr, ce1, ce2
 
   implicit none
 
@@ -531,6 +543,7 @@ contains
 
     use modglobal, only : i1,ih,i2,j1,jh,j2,k1,kmax,dx2i,dzf,dy2i,dzh
     use modfields, only : rhobf,rhobh
+    use modsubgriddata, only : ekm, ekh, anis_fac
     implicit none
 
     real, intent(in)    :: putin(2-ih:i1+ih,2-jh:j1+jh,k1)
@@ -594,6 +607,7 @@ contains
 
     use modglobal, only : i1,ih,j1,jh,k1,kmax,dx2i,dzf,dy2i,dzh
     use modfields, only : e120,rhobf,rhobh
+    use modsubgriddata, only : ekm, anis_fac
     implicit none
 
     real, intent(inout) :: putout(2-ih:i1+ih,2-jh:j1+jh,k1)
@@ -655,6 +669,7 @@ contains
     use modglobal, only : i1,ih,j1,jh,k1,kmax,dxi,dx2i,dzf,dy,dyi,dzh, cu,cv
     use modfields, only : u0,v0,w0,rhobf,rhobh
     use modsurfdata,only : ustar
+    use modsubgriddata, only : ekm, ekh, anis_fac
     implicit none
 
     real, intent(inout) :: putout(2-ih:i1+ih,2-jh:j1+jh,k1)
@@ -766,6 +781,7 @@ contains
     use modglobal, only : i1,ih,j1,jh,k1,kmax,dx,dxi,dzf,dyi,dy2i,dzh, cu,cv
     use modfields, only : u0,v0,w0,rhobf,rhobh
     use modsurfdata,only : ustar
+    use modsubgriddata, only : ekm, ekh, anis_fac
 
     implicit none
 
@@ -874,6 +890,7 @@ contains
 
     use modglobal, only : i1,ih,j1,jh,k1,kmax,dx,dxi,dy,dyi,dzf,dzh
     use modfields, only : u0,v0,w0,rhobh,rhobf
+    use modsubgriddata, only : ekm, ekh, anis_fac
     implicit none
 
   !*****************************************************************
