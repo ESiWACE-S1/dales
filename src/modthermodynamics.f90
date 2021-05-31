@@ -458,7 +458,7 @@ contains
 !> Calculates liquid water content.and temperature
 !! \author Steef B\"oing
 
-  use modglobal, only : i1,j1,k1,rd,rv,rlv,tup,tdn,cp,ttab,esatltab,esatitab
+  use modglobal, only : i1,j1,k1,rd,rv,rlv,tup,tdn,cp,sattab,sattab_l,sattab_i
   use modfields, only : qvsl,qvsi,qt0,thl0,exnf,presf,tmp0,ql0,esl,qsat
   implicit none
 
@@ -479,10 +479,10 @@ contains
             ilratio = max(0.,min(1.,(Tnr-tdn)/(tup-tdn)))
             tlonr=int((Tnr-150.)*5.)
             thinr=tlonr+1
-            tlo=ttab(tlonr)
-            thi=ttab(thinr)
-            esl1=(thi-Tnr)*5.*esatltab(tlonr)+(Tnr-tlo)*5.*esatltab(thinr)
-            esi1=(thi-Tnr)*5.*esatitab(tlonr)+(Tnr-tlo)*5.*esatitab(thinr)
+            tlo=150. + 0.2*tlonr  ! sattab(tlonr, sattab_t)
+            thi=150. + 0.2*thinr  ! sattab(thinr, sattab_t)
+            esl1=(thi-Tnr)*sattab(tlonr, sattab_l)+(Tnr-tlo)*sattab(thinr, sattab_l)
+            esi1=(thi-Tnr)*sattab(tlonr, sattab_i)+(Tnr-tlo)*sattab(thinr, sattab_i)
             qvsl1=(rd/rv)*esl1/(presf(k)-(1.-rd/rv)*esl1)
             qvsi1=(rd/rv)*esi1/(presf(k)-(1.-rd/rv)*esi1)
             qsatur = ilratio*qvsl1+(1.-ilratio)*qvsi1
@@ -494,10 +494,10 @@ contains
               ilratio = max(0.,min(1.,(ttry-tdn)/(tup-tdn)))
               tlonr=int((ttry-150.)*5.)
               thinr=tlonr+1
-              tlo=ttab(tlonr)
-              thi=ttab(thinr)
-              esl1=(thi-ttry)*5.*esatltab(tlonr)+(ttry-tlo)*5.*esatltab(thinr)
-              esi1=(thi-ttry)*5.*esatitab(tlonr)+(ttry-tlo)*5.*esatitab(thinr)
+              tlo=150. + 0.2*tlonr  ! sattab(tlonr, sattab_t)
+              thi=150. + 0.2*thinr  ! sattab(thinr, sattab_t)
+              esl1=(thi-ttry)*sattab(tlonr, sattab_l)+(ttry-tlo)*sattab(thinr, sattab_l)
+              esi1=(thi-ttry)*sattab(tlonr, sattab_i)+(ttry-tlo)*sattab(thinr, sattab_i)
               qsatur = ilratio*(rd/rv)*esl1/(presf(k)-(1.-rd/rv)*esl1)+(1.-ilratio)*(rd/rv)*esi1/(presf(k)-(1.-rd/rv)*esi1)
               thlguessmin = ttry/exnf(k)-(rlv/(cp*exnf(k)))*max(qt0(i,j,k)-qsatur,0.)
 
@@ -512,10 +512,10 @@ contains
                   write(*,*) i,j,k,niter,thl0(i,j,k),qt0(i,j,k)
                 endif
                 thinr=tlonr+1
-                tlo=ttab(tlonr)
-                thi=ttab(thinr)
-                esl1=(thi-Tnr)*5.*esatltab(tlonr)+(Tnr-tlo)*5.*esatltab(thinr)
-                esi1=(thi-Tnr)*5.*esatitab(tlonr)+(Tnr-tlo)*5.*esatitab(thinr)
+                tlo=150. + 0.2*tlonr  ! sattab(tlonr, sattab_t)
+                thi=150. + 0.2*thinr  ! sattab(thinr, sattab_t)
+                esl1=(thi-Tnr)*sattab(tlonr, sattab_l)+(Tnr-tlo)*sattab(thinr, sattab_l)
+                esi1=(thi-Tnr)*sattab(tlonr, sattab_i)+(Tnr-tlo)*sattab(thinr, sattab_i)
                 qsatur = ilratio*(rd/rv)*esl1/(presf(k)-(1.-rd/rv)*esl1)+(1.-ilratio)*(rd/rv)*esi1/(presf(k)-(1.-rd/rv)*esi1)
                 thlguess = Tnr/exnf(k)-(rlv/(cp*exnf(k)))*max(qt0(i,j,k)-qsatur,0.)
 
@@ -523,10 +523,10 @@ contains
                 ilratio = max(0.,min(1.,(ttry-tdn)/(tup-tdn)))
                 tlonr=int((ttry-150.)*5.)
                 thinr=tlonr+1
-                tlo=ttab(tlonr)
-                thi=ttab(thinr)
-                esl1=(thi-ttry)*5.*esatltab(tlonr)+(ttry-tlo)*5.*esatltab(thinr)
-                esi1=(thi-ttry)*5.*esatitab(tlonr)+(ttry-tlo)*5.*esatitab(thinr)
+                tlo=150. + 0.2*tlonr  ! sattab(tlonr, sattab_t)
+                thi=150. + 0.2*thinr  ! sattab(thinr, sattab_t)
+                esl1=(thi-ttry)*sattab(tlonr, sattab_l)+(ttry-tlo)*sattab(thinr, sattab_l)
+                esi1=(thi-ttry)*sattab(tlonr, sattab_i)+(ttry-tlo)*sattab(thinr, sattab_i)
                 qsatur = ilratio*(rd/rv)*esl1/(presf(k)-(1.-rd/rv)*esl1)+(1.-ilratio)*(rd/rv)*esi1/(presf(k)-(1.-rd/rv)*esi1)
                 thlguessmin = ttry/exnf(k)-(rlv/(cp*exnf(k)))*max(qt0(i,j,k)-qsatur,0.)
 
@@ -537,10 +537,10 @@ contains
               ilratio = max(0.,min(1.,(Tnr-tdn)/(tup-tdn)))
               tlonr=int((Tnr-150.)*5.)
               thinr=tlonr+1
-              tlo=ttab(tlonr)
-              thi=ttab(thinr)
-              esl(i,j,k)=(thi-Tnr)*5.*esatltab(tlonr)+(Tnr-tlo)*5.*esatltab(thinr)
-              esi1=(thi-Tnr)*5.*esatitab(tlonr)+(Tnr-tlo)*5.*esatitab(thinr)
+              tlo=150. + 0.2*tlonr  ! sattab(tlonr, sattab_t)
+              thi=150. + 0.2*thinr  ! sattab(thinr, sattab_t)
+              esl(i,j,k)=(thi-Tnr)*sattab(tlonr, sattab_l)+(Tnr-tlo)*sattab(thinr, sattab_l)
+              esi1=(thi-Tnr)*sattab(tlonr, sattab_i)+(Tnr-tlo)*sattab(thinr, sattab_i)
               qvsl(i,j,k)=rd/rv*esl(i,j,k)/(presf(k)-(1.-rd/rv)*esl(i,j,k))
               qvsi(i,j,k)=rd/rv*esi1/(presf(k)-(1.-rd/rv)*esi1)
               qsatur = ilratio*qvsl(i,j,k)+(1.-ilratio)*qvsi(i,j,k)
@@ -566,7 +566,7 @@ contains
 !> Calculates liquid water content.and temperature
 !! \author Steef B\"oing
 
-  use modglobal, only : i1,j1,k1,rd,rv,rlv,tup,tdn,cp,ttab,esatltab,esatitab
+  use modglobal, only : i1,j1,k1,rd,rv,rlv,tup,tdn,cp,sattab,sattab_l,sattab_i
   use modfields, only : qt0h,thl0h,exnh,presh,ql0h
   implicit none
 
@@ -587,10 +587,10 @@ contains
             ilratio = max(0.,min(1.,(Tnr-tdn)/(tup-tdn)))
             tlonr=int((Tnr-150.)*5.)
             thinr=tlonr+1
-            tlo=ttab(tlonr)
-            thi=ttab(thinr)
-            esl1=(thi-Tnr)*5.*esatltab(tlonr)+(Tnr-tlo)*5.*esatltab(thinr)
-            esi1=(thi-Tnr)*5.*esatitab(tlonr)+(Tnr-tlo)*5.*esatitab(thinr)
+            tlo=150. + 0.2*tlonr  ! sattab(tlonr, sattab_t)
+            thi=150. + 0.2*thinr  ! sattab(thinr, sattab_t)
+            esl1=(thi-Tnr)*sattab(tlonr, sattab_l)+(Tnr-tlo)*sattab(thinr, sattab_l)
+            esi1=(thi-Tnr)*sattab(tlonr, sattab_i)+(Tnr-tlo)*sattab(thinr, sattab_i)
             qvsl1=(rd/rv)*esl1/(presh(k)-(1.-rd/rv)*esl1)
             qvsi1=(rd/rv)*esi1/(presh(k)-(1.-rd/rv)*esi1)
             qsatur = ilratio*qvsl1+(1.-ilratio)*qvsi1
@@ -602,10 +602,10 @@ contains
               ilratio = max(0.,min(1.,(ttry-tdn)/(tup-tdn)))
               tlonr=int((ttry-150.)*5.)
               thinr=tlonr+1
-              tlo=ttab(tlonr)
-              thi=ttab(thinr)
-              esl1=(thi-ttry)*5.*esatltab(tlonr)+(ttry-tlo)*5.*esatltab(thinr)
-              esi1=(thi-ttry)*5.*esatitab(tlonr)+(ttry-tlo)*5.*esatitab(thinr)
+              tlo=150. + 0.2*tlonr  ! sattab(tlonr, sattab_t)
+              thi=150. + 0.2*thinr  ! sattab(thinr, sattab_t)
+              esl1=(thi-ttry)*sattab(tlonr, sattab_l)+(ttry-tlo)*sattab(thinr, sattab_l)
+              esi1=(thi-ttry)*sattab(tlonr, sattab_i)+(ttry-tlo)*sattab(thinr, sattab_i)
               qsatur = ilratio*(rd/rv)*esl1/(presh(k)-(1.-rd/rv)*esl1)+(1.-ilratio)*(rd/rv)*esi1/(presh(k)-(1.-rd/rv)*esi1)
               thlguessmin = ttry/exnh(k)-(rlv/(cp*exnh(k)))*max(qt0h(i,j,k)-qsatur,0.)
 
@@ -620,10 +620,10 @@ contains
                   write(*,*) i,j,k,niter,thl0h(i,j,k),qt0h(i,j,k)
                 endif
                 thinr=tlonr+1
-                tlo=ttab(tlonr)
-                thi=ttab(thinr)
-                esl1=(thi-Tnr)*5.*esatltab(tlonr)+(Tnr-tlo)*5.*esatltab(thinr)
-                esi1=(thi-Tnr)*5.*esatitab(tlonr)+(Tnr-tlo)*5.*esatitab(thinr)
+                tlo=150. + 0.2*tlonr  ! sattab(tlonr, sattab_t)
+                thi=150. + 0.2*thinr  ! sattab(thinr, sattab_t)
+                esl1=(thi-Tnr)*sattab(tlonr, sattab_l)+(Tnr-tlo)*sattab(thinr, sattab_l)
+                esi1=(thi-Tnr)*sattab(tlonr, sattab_i)+(Tnr-tlo)*sattab(thinr, sattab_i)
                 qsatur = ilratio*(rd/rv)*esl1/(presh(k)-(1.-rd/rv)*esl1)+(1.-ilratio)*(rd/rv)*esi1/(presh(k)-(1.-rd/rv)*esi1)
                 thlguess = Tnr/exnh(k)-(rlv/(cp*exnh(k)))*max(qt0h(i,j,k)-qsatur,0.)
 
@@ -631,10 +631,10 @@ contains
                 ilratio = max(0.,min(1.,(ttry-tdn)/(tup-tdn)))
                 tlonr=int((ttry-150.)*5.)
                 thinr=tlonr+1
-                tlo=ttab(tlonr)
-                thi=ttab(thinr)
-                esl1=(thi-ttry)*5.*esatltab(tlonr)+(ttry-tlo)*5.*esatltab(thinr)
-                esi1=(thi-ttry)*5.*esatitab(tlonr)+(ttry-tlo)*5.*esatitab(thinr)
+                tlo=150. + 0.2*tlonr  ! sattab(tlonr, sattab_t)
+                thi=150. + 0.2*thinr  ! sattab(thinr, sattab_t)
+                esl1=(thi-ttry)*sattab(tlonr, sattab_l)+(ttry-tlo)*sattab(thinr, sattab_l)
+                esi1=(thi-ttry)*sattab(tlonr, sattab_i)+(ttry-tlo)*sattab(thinr, sattab_i)
                 qsatur = ilratio*(rd/rv)*esl1/(presh(k)-(1.-rd/rv)*esl1)+(1.-ilratio)*(rd/rv)*esi1/(presh(k)-(1.-rd/rv)*esi1)
                 thlguessmin = ttry/exnh(k)-(rlv/(cp*exnh(k)))*max(qt0h(i,j,k)-qsatur,0.)
 
@@ -644,10 +644,10 @@ contains
               ilratio = max(0.,min(1.,(Tnr-tdn)/(tup-tdn)))
               tlonr=int((Tnr-150.)*5.)
               thinr=tlonr+1
-              tlo=ttab(tlonr)
-              thi=ttab(thinr)
-              esl1=(thi-Tnr)*5.*esatltab(tlonr)+(Tnr-tlo)*5.*esatltab(thinr)
-              esi1=(thi-Tnr)*5.*esatitab(tlonr)+(Tnr-tlo)*5.*esatitab(thinr)
+              tlo=150. + 0.2*tlonr  ! sattab(tlonr, sattab_t)
+              thi=150. + 0.2*thinr  ! sattab(thinr, sattab_t)
+              esl1=(thi-Tnr)*sattab(tlonr, sattab_l)+(Tnr-tlo)*sattab(thinr, sattab_l)
+              esi1=(thi-Tnr)*sattab(tlonr, sattab_i)+(Tnr-tlo)*sattab(thinr, sattab_i)
               qvsl1=rd/rv*esl1/(presh(k)-(1.-rd/rv)*esl1)
               qvsi1=rd/rv*esi1/(presh(k)-(1.-rd/rv)*esi1)
               qsatur = ilratio*qvsl1+(1.-ilratio)*qvsi1

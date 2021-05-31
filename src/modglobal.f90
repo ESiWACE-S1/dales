@@ -138,9 +138,11 @@ save
       real :: lambda_crit=100. !< maximum value for the smoothness. This controls if WENO or
 
       ! Tabulated saturation relation
-      real, dimension(1:2000) :: ttab
-      real, dimension(1:2000) :: esatltab
-      real, dimension(1:2000) :: esatitab
+      ! access pattern for esatltab, and esatitab: at i and i+1, we need both
+      real, dimension(1:2000,2) :: sattab
+      integer, parameter :: sattab_l = 1
+      integer, parameter :: sattab_i = 2
+      ! integer, parameter :: sattab_t  ! replaced the tabulation with direct calculation
       real, dimension(-100:4000) :: mygamma251
       real, dimension(-100:4000) :: mygamma21
 
@@ -241,7 +243,7 @@ contains
     implicit none
 
     integer :: advarr(4)
-    real phi, colat, silat, omega, omega_gs
+    real phi, colat, silat, omega, omega_gs, t
     integer :: k, n, m
     character(80) chmess
 
@@ -331,19 +333,29 @@ contains
     ncosv = max(2*nsv-3,0)
 
     ! Global constants
-
-
-
-    ! esatltab(m) gives the saturation vapor pressure over water at T corresponding to m
-    ! esatitab(m) is the same over ice
     ! http://www.radiativetransfer.org/misc/atmlabdoc/atmlab/h2o/thermodynamics/e_eq_water_mk.html
     ! Murphy and Koop 2005 parameterization formula.
-    do m=1,2000
-    ttab(m)=150.+0.2*m
-    esatltab(m)=exp(54.842763-6763.22/ttab(m)-4.21*log(ttab(m))+0.000367*ttab(m)+&
-         tanh(0.0415*(ttab(m)-218.8))*(53.878-1331.22/ttab(m)-9.44523*log(ttab(m))+ 0.014025*ttab(m)))
 
-    esatitab(m)=exp(9.550426-5723.265/ttab(m)+3.53068*log(ttab(m))-0.00728332*ttab(m))
+    do m=1,2000
+      t = 150.+0.2*m
+
+      ! t gives the temperature at which esatl and esati are calculated
+      ! NOTE: this is a trivial calculation, do not tabulate this.
+      !       This will add some 'magic numbers' to the code, but only in cases where
+      !       the 150. and 2.  were already used in line(s) above for calculating the m
+      ! sattab(m, sattab_t) = t
+
+      ! sattab(m, sattab_l) gives the saturation vapor pressure over water at T corresponding to m
+      sattab(m, sattab_l) = exp(54.842763-6763.22/t-4.21*log(t)+0.000367*t+&
+           tanh(0.0415*(t-218.8))*(53.878-1331.22/t-9.44523*log(t)+ 0.014025*t))
+
+      ! esatitab(m, sattab_i) is the same over ice
+      sattab(m, sattab_i) = exp(9.550426-5723.265/t+3.53068*log(t)-0.00728332*t)
+
+      ! NOTE: this is only used in an interpolation, where it is always mulitplied by 5.
+      !       so absorb that factor here
+      sattab(m, sattab_l) = 5.*sattab(m, sattab_l)
+      sattab(m, sattab_i) = 5.*sattab(m, sattab_i)
     end do
 
     mygamma251(-100)=0.
