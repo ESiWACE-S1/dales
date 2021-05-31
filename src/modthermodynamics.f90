@@ -45,9 +45,8 @@ contains
   ! http://www.radiativetransfer.org/misc/atmlabdoc/atmlab/h2o/thermodynamics/e_eq_water_mk.html
   ! Murphy and Koop 2005 parameterization formula.
   ! The saturation vapor pressure over water at T corresponding to m
-  pure function sattab_l(t)
+  elemental real function sattab_l(t)
     real, intent(in)  :: t
-    real, intent(out) :: sattab_l
 
     sattab_l = exp(54.842763-6763.22/t-4.21*log(t)+0.000367*t+&
       tanh(0.0415*(t-218.8))*(53.878-1331.22/t-9.44523*log(t)+ 0.014025*t))
@@ -56,9 +55,8 @@ contains
   ! http://www.radiativetransfer.org/misc/atmlabdoc/atmlab/h2o/thermodynamics/e_eq_water_mk.html
   ! Murphy and Koop 2005 parameterization formula.
   ! The saturation vapor pressure over ice at T corresponding to m
-  pure function sattab_i(t)
+  elemental real function sattab_i(t)
     real, intent(in)  :: t
-    real, intent(out) :: sattab_i
 
     sattab_i = exp(9.550426-5723.265/t+3.53068*log(t)-0.00728332*t)
   end function sattab_i

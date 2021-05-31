@@ -329,8 +329,8 @@ contains
             thinr=tlonr+1
             tlo=150. + 0.2*tlonr  ! sattab(tlonr, sattab_t)
             thi=150. + 0.2*thinr  ! sattab(thinr, sattab_t)
-            esl1=(thi-Tnr)*esatltab(tlonr)+(Tnr-tlo)*esatltab(thinr)
-            esi1=(thi-Tnr)*esatitab(tlonr)+(Tnr-tlo)*esatitab(thinr)
+            esl1=(thi-Tnr)*sattab(tlonr, sattab_l)+(Tnr-tlo)*sattab(thinr, sattab_l)
+            esi1=(thi-Tnr)*sattab(tlonr, sattab_i)+(Tnr-tlo)*sattab(thinr, sattab_i)
             qsatur = ilratio*(rd/rv)*esl1/(presf(k)-(1.-rd/rv)*esl1)+(1.-ilratio)*(rd/rv)*esi1/(presf(k)-(1.-rd/rv)*esi1)
             thlguess = Tnr/exnf(k)-(rlv/(cp*exnf(k)))*max(qt200400(i,j)-qsatur,0.)
 
