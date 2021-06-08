@@ -580,10 +580,12 @@ contains
     integer       ::   count, dest, tag, ierror
     type(MPI_COMM):: comm
     type(MPI_REQUEST) :: request
-    BYTE, pointer :: buf_b
     ! This cast is necessary for the fujitsu fortran compiler, hopefully it
     ! will not be neccessary anymore sometime in the future (then please remove the
     ! cast and pass the buf directly!
+    ! Furthermore, the target attribute of the buf argument should then be changed to asynchronous
+    ! To match the actual MPI_XXX interface of mpi_f08 better
+    BYTE, pointer :: buf_b
     call c_f_pointer(c_loc(buf),buf_b)
     call MPI_ISEND(buf_b,count,MPI_REAL4,dest,tag,comm,request,ierror)
   end subroutine D_MPI_ISEND_REAL32
