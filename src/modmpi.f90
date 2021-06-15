@@ -122,12 +122,18 @@ contains
     implicit none
     type(MPI_COMM), intent(in),optional  :: comm
     logical                              :: init
+    integer                              :: ierr
 
     call MPI_INITIALIZED(init,mpierr)
 
     if(.not.init) then
         call MPI_INIT(mpierr)
     endif
+
+    call MPI_Comm_set_errhandler(MPI_COMM_WORLD, MPI_ERRORS_RETURN, ierr)
+    if (ierr /= MPI_SUCCESS) then
+      error stop
+    end if
 
     if(present(comm)) then
         libmode=.true.
@@ -401,7 +407,9 @@ contains
 
     ! Wait until data is received
     call MPI_WAIT(reqrs, status, mpierr)
+    if (mpierr /= MPI_SUCCESS) error stop
     call MPI_WAIT(reqrn, status, mpierr)
+    if (mpierr /= MPI_SUCCESS) error stop
 
     ! Write back buffers
     a(:,sy-jh:sy-1,:) = reshape(recvs,(/xl,jh,zl/))
@@ -433,7 +441,9 @@ contains
 
     ! Wait until data is received
     call MPI_WAIT(reqrw, status, mpierr)
+    if (mpierr /= MPI_SUCCESS) error stop
     call MPI_WAIT(reqre, status, mpierr)
+    if (mpierr /= MPI_SUCCESS) error stop
 
     ! Write back buffers
     a(sx-ih:sx-1,:,:) = reshape(recvw,(/ih,yl,zl/))
@@ -451,7 +461,9 @@ contains
 
     ! Make sure data is sent
     call MPI_WAIT(reqn, status, mpierr)
+    if (mpierr /= MPI_SUCCESS) error stop
     call MPI_WAIT(reqs, status, mpierr)
+    if (mpierr /= MPI_SUCCESS) error stop
   
     deallocate (sendn, sends)
     deallocate (recvn, recvs)
@@ -462,7 +474,9 @@ contains
 
     ! Make sure data is sent
     call MPI_WAIT(reqe, status, mpierr)
+    if (mpierr /= MPI_SUCCESS) error stop
     call MPI_WAIT(reqw, status, mpierr)
+    if (mpierr /= MPI_SUCCESS) error stop
 
     ! Deallocate buffers
     deallocate (sende, sendw)
