@@ -240,7 +240,7 @@ SAVE
   real              :: ustin  = -1      !<  Prescribed friction velocity [m/s]
   real              :: wtsurf = -1e20  !<  Prescribed kinematic temperature flux [K m/s]
   real              :: wqsurf = -1e20  !<  Prescribed kinematic moisture flux [kg/kg m/s]
-  real              :: wsvsurf(100) = 0 !<  Prescribed surface scalar(n) flux [- m/s]
+  real, allocatable :: wsvsurf(:)      !<  Prescribed surface scalar(n) flux [- m/s]
 
   ! Heterogeneous surfaces
   integer, parameter:: max_lands                   = 10 !<  Amount of land types that can be defined

@@ -187,7 +187,9 @@ contains
     !call D_MPI_BCAST(lneutraldrag ,1,0,commwrld,mpierr)
     call D_MPI_BCAST(wtsurf     ,1,0,commwrld,mpierr)
     call D_MPI_BCAST(wqsurf     ,1,0,commwrld,mpierr)
-    call D_MPI_BCAST(wsvsurf(1:nsv),nsv,0,commwrld,mpierr)
+    allocate(wsvsurf(1:nsv))
+    wsvsurf = 0
+    call D_MPI_BCAST(wsvsurf    ,nsv,0,commwrld,mpierr)
     call D_MPI_BCAST(ps         ,1,0,commwrld,mpierr)
     call D_MPI_BCAST(thls       ,1,0,commwrld,mpierr)
     call D_MPI_BCAST(chi_half   ,1,0,commwrld,mpierr)
