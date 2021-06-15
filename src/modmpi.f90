@@ -652,12 +652,20 @@ contains
   end subroutine D_MPI_BCAST_REAL32
   subroutine D_MPI_BCAST_REAL64(buffer, count, root, comm, ierror)
     implicit none
-    real(real64), target   ::  buffer(..)
+    real(real64)   ::  buffer(:)
     integer        :: count, root, ierror
     type(MPI_COMM) :: comm
     call MPI_BCAST(buffer, count, MPI_REAL8, root, comm, ierror)
     if (ierror /= MPI_SUCCESS) call abort
   end subroutine D_MPI_BCAST_REAL64
+  subroutine D_MPI_BCAST_REAL64_S(buffer, count, root, comm, ierror)
+    implicit none
+    real(real64)   ::  buffer
+    integer        :: count, root, ierror
+    type(MPI_COMM) :: comm
+    call MPI_BCAST(buffer, count, MPI_REAL8, root, comm, ierror)
+    if (ierror /= MPI_SUCCESS) call abort
+  end subroutine D_MPI_BCAST_REAL64_S
   subroutine D_MPI_BCAST_INT32(buffer, count, root, comm, ierror)
     implicit none
     integer(int32), target ::  buffer(..)
