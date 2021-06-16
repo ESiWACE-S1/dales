@@ -387,6 +387,7 @@ contains
   type(MPI_STATUS)  :: status
   integer :: xl, yl, zl
   type(MPI_REQUEST) :: reqn, reqs, reqe, reqw
+  type(MPI_REQUEST) :: reqrn, reqrs, reqre, reqrw
   integer nssize, ewsize
   real(real64),allocatable, dimension(:) :: sendn,recvn &
                                           , sends,recvs &
@@ -416,8 +417,12 @@ contains
     call D_MPI_ISEND(sends, nssize, nbrsouth, 5, comm3d, reqs, mpierr)
 
     !   Receive south/north
-    call D_MPI_RECV(recvs, nssize, nbrsouth, 4, comm3d, status, mpierr)
-    call D_MPI_RECV(recvn, nssize, nbrnorth, 5, comm3d, status, mpierr)
+    call D_MPI_IRECV(recvs, nssize, nbrsouth, 4, comm3d, reqrs, mpierr)
+    call D_MPI_IRECV(recvn, nssize, nbrnorth, 5, comm3d, reqrn, mpierr)
+
+    ! Wait until data is received
+    call MPI_WAIT(reqrs, status, mpierr)
+    call MPI_WAIT(reqrn, status, mpierr)
 
 
     ! Write back buffers
@@ -445,8 +450,12 @@ contains
     call D_MPI_ISEND(sendw, ewsize, nbrwest, 7, comm3d, reqw, mpierr)
 
     !   Receive west/east
-    call D_MPI_RECV(recvw, ewsize, nbrwest, 6, comm3d, status, mpierr)
-    call D_MPI_RECV(recve, ewsize, nbreast, 7, comm3d, status, mpierr)
+    call D_MPI_IRECV(recvw, ewsize, nbrwest, 6, comm3d, reqrw, mpierr)
+    call D_MPI_IRECV(recve, ewsize, nbreast, 7, comm3d, reqre, mpierr)
+
+    ! Wait until data is received
+    call MPI_WAIT(reqrw, status, mpierr)
+    call MPI_WAIT(reqre, status, mpierr)
 
     ! Write back buffers
     a(sx-ih:sx-1,:,:) = reshape(recvw,(/ih,yl,zl/))
@@ -593,7 +602,7 @@ contains
   !MPI interfaces instantations for the various types
   subroutine D_MPI_ISEND_REAL32(buf, count, dest, tag, comm, request, ierror)
     implicit none
-    real(real32), target, contiguous, intent(inout) ::   buf(..)
+    real(real32), target, contiguous, asynchronous, intent(inout) ::   buf(:)
     integer       ::   count, dest, tag, ierror
     type(MPI_COMM):: comm
     type(MPI_REQUEST) :: request
@@ -610,7 +619,7 @@ contains
   end subroutine D_MPI_ISEND_REAL32
   subroutine D_MPI_ISEND_REAL64(buf, count, dest, tag, comm, request, ierror)
     implicit none
-    real(real64), contiguous, intent(inout) ::   buf(..)
+    real(real64), contiguous, asynchronous, intent(inout) ::   buf(:)
     integer       ::   count, dest, tag, ierror
     type(MPI_COMM):: comm
     type(MPI_REQUEST) :: request
@@ -620,7 +629,7 @@ contains
 
   subroutine D_MPI_IRECV_REAL32(buf, count, source, tag, comm, request, ierror)
     implicit none
-    real(real32), target, contiguous, intent(inout)  ::   buf(..)
+    real(real32), target, asynchronous,contiguous, intent(inout)  ::   buf(:)
     integer        :: count, source, tag, ierror
     type(MPI_COMM) :: comm
     type(MPI_REQUEST) :: request
@@ -631,7 +640,7 @@ contains
   end subroutine D_MPI_IRECV_REAL32
   subroutine D_MPI_IRECV_REAL64(buf, count, source, tag, comm, request, ierror)
     implicit none
-    real(real64), contiguous, intent(inout)  ::   buf(..)
+    real(real64), contiguous, asynchronous, intent(inout)  ::   buf(:)
     integer        :: count, source, tag, ierror
     type(MPI_COMM) :: comm
     type(MPI_REQUEST) :: request
@@ -641,7 +650,7 @@ contains
   
   subroutine D_MPI_RECV_REAL32(buf, count, source, tag, comm, status, ierror)
     implicit none
-    real(real32), target, contiguous, intent(inout)  ::   buf(..)
+    real(real32), target, contiguous, intent(inout)  ::   buf(:)
     integer        :: count, source, tag, ierror
     type(MPI_COMM) :: comm
     type(MPI_STATUS) :: status
@@ -652,7 +661,7 @@ contains
   end subroutine D_MPI_RECV_REAL32
   subroutine D_MPI_RECV_REAL64(buf, count, source, tag, comm, status, ierror)
     implicit none
-    real(real64), contiguous, intent(inout)  ::   buf(..)
+    real(real64), contiguous, intent(inout)  ::   buf(:)
     integer        :: count, source, tag, ierror
     type(MPI_COMM) :: comm
     type(MPI_STATUS) :: status
