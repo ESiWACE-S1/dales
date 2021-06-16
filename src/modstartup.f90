@@ -1222,9 +1222,9 @@ contains
     real,dimension(4) :: pmat
     real,dimension(4) :: tmat
 
-    allocate (height(k1),pb(k1),tb(k1))
 
     if(myid==0)then
+    allocate (height(k1),pb(k1),tb(k1))
 
       if((lwarmstart.eqv..true.).and.(ibas_prf /= 5)) then
         ibas_prf = 5
@@ -1409,6 +1409,7 @@ contains
               drhobdzh (k)
     end do
 
+    deallocate(height, pb,tb)
     end if ! ENDIF MYID=0
 
     ! MPI broadcast variables
@@ -1417,7 +1418,6 @@ contains
     call D_MPI_BCAST(drhobdzf    ,k1,0,comm3d,mpierr)
     call D_MPI_BCAST(drhobdzh    ,k1,0,comm3d,mpierr)
 
-    deallocate(height, pb,tb)
 
   end subroutine baseprofs
 
