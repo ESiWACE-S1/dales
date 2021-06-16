@@ -219,7 +219,7 @@ contains
     enddo
     enddo
 
-    call D_MPI_ALLREDUCE(kdmaxl,kdmax,1,MPI_MAX,comm3d,mpierr)
+    call D_MPI_ALLREDUCE_S(kdmaxl,kdmax,1,MPI_MAX,comm3d,mpierr)
 
     do j=2,j1
     do i=2,i1

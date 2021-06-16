@@ -164,7 +164,7 @@ contains
 
     use modglobal, only : i1,j1,kmax,dx,dy,dzf,dt_reason
     use modfields, only : u0,v0,w0,rhobf,rhobh
-    use modmpi,    only : myid,comm3d,mpi_sum,mpi_max,mpierr, D_MPI_ALLREDUCE
+    use modmpi,    only : myid,comm3d,mpi_sum,mpi_max,mpierr, D_MPI_ALLREDUCE_S
     implicit none
 
 
@@ -191,9 +191,9 @@ contains
     end do
     end do
 
-    call D_MPI_ALLREDUCE(divtotl, divtot, 1,     &
+    call D_MPI_ALLREDUCE_S(divtotl, divtot, 1,     &
                           MPI_SUM, comm3d,mpierr)
-    call D_MPI_ALLREDUCE(divmaxl, divmax, 1,     &
+    call D_MPI_ALLREDUCE_S(divmaxl, divmax, 1,     &
                           MPI_MAX, comm3d,mpierr)
 
     if(myid==0)then

@@ -248,7 +248,7 @@ contains
     use modsubgrid,     only : diffc
     use modfields,      only : u0,v0,w0,u0av,v0av
     use modmpi,         only : comm3d,mpi_sum,mpierr, &
-                               slabsum, D_MPI_ALLREDUCE
+                               slabsum, D_MPI_ALLREDUCE, D_MPI_ALLREDUCE_S
     use advec_2nd,      only : advecc_2nd
     use advec_52,       only : advecc_52
     use advec_5th,      only : advecc_5th
@@ -476,7 +476,7 @@ contains
       varxfluxavl = varxfluxavl + varxflux(i,j)
     end do
     end do
-    call D_MPI_ALLREDUCE(varxfluxavl, varxfluxav, 1, &
+    call D_MPI_ALLREDUCE_S(varxfluxavl, varxfluxav, 1, &
                            MPI_SUM, comm3d,mpierr)
     varxfluxav = varxfluxav/ijtot
 

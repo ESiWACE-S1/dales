@@ -344,7 +344,8 @@ contains
                            cliq,rsveg,rssoil,Wl, &
                            lhetero, xpatches, ypatches, qts_patch, wt_patch, wq_patch, thls_patch,obl,z0mav_patch, wco2av, Anav, Respav,gcco2av
     use modsurface, only : patchxnr,patchynr
-    use modmpi,     only : mpi_sum,mpi_max,mpi_min,comm3d,mpierr,myid, D_MPI_ALLREDUCE
+    use modmpi,     only : mpi_sum,mpi_max,mpi_min,comm3d,mpierr,myid, &
+                           D_MPI_ALLREDUCE, D_MPI_ALLREDUCE_S
     use modstat_nc,  only : lnetcdf, writestat_nc,nc_fillvalue
     implicit none
 
@@ -489,15 +490,15 @@ contains
       end do
     end do
 
-    call D_MPI_ALLREDUCE(ccl   , cc   , 1,       &
+    call D_MPI_ALLREDUCE_S(ccl   , cc   , 1,       &
                           MPI_SUM, comm3d,mpierr)
-    call D_MPI_ALLREDUCE(qlintavl, qlintav, 1  , &
+    call D_MPI_ALLREDUCE_S(qlintavl, qlintav, 1  , &
                           MPI_SUM, comm3d,mpierr)
-    call D_MPI_ALLREDUCE(qlintmaxl, qlintmax, 1, &
+    call D_MPI_ALLREDUCE_S(qlintmaxl, qlintmax, 1, &
                           MPI_MAX, comm3d,mpierr)
-    call D_MPI_ALLREDUCE(zbaseavl, zbaseav, 1,   &
+    call D_MPI_ALLREDUCE_S(zbaseavl, zbaseav, 1,   &
                           MPI_SUM, comm3d,mpierr)
-    call D_MPI_ALLREDUCE(zbaseminl, zbasemin, 1, &
+    call D_MPI_ALLREDUCE_S(zbaseminl, zbasemin, 1, &
                           MPI_MIN, comm3d,mpierr)
 
     if (lhetero) then
@@ -550,13 +551,13 @@ contains
       end do
     end do
 
-    call D_MPI_ALLREDUCE(wmaxl   , wmax   , 1,   &
+    call D_MPI_ALLREDUCE_S(wmaxl   , wmax   , 1,   &
                           MPI_MAX, comm3d,mpierr)
-    call D_MPI_ALLREDUCE(qlmaxl, qlmax, 1,       &
+    call D_MPI_ALLREDUCE_S(qlmaxl, qlmax, 1,       &
                           MPI_MAX, comm3d,mpierr)
-    call D_MPI_ALLREDUCE(ztopavl, ztopav, 1,     &
+    call D_MPI_ALLREDUCE_S(ztopavl, ztopav, 1,     &
                           MPI_SUM, comm3d,mpierr)
-    call D_MPI_ALLREDUCE(ztopmaxl, ztopmax, 1,   &
+    call D_MPI_ALLREDUCE_S(ztopmaxl, ztopmax, 1,   &
                           MPI_MAX, comm3d,mpierr)
 
     if (lhetero) then
@@ -632,7 +633,7 @@ contains
       end do
     end do
 
-    call D_MPI_ALLREDUCE(tke_totl, tke_tot, 1,   &
+    call D_MPI_ALLREDUCE_S(tke_totl, tke_tot, 1,   &
                           MPI_SUM, comm3d,mpierr)
 
     tke_tot = tke_tot/ijtot
@@ -648,9 +649,9 @@ contains
     tstl=sum(- thlflux(2:i1,2:j1) / ustar(2:i1,2:j1))
     qstl=sum(- qtflux (2:i1,2:j1) / ustar(2:i1,2:j1))
 
-    call D_MPI_ALLREDUCE(ustl, ust, 1, MPI_SUM, comm3d,mpierr)
-    call D_MPI_ALLREDUCE(tstl, tst, 1, MPI_SUM, comm3d,mpierr)
-    call D_MPI_ALLREDUCE(qstl, qst, 1, MPI_SUM, comm3d,mpierr)
+    call D_MPI_ALLREDUCE_S(ustl, ust, 1, MPI_SUM, comm3d,mpierr)
+    call D_MPI_ALLREDUCE_S(tstl, tst, 1, MPI_SUM, comm3d,mpierr)
+    call D_MPI_ALLREDUCE_S(qstl, qst, 1, MPI_SUM, comm3d,mpierr)
 
     ust = ust / ijtot
     tst = tst / ijtot
@@ -666,8 +667,8 @@ contains
       thlfluxl = sum(thlflux(2:i1, 2:j1))
       qtfluxl  = sum(qtflux (2:i1, 2:j1))
 
-      call D_MPI_ALLREDUCE(thlfluxl, usttst, 1, MPI_SUM, comm3d,mpierr)
-      call D_MPI_ALLREDUCE(qtfluxl,  ustqst, 1, MPI_SUM, comm3d,mpierr)
+      call D_MPI_ALLREDUCE_S(thlfluxl, usttst, 1, MPI_SUM, comm3d,mpierr)
+      call D_MPI_ALLREDUCE_S(qtfluxl,  ustqst, 1, MPI_SUM, comm3d,mpierr)
 
       usttst = -usttst / ijtot
       ustqst = -ustqst / ijtot
@@ -714,18 +715,18 @@ contains
       rssoilavl    = sum(rssoil(2:i1,2:j1))
       tskinavl     = sum(tskin(2:i1,2:j1))
 
-      call D_MPI_ALLREDUCE(Qnetavl,     Qnetav,     1,  MPI_SUM, comm3d,mpierr)
-      call D_MPI_ALLREDUCE(Havl,        Hav,        1,  MPI_SUM, comm3d,mpierr)
-      call D_MPI_ALLREDUCE(LEavl,       LEav,       1,  MPI_SUM, comm3d,mpierr)
-      call D_MPI_ALLREDUCE(G0avl,       G0av,       1,  MPI_SUM, comm3d,mpierr)
-      call D_MPI_ALLREDUCE(tendskinavl, tendskinav, 1,  MPI_SUM, comm3d,mpierr)
-      call D_MPI_ALLREDUCE(rsavl,       rsav,       1,  MPI_SUM, comm3d,mpierr)
-      call D_MPI_ALLREDUCE(raavl,       raav,       1,  MPI_SUM, comm3d,mpierr)
-      call D_MPI_ALLREDUCE(cliqavl,     cliqav,     1,  MPI_SUM, comm3d,mpierr)
-      call D_MPI_ALLREDUCE(wlavl,       wlav,       1,  MPI_SUM, comm3d,mpierr)
-      call D_MPI_ALLREDUCE(rsvegavl,    rsvegav,    1,  MPI_SUM, comm3d,mpierr)
-      call D_MPI_ALLREDUCE(rssoilavl,   rssoilav,   1,  MPI_SUM, comm3d,mpierr)
-      call D_MPI_ALLREDUCE(tskinavl,    tskinav,    1,  MPI_SUM, comm3d,mpierr)
+      call D_MPI_ALLREDUCE_S(Qnetavl,     Qnetav,     1,  MPI_SUM, comm3d,mpierr)
+      call D_MPI_ALLREDUCE_S(Havl,        Hav,        1,  MPI_SUM, comm3d,mpierr)
+      call D_MPI_ALLREDUCE_S(LEavl,       LEav,       1,  MPI_SUM, comm3d,mpierr)
+      call D_MPI_ALLREDUCE_S(G0avl,       G0av,       1,  MPI_SUM, comm3d,mpierr)
+      call D_MPI_ALLREDUCE_S(tendskinavl, tendskinav, 1,  MPI_SUM, comm3d,mpierr)
+      call D_MPI_ALLREDUCE_S(rsavl,       rsav,       1,  MPI_SUM, comm3d,mpierr)
+      call D_MPI_ALLREDUCE_S(raavl,       raav,       1,  MPI_SUM, comm3d,mpierr)
+      call D_MPI_ALLREDUCE_S(cliqavl,     cliqav,     1,  MPI_SUM, comm3d,mpierr)
+      call D_MPI_ALLREDUCE_S(wlavl,       wlav,       1,  MPI_SUM, comm3d,mpierr)
+      call D_MPI_ALLREDUCE_S(rsvegavl,    rsvegav,    1,  MPI_SUM, comm3d,mpierr)
+      call D_MPI_ALLREDUCE_S(rssoilavl,   rssoilav,   1,  MPI_SUM, comm3d,mpierr)
+      call D_MPI_ALLREDUCE_S(tskinavl,    tskinav,    1,  MPI_SUM, comm3d,mpierr)
 
       Qnetav        = Qnetav      / ijtot
       Hav           = Hav         / ijtot
@@ -938,7 +939,7 @@ contains
     use modfields,  only : w0,qt0,qt0h,ql0,thl0,thl0h,thv0h,sv0,exnf,whls
     use modsurfdata,only : svs, lhetero, xpatches, ypatches
     use modsurface, only : patchxnr,patchynr
-    use modmpi,     only : mpierr, comm3d,mpi_sum, D_MPI_ALLREDUCE
+    use modmpi,     only : mpierr, comm3d,mpi_sum, D_MPI_ALLREDUCE_S
     use advec_kappa,only : halflev_kappa
     implicit none
     real    :: zil, dhdt,locval,oldlocval
@@ -1103,7 +1104,7 @@ contains
 
     endif
 
-    call D_MPI_ALLREDUCE(zil, zi, 1, MPI_SUM, comm3d,mpierr)
+    call D_MPI_ALLREDUCE_S(zil, zi, 1, MPI_SUM, comm3d,mpierr)
     zi = zi / ijtot
 
     if (lhetero) then

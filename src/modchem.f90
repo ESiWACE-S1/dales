@@ -1138,7 +1138,7 @@ SUBROUTINE twostep2(y)
 use modglobal, only : ih,i1,jh,j1,k1,kmax,rtimee,rdt,timee,timeav_glob,ifoutput,cexpnr,dz,ijtot
 use modfields, only : qt0
 use modmpi, only: comm3d, mpierr,mpi_max,mpi_min,mpi_sum,myid,nprocs &
-                , D_MPI_ALLREDUCE
+                , D_MPI_ALLREDUCE_S, D_MPI_ALLREDUCE
 use modtimestat, only: we, zi, ziold, calcblheight
 
 implicit none
@@ -1227,7 +1227,7 @@ implicit none
       enddo
     enddo
 
-    call D_MPI_ALLREDUCE(kdtl, kdt, 1, MPI_MIN,  comm3d, mpierr)
+    call D_MPI_ALLREDUCE_S(kdtl, kdt, 1, MPI_MIN,  comm3d, mpierr)
 
 25  nstart=nstart+1
 
@@ -1284,7 +1284,7 @@ implicit none
       enddo
     enddo
 
-    call D_MPI_ALLREDUCE(errltel, errlte, 1, MPI_MAX, comm3d, mpierr)
+    call D_MPI_ALLREDUCE_S(errltel, errlte, 1, MPI_MAX, comm3d, mpierr)
 
     errlte=2.0*errlte/(c+c*c)
     call NEWDT(t,te,kdt,dtold,ratio,errlte,accept,dtmin,kdtmax)
@@ -1789,7 +1789,7 @@ subroutine ratech
                         zf,dzf,ijtot,ifoutput,cexpnr
   use modfields, only : qt0, ql0 ,rhof
   use modmpi,    only : myid, comm3d, mpierr, mpi_max,  mpi_sum &
-                      , D_MPI_ALLREDUCE
+                      , D_MPI_ALLREDUCE_S
   use modsurfdata,only: taufield, lrsAgs
   use modraddata,only: iradiation, irad_par
   implicit none
@@ -2002,20 +2002,20 @@ subroutine ratech
      qlintallsuml = qlintallsum
      qlintallmaxl = qlintallmax
 
-     call D_MPI_ALLREDUCE(zbasecountl   , zbasecount   ,   1, MPI_SUM, comm3d, mpierr)
-     call D_MPI_ALLREDUCE(cloudcountl   , cloudcount   ,   1, MPI_SUM, comm3d, mpierr)
+     call D_MPI_ALLREDUCE_S(zbasecountl   , zbasecount   ,   1, MPI_SUM, comm3d, mpierr)
+     call D_MPI_ALLREDUCE_S(cloudcountl   , cloudcount   ,   1, MPI_SUM, comm3d, mpierr)
 
-     call D_MPI_ALLREDUCE(zbasesuml, zbasesum,             1, MPI_SUM, comm3d, mpierr)
-     call D_MPI_ALLREDUCE(ztopmaxl, ztopmax,               1, MPI_MAX, comm3d, mpierr)
+     call D_MPI_ALLREDUCE_S(zbasesuml, zbasesum,             1, MPI_SUM, comm3d, mpierr)
+     call D_MPI_ALLREDUCE_S(ztopmaxl, ztopmax,               1, MPI_MAX, comm3d, mpierr)
 
-     call D_MPI_ALLREDUCE(cloudheightmaxl, cloudheightmax, 1, MPI_MAX, comm3d, mpierr)
-     call D_MPI_ALLREDUCE(cloudheightsuml, cloudheightsum, 1, MPI_SUM, comm3d, mpierr)
+     call D_MPI_ALLREDUCE_S(cloudheightmaxl, cloudheightmax, 1, MPI_MAX, comm3d, mpierr)
+     call D_MPI_ALLREDUCE_S(cloudheightsuml, cloudheightsum, 1, MPI_SUM, comm3d, mpierr)
 
-     call D_MPI_ALLREDUCE(qlintmaxl, qlintmax,             1, MPI_MAX, comm3d, mpierr)
-     call D_MPI_ALLREDUCE(qlintsuml, qlintsum,             1, MPI_SUM, comm3d, mpierr)
+     call D_MPI_ALLREDUCE_S(qlintmaxl, qlintmax,             1, MPI_MAX, comm3d, mpierr)
+     call D_MPI_ALLREDUCE_S(qlintsuml, qlintsum,             1, MPI_SUM, comm3d, mpierr)
 
-     call D_MPI_ALLREDUCE(qlintallmaxl, qlintallmax,       1, MPI_MAX, comm3d, mpierr)
-     call D_MPI_ALLREDUCE(qlintallsuml, qlintallsum,       1, MPI_SUM, comm3d, mpierr)
+     call D_MPI_ALLREDUCE_S(qlintallmaxl, qlintallmax,       1, MPI_MAX, comm3d, mpierr)
+     call D_MPI_ALLREDUCE_S(qlintallsuml, qlintallsum,       1, MPI_SUM, comm3d, mpierr)
 
      if ( myid ==0 ) then
        open (ifoutput,file='cloudstat.'//cexpnr,position='append')

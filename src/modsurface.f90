@@ -703,8 +703,8 @@ contains
   subroutine surface
     use modglobal,  only : i1,j1,fkar,zf,cu,cv,nsv,ijtot,rd,rv
     use modfields,  only : thl0, qt0, u0, v0, u0av, v0av
-    use modmpi,     only : mpierr, comm3d, mpi_sum, excjs, mpi_integer &
-                         , D_MPI_ALLREDUCE, D_MPI_BCAST_S
+    use modmpi,     only : mpierr, comm3d, mpi_sum, excjs &
+                         , D_MPI_ALLREDUCE,D_MPI_ALLREDUCE_S,D_MPI_BCAST_S
     use moduser,    only : surf_user
     implicit none
 
@@ -876,9 +876,9 @@ contains
         wtsurfl = sum(thlflux(2:i1,2:j1))
         wqsurfl = sum(qtflux (2:i1,2:j1))
 
-        call D_MPI_ALLREDUCE(ustl  ,  ust   , 1, MPI_SUM, comm3d,mpierr)
-        call D_MPI_ALLREDUCE(wtsurfl, wtsurf, 1, MPI_SUM, comm3d,mpierr)
-        call D_MPI_ALLREDUCE(wqsurfl, wqsurf, 1, MPI_SUM, comm3d,mpierr)
+        call D_MPI_ALLREDUCE_S(ustl  ,  ust   , 1, MPI_SUM, comm3d,mpierr)
+        call D_MPI_ALLREDUCE_S(wtsurfl, wtsurf, 1, MPI_SUM, comm3d,mpierr)
+        call D_MPI_ALLREDUCE_S(wqsurfl, wqsurf, 1, MPI_SUM, comm3d,mpierr)
 
         wtsurf = wtsurf / ijtot
         wqsurf = wqsurf / ijtot
@@ -1003,8 +1003,8 @@ contains
         end do
       end do
 
-      call D_MPI_ALLREDUCE(thlsl, thls, 1, MPI_SUM, comm3d,mpierr)
-      call D_MPI_ALLREDUCE(qtsl , qts , 1, MPI_SUM, comm3d,mpierr)
+      call D_MPI_ALLREDUCE_S(thlsl, thls, 1, MPI_SUM, comm3d,mpierr)
+      call D_MPI_ALLREDUCE_S(qtsl , qts , 1, MPI_SUM, comm3d,mpierr)
 
       thls = thls / ijtot
       qts  = qts  / ijtot
@@ -1041,7 +1041,8 @@ contains
     use modglobal,   only : tmelt,bt,at,rd,rv,cp,es0,pref0,ijtot,i1,j1
     use modfields,   only : qt0
     !use modsurfdata, only : rs, ra
-    use modmpi,      only : mpierr,comm3d,mpi_sum,mpi_integer, D_MPI_ALLREDUCE
+    use modmpi,      only : mpierr,comm3d,mpi_sum,mpi_integer, D_MPI_ALLREDUCE &
+                          , D_MPI_ALLREDUCE_S
 
     implicit none
     real       :: exner, tsurf, qsatsurf, surfwet, es, qtsl
@@ -1066,7 +1067,7 @@ contains
         end do
       end do
 
-      call D_MPI_ALLREDUCE(qtsl, qts, 1,  MPI_SUM, comm3d,mpierr)
+      call D_MPI_ALLREDUCE_S(qtsl, qts, 1,  MPI_SUM, comm3d,mpierr)
       qts  = qts / ijtot
       thvs = thls * (1. + (rv/rd - 1.) * qts)
 
@@ -1640,7 +1641,8 @@ contains
     use modglobal, only : pref0,boltz,cp,rd,rhow,rlv,i1,j1,rdt,ijtot,rk3step,nsv,xtime,rtimee,xday,xlat,xlon
     use modfields, only : ql0,qt0,thl0,rhof,presf,svm
     use modraddata,only : iradiation,useMcICA,swd,swu,lwd,lwu,irad_par,swdir,swdif,zenith
-    use modmpi, only :comm3d,mpi_sum,mpierr,mpi_integer,myid, D_MPI_ALLREDUCE
+    use modmpi, only :comm3d,mpi_sum,mpierr,mpi_integer,myid, D_MPI_ALLREDUCE &
+                     , D_MPI_ALLREDUCE_S
     use modmicrodata, only : imicro,imicro_bulk
 
     real     :: f1, f2, f3, f4 ! Correction functions for Jarvis-Stewart
@@ -2188,10 +2190,10 @@ contains
       endif
     endif
 
-    call D_MPI_ALLREDUCE(local_wco2av , wco2av , 1, MPI_SUM, comm3d,mpierr)
-    call D_MPI_ALLREDUCE(local_Anav   , Anav   , 1, MPI_SUM, comm3d,mpierr)
-    call D_MPI_ALLREDUCE(local_gcco2av, gcco2av, 1, MPI_SUM, comm3d,mpierr)
-    call D_MPI_ALLREDUCE(local_Respav , Respav , 1, MPI_SUM, comm3d,mpierr)
+    call D_MPI_ALLREDUCE_S(local_wco2av , wco2av , 1, MPI_SUM, comm3d,mpierr)
+    call D_MPI_ALLREDUCE_S(local_Anav   , Anav   , 1, MPI_SUM, comm3d,mpierr)
+    call D_MPI_ALLREDUCE_S(local_gcco2av, gcco2av, 1, MPI_SUM, comm3d,mpierr)
+    call D_MPI_ALLREDUCE_S(local_Respav , Respav , 1, MPI_SUM, comm3d,mpierr)
 
     Anav   = Anav/ijtot
     gcco2av= gcco2av/ijtot
@@ -2199,7 +2201,7 @@ contains
     Respav = Respav/ijtot
 
 
-    call D_MPI_ALLREDUCE(thlsl, thls, 1, MPI_SUM, comm3d,mpierr)
+    call D_MPI_ALLREDUCE_S(thlsl, thls, 1, MPI_SUM, comm3d,mpierr)
     thls = thls / ijtot
     if (lhetero) then
       call D_MPI_ALLREDUCE(lthls_patch(1:xpatches,1:ypatches), thls_patch(1:xpatches,1:ypatches),&
