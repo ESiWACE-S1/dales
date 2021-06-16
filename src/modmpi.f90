@@ -89,7 +89,8 @@ save
   interface D_MPI_BCAST
     procedure :: D_MPI_BCAST_REAL32
     procedure :: D_MPI_BCAST_REAL64
-    procedure :: D_MPI_BCAST_INT32
+    procedure :: D_MPI_BCAST_INT32_R1
+    procedure :: D_MPI_BCAST_INT32_R2
     procedure :: D_MPI_BCAST_LOGICAL
     procedure :: D_MPI_BCAST_STRING
   end interface
@@ -700,14 +701,22 @@ contains
     type(MPI_COMM) :: comm
     call MPI_BCAST(buffer, count, MPI_REAL8, root, comm, ierror)
   end subroutine D_MPI_BCAST_REAL64
-  subroutine D_MPI_BCAST_INT32(buffer, count, root, comm, ierror)
+  subroutine D_MPI_BCAST_INT32_R2(buffer, count, root, comm, ierror)
     implicit none
-    integer(int32), contiguous, intent(inout) ::  buffer(..)
+    integer(int32), contiguous, intent(inout) ::  buffer(:,:)
     integer        :: count, root, ierror
     type(MPI_COMM) :: comm
     call MPI_BCAST(buffer, count, MPI_INTEGER4, root, comm, ierror)
     if (ierror /= MPI_SUCCESS) call abort
-  end subroutine D_MPI_BCAST_INT32
+  end subroutine D_MPI_BCAST_INT32_R2
+  subroutine D_MPI_BCAST_INT32_R1(buffer, count, root, comm, ierror)
+    implicit none
+    integer(int32), contiguous, intent(inout) ::  buffer(:)
+    integer        :: count, root, ierror
+    type(MPI_COMM) :: comm
+    call MPI_BCAST(buffer, count, MPI_INTEGER4, root, comm, ierror)
+    if (ierror /= MPI_SUCCESS) call abort
+  end subroutine D_MPI_BCAST_INT32_R1
   subroutine D_MPI_BCAST_LOGICAL(buffer, count, root, comm, ierror)
     implicit none
     logical, contiguous, intent(inout)        :: buffer(..)
