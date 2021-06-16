@@ -291,6 +291,8 @@ contains
     k2=kmax+2
     i2=imax+2
     j2=jmax+2
+    write(*,*) "DEBUG", iadv_mom, iadv_tke,iadv_thl,iadv_qt
+    write(*,*) "DEBUG2", iadv_sv
     !set the number of ghost cells. NB: This switch has to run in order of required ghost cells
     advarr = (/iadv_mom,iadv_tke,iadv_thl,iadv_qt/)
     if     (any(advarr==iadv_cd6).or.any(iadv_sv(1:nsv)==iadv_cd6)) then
