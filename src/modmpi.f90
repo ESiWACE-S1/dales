@@ -590,7 +590,7 @@ contains
   !MPI interfaces instantations for the various types
   subroutine D_MPI_ISEND_REAL32(buf, count, dest, tag, comm, request, ierror)
     implicit none
-    real(real32), target ::   buf(..)
+    real(real32), target, contiguous, intent(inout) ::   buf(..)
     integer       ::   count, dest, tag, ierror
     type(MPI_COMM):: comm
     type(MPI_REQUEST) :: request
@@ -607,19 +607,17 @@ contains
   end subroutine D_MPI_ISEND_REAL32
   subroutine D_MPI_ISEND_REAL64(buf, count, dest, tag, comm, request, ierror)
     implicit none
-    real(real64), target ::   buf(..)
+    real(real64), contiguous, intent(inout) ::   buf(..)
     integer       ::   count, dest, tag, ierror
     type(MPI_COMM):: comm
     type(MPI_REQUEST) :: request
-    BYTE, pointer :: buf_b
-    call c_f_pointer(c_loc(buf),buf_b)
-    call MPI_ISEND(buf_b,count,MPI_REAL8,dest,tag,comm,request,ierror)
+    call MPI_ISEND(buf,count,MPI_REAL8,dest,tag,comm,request,ierror)
     if (ierror /= MPI_SUCCESS) call abort
   end subroutine D_MPI_ISEND_REAL64
 
   subroutine D_MPI_IRECV_REAL32(buf, count, source, tag, comm, request, ierror)
     implicit none
-    real(real32), target  ::   buf(..)
+    real(real32), target, contiguous, intent(inout)  ::   buf(..)
     integer        :: count, source, tag, ierror
     type(MPI_COMM) :: comm
     type(MPI_REQUEST) :: request
@@ -630,19 +628,17 @@ contains
   end subroutine D_MPI_IRECV_REAL32
   subroutine D_MPI_IRECV_REAL64(buf, count, source, tag, comm, request, ierror)
     implicit none
-    real(real64), target  ::   buf(..)
+    real(real64), contiguous, intent(inout)  ::   buf(..)
     integer        :: count, source, tag, ierror
     type(MPI_COMM) :: comm
     type(MPI_REQUEST) :: request
-    BYTE, pointer :: buf_b
-    call c_f_pointer(c_loc(buf),buf_b)
-    call MPI_IRECV(buf_b,count,MPI_REAL8,source,tag,comm,request,ierror)
+    call MPI_IRECV(buf,count,MPI_REAL8,source,tag,comm,request,ierror)
     if (ierror /= MPI_SUCCESS) call abort
   end subroutine D_MPI_IRECV_REAL64
   
   subroutine D_MPI_BCAST_REAL32(buffer, count, root, comm, ierror)
     implicit none
-    real(real32), target   ::  buffer(..)
+    real(real32), target, contiguous, intent(inout)   ::  buffer(..)
     integer        :: count, root, ierror
     type(MPI_COMM) :: comm
     BYTE, pointer :: buf_b
@@ -652,23 +648,14 @@ contains
   end subroutine D_MPI_BCAST_REAL32
   subroutine D_MPI_BCAST_REAL64(buffer, count, root, comm, ierror)
     implicit none
-    real(real64)   ::  buffer(:)
+    real(real64), contiguous, intent(inout)  ::  buffer(..)
     integer        :: count, root, ierror
     type(MPI_COMM) :: comm
     call MPI_BCAST(buffer, count, MPI_REAL8, root, comm, ierror)
-    if (ierror /= MPI_SUCCESS) call abort
   end subroutine D_MPI_BCAST_REAL64
-  subroutine D_MPI_BCAST_REAL64_S(buffer, count, root, comm, ierror)
-    implicit none
-    real(real64)   ::  buffer
-    integer        :: count, root, ierror
-    type(MPI_COMM) :: comm
-    call MPI_BCAST(buffer, count, MPI_REAL8, root, comm, ierror)
-    if (ierror /= MPI_SUCCESS) call abort
-  end subroutine D_MPI_BCAST_REAL64_S
   subroutine D_MPI_BCAST_INT32(buffer, count, root, comm, ierror)
     implicit none
-    integer(int32), target ::  buffer(..)
+    integer(int32), contiguous, intent(inout) ::  buffer(..)
     integer        :: count, root, ierror
     type(MPI_COMM) :: comm
     call MPI_BCAST(buffer, count, MPI_INTEGER4, root, comm, ierror)
@@ -676,7 +663,7 @@ contains
   end subroutine D_MPI_BCAST_INT32
   subroutine D_MPI_BCAST_LOGICAL(buffer, count, root, comm, ierror)
     implicit none
-    logical, target        :: buffer(..)
+    logical, contiguous, intent(inout)        :: buffer(..)
     integer        :: count, root, ierror
     type(MPI_COMM) :: comm
     call MPI_BCAST(buffer, count, MPI_LOGICAL, root, comm, ierror)
@@ -693,7 +680,7 @@ contains
 
   subroutine D_MPI_ALLREDUCE_REAL32(sendbuf, recvbuf, count, op, comm, ierror)
     implicit none
-    real(real32), target   :: sendbuf(..), recvbuf(..)
+    real(real32), target, contiguous, intent(inout)   :: sendbuf(..), recvbuf(..)
     integer        :: count, ierror
     type(MPI_OP)   :: op
     type(MPI_COMM) :: comm
@@ -705,7 +692,7 @@ contains
   end subroutine D_MPI_ALLREDUCE_REAL32
   subroutine D_MPI_ALLREDUCE_REAL64(sendbuf, recvbuf, count, op, comm, ierror)
     implicit none
-    real(real64), target   :: sendbuf(..), recvbuf(..)
+    real(real64), contiguous, intent(inout)   :: sendbuf(..), recvbuf(..)
     integer        :: count, ierror
     type(MPI_OP)   :: op
     type(MPI_COMM) :: comm
@@ -714,7 +701,7 @@ contains
   end subroutine D_MPI_ALLREDUCE_REAL64
   subroutine D_MPI_ALLREDUCE_INT32(sendbuf, recvbuf, count, op, comm, ierror)
     implicit none
-    integer(int32), target :: sendbuf(..), recvbuf(..)
+    integer(int32), target, contiguous, intent(inout) :: sendbuf(..), recvbuf(..)
     integer        :: count, ierror
     type(MPI_OP)   :: op
     type(MPI_COMM) :: comm
@@ -723,7 +710,7 @@ contains
   end subroutine D_MPI_ALLREDUCE_INT32
   subroutine D_MPI_ALLREDUCE_REAL32_IP(recvbuf, count, op, comm, ierror)
     implicit none
-    real(real32), target   :: recvbuf(..)
+    real(real32), target, contiguous, intent(inout)   :: recvbuf(..)
     integer        :: count, ierror
     type(MPI_OP)   :: op
     type(MPI_COMM) :: comm
@@ -734,7 +721,7 @@ contains
   end subroutine D_MPI_ALLREDUCE_REAL32_IP
   subroutine D_MPI_ALLREDUCE_REAL64_IP(recvbuf, count, op, comm, ierror)
     implicit none
-    real(real64), target   :: recvbuf(..)
+    real(real64), contiguous, intent(inout)   :: recvbuf(..)
     integer        :: count, ierror
     type(MPI_OP)   :: op
     type(MPI_COMM) :: comm
@@ -744,7 +731,7 @@ contains
 
   subroutine D_MPI_ALLTOALL_REAL32(sendbuf, sendcount, recvbuf, recvcount, comm, ierror)
     implicit none
-    real(real32), target   :: sendbuf(..), recvbuf(..)
+    real(real32), target, contiguous, intent(inout)   :: sendbuf(..), recvbuf(..)
     integer        :: sendcount, recvcount, ierror
     type(MPI_COMM) :: comm
     BYTE, pointer :: bufs_b, bufr_b
@@ -755,7 +742,7 @@ contains
   end subroutine D_MPI_ALLTOALL_REAL32
   subroutine D_MPI_ALLTOALL_REAL64(sendbuf, sendcount, recvbuf, recvcount, comm, ierror)
     implicit none
-    real(real64), target   :: sendbuf(..), recvbuf(..)
+    real(real64), contiguous, intent(inout)   :: sendbuf(..), recvbuf(..)
     integer        :: sendcount, recvcount, ierror
     type(MPI_COMM) :: comm
     call MPI_ALLTOALL(sendbuf, sendcount, MPI_REAL8, recvbuf, recvcount, MPI_REAL8, comm, ierror)
@@ -764,7 +751,7 @@ contains
 
   subroutine D_MPI_REDUCE_REAL32(sendbuf, recvbuf, count, op, root, comm, ierror)
     implicit none
-    real(real32), target   :: sendbuf(..), recvbuf(..)
+    real(real32), target, contiguous, intent(inout)   :: sendbuf(..), recvbuf(..)
     integer        :: count, root, ierror
     type(MPI_OP)   :: op
     type(MPI_COMM) :: comm
@@ -776,7 +763,7 @@ contains
   end subroutine D_MPI_REDUCE_REAL32
   subroutine D_MPI_REDUCE_REAL64(sendbuf, recvbuf, count, op, root, comm, ierror)
     implicit none
-    real(real64), target   :: sendbuf(..), recvbuf(..)
+    real(real64), contiguous, intent(inout)   :: sendbuf(..), recvbuf(..)
     integer        :: count, root, ierror
     type(MPI_OP)   :: op
     type(MPI_COMM) :: comm
@@ -785,7 +772,7 @@ contains
   end subroutine D_MPI_REDUCE_REAL64
   subroutine D_MPI_REDUCE_REAL32_IP(recvbuf, count, op, root, comm, ierror)
     implicit none
-    real(real32), target   :: recvbuf(..)
+    real(real32), target, contiguous, intent(inout)   :: recvbuf(..)
     integer        :: count, root, ierror
     type(MPI_OP)   :: op
     type(MPI_COMM) :: comm
@@ -806,7 +793,7 @@ contains
 
   subroutine D_MPI_GATHER_REAL32(sendbuf, sendcount, recvbuf, recvcount, root, comm, ierror)
     implicit none
-    real(real32), target   :: sendbuf(..), recvbuf(..)
+    real(real32), target, contiguous, intent(inout)   :: sendbuf(..), recvbuf(..)
     integer        :: sendcount, recvcount, root, ierror
     type(MPI_COMM) :: comm
     BYTE, pointer :: bufs_b, bufr_b
@@ -819,7 +806,7 @@ contains
   end subroutine D_MPI_GATHER_REAL32
   subroutine D_MPI_GATHER_REAL64(sendbuf, sendcount, recvbuf, recvcount, root, comm, ierror)
     implicit none
-    real(real64), target   :: sendbuf(..), recvbuf(..)
+    real(real64), contiguous, intent(inout)   :: sendbuf(..), recvbuf(..)
     integer        :: sendcount, recvcount, root, ierror
     type(MPI_COMM) :: comm
     call MPI_GATHER( sendbuf, sendcount, MPI_REAL8 &
