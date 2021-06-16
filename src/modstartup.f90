@@ -1417,7 +1417,7 @@ contains
     call D_MPI_BCAST(drhobdzf    ,k1,0,comm3d,mpierr)
     call D_MPI_BCAST(drhobdzh    ,k1,0,comm3d,mpierr)
 
-    deallocate(pb,tb)
+    deallocate(height, pb,tb)
 
   end subroutine baseprofs
 
