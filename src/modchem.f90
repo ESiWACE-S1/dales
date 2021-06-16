@@ -240,7 +240,7 @@ contains
 SUBROUTINE initchem
   use modglobal,   only : i1,j1,nsv, ifnamopt, fname_options, ifoutput, cexpnr,timeav_glob,btime,tres,lwarmstart,checknamelisterror
   use modmpi,      only : myid, mpi_logical, mpi_integer,  comm3d, mpierr &
-                        , D_MPI_BCAST
+                        , D_MPI_BCAST_S
   use modsurfdata, only : lCHon
   implicit none
 
@@ -275,21 +275,21 @@ SUBROUTINE initchem
   endif
 
 
-  call D_MPI_BCAST(lchem       ,1, 0,comm3d, mpierr)
-  call D_MPI_BCAST(ldiuvar     ,1, 0,comm3d, mpierr)
-  call D_MPI_BCAST(lchconst    ,1, 0,comm3d, mpierr)
-  call D_MPI_BCAST(lchmovie    ,1, 0,comm3d, mpierr)
-  call D_MPI_BCAST(lsegr       ,1, 0,comm3d, mpierr)
-  call D_MPI_BCAST(lcloudKconst,1, 0,comm3d,mpierr)
-  call D_MPI_BCAST(tnor        ,1, 0,comm3d, mpierr)
-  call D_MPI_BCAST(firstchem   ,1, 0,comm3d, mpierr)
-  call D_MPI_BCAST(lastchem    ,1, 0,comm3d, mpierr)
-  call D_MPI_BCAST(t_ref       ,1, 0,comm3d, mpierr)
-  call D_MPI_BCAST(q_ref       ,1, 0,comm3d, mpierr)
-  call D_MPI_BCAST(p_ref       ,1, 0,comm3d, mpierr)
-  call D_MPI_BCAST(h_ref       ,1, 0,comm3d, mpierr)
-  call D_MPI_BCAST(itermin     ,1, 0,comm3d, mpierr)
-  call D_MPI_BCAST(dtchmovie   ,1, 0,comm3d, mpierr)
+  call D_MPI_BCAST_S(lchem       ,1, 0,comm3d, mpierr)
+  call D_MPI_BCAST_S(ldiuvar     ,1, 0,comm3d, mpierr)
+  call D_MPI_BCAST_S(lchconst    ,1, 0,comm3d, mpierr)
+  call D_MPI_BCAST_S(lchmovie    ,1, 0,comm3d, mpierr)
+  call D_MPI_BCAST_S(lsegr       ,1, 0,comm3d, mpierr)
+  call D_MPI_BCAST_S(lcloudKconst,1, 0,comm3d,mpierr)
+  call D_MPI_BCAST_S(tnor        ,1, 0,comm3d, mpierr)
+  call D_MPI_BCAST_S(firstchem   ,1, 0,comm3d, mpierr)
+  call D_MPI_BCAST_S(lastchem    ,1, 0,comm3d, mpierr)
+  call D_MPI_BCAST_S(t_ref       ,1, 0,comm3d, mpierr)
+  call D_MPI_BCAST_S(q_ref       ,1, 0,comm3d, mpierr)
+  call D_MPI_BCAST_S(p_ref       ,1, 0,comm3d, mpierr)
+  call D_MPI_BCAST_S(h_ref       ,1, 0,comm3d, mpierr)
+  call D_MPI_BCAST_S(itermin     ,1, 0,comm3d, mpierr)
+  call D_MPI_BCAST_S(dtchmovie   ,1, 0,comm3d, mpierr)
 
   lCHon = lchem
 

@@ -83,7 +83,7 @@ save
 contains
 !> Initialization routine, reads namelists and inits variables
 subroutine initsimpleicestat
-    use modmpi,    only  : myid, mpi_logical, comm3d, mpierr, D_MPI_BCAST
+    use modmpi,    only  : myid, comm3d, mpierr, D_MPI_BCAST_S
     use modglobal, only  : ifnamopt, fname_options, cexpnr, ifoutput, &
               dtav_glob, timeav_glob, ladaptive, k1, dtmax,btime,tres,lwarmstart,checknamelisterror
     use modstat_nc, only : lnetcdf, open_nc,define_nc,redefine_nc,ncinfo,nctiminfo,writestat_dims_nc
@@ -107,9 +107,9 @@ subroutine initsimpleicestat
       close(ifnamopt)
     end if
 
-    call D_MPI_BCAST(lmicrostat  ,1,0,comm3d,mpierr)
-    call D_MPI_BCAST(dtav        ,1,0,comm3d,mpierr)
-    call D_MPI_BCAST(timeav      ,1,0,comm3d,mpierr)
+    call D_MPI_BCAST_S(lmicrostat  ,1,0,comm3d,mpierr)
+    call D_MPI_BCAST_S(dtav        ,1,0,comm3d,mpierr)
+    call D_MPI_BCAST_S(timeav      ,1,0,comm3d,mpierr)
     idtav = dtav/tres
     itimeav = timeav/tres
 

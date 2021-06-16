@@ -45,7 +45,7 @@ contains
 !> Initializing Checksim. Read out the namelist, initializing the variables
   subroutine initchecksim
     use modglobal, only : ifnamopt, fname_options,dtmax,ladaptive,btime,tres,checknamelisterror
-    use modmpi,    only : myid,comm3d,mpierr, D_MPI_BCAST
+    use modmpi,    only : myid,comm3d,mpierr, D_MPI_BCAST_S
     implicit none
     integer :: ierr
     namelist/NAMCHECKSIM/ &
@@ -63,7 +63,7 @@ contains
       end if
     end if
 
-    call D_MPI_BCAST(tcheck     ,1,0,comm3d,mpierr)
+    call D_MPI_BCAST_S(tcheck     ,1,0,comm3d,mpierr)
     itcheck = floor(tcheck/tres)
     tnext = itcheck+btime
 

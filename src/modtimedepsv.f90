@@ -55,7 +55,7 @@ save
 contains
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   subroutine inittimedepsv
-    use modmpi,     only :myid,mpi_logical,mpierr,comm3d,D_MPI_BCAST
+    use modmpi,     only :myid,mpierr,comm3d,D_MPI_BCAST, D_MPI_BCAST_S
     use modglobal,  only :cexpnr,kmax,k1,ifinput,runtime,nsv,ntimedep
     use modtestbed, only :ltestbed,ntnudge
     
@@ -158,11 +158,11 @@ contains
    endif
 
 
-    call D_MPI_BCAST(timesvsurf(1:kflux),kflux,0,comm3d,mpierr)
-    call D_MPI_BCAST(svst             ,kflux*nsv,0,comm3d,mpierr)
-    call D_MPI_BCAST(timesvz(1:kls)    ,kls,0,comm3d,mpierr)
-    call D_MPI_BCAST(ltimedepsvsurf ,1,0,comm3d,mpierr)
-    call D_MPI_BCAST(ltimedepsvz    ,1,0,comm3d,mpierr)
+    call D_MPI_BCAST  (timesvsurf(1:kflux),kflux,0,comm3d,mpierr)
+    call D_MPI_BCAST  (svst             ,kflux*nsv,0,comm3d,mpierr)
+    call D_MPI_BCAST  (timesvz(1:kls)    ,kls,0,comm3d,mpierr)
+    call D_MPI_BCAST_S(ltimedepsvsurf ,1,0,comm3d,mpierr)
+    call D_MPI_BCAST_S(ltimedepsvz    ,1,0,comm3d,mpierr)
     do n=1,nsv
          call D_MPI_BCAST(svzt(1:k1,1:kls,n),kmax*kls,0,comm3d,mpierr)
     enddo

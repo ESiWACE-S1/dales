@@ -115,7 +115,8 @@ contains
 
   subroutine subgridnamelist
     use modglobal, only : ifnamopt,fname_options,checknamelisterror
-    use modmpi,    only : myid, comm3d, mpierr, mpi_logical, D_MPI_BCAST
+    use modmpi,    only : myid, comm3d, mpierr, mpi_logical, D_MPI_BCAST, &
+                          D_MPI_BCAST_S
 
     implicit none
 
@@ -134,18 +135,18 @@ contains
       close(ifnamopt)
     end if
 
-    call D_MPI_BCAST(ldelta          ,1, 0,comm3d,mpierr)
-    call D_MPI_BCAST(lmason          ,1, 0,comm3d,mpierr)
-    call D_MPI_BCAST(lsmagorinsky    ,1, 0,comm3d,mpierr)
-    call D_MPI_BCAST(lanisotrop      ,1, 0,comm3d,mpierr)
-    call D_MPI_BCAST(sgs_surface_fix ,1, 0,comm3d,mpierr)
-    call D_MPI_BCAST(nmason          ,1, 0,comm3d,mpierr)
-    call D_MPI_BCAST(cs              ,1, 0,comm3d,mpierr)
-    call D_MPI_BCAST(cf              ,1, 0,comm3d,mpierr)
-    call D_MPI_BCAST(cn              ,1, 0,comm3d,mpierr)
-    call D_MPI_BCAST(Rigc            ,1, 0,comm3d,mpierr)
-    call D_MPI_BCAST(Prandtl         ,1, 0,comm3d,mpierr)
-    call D_MPI_BCAST(ch1             ,1, 0,comm3d,mpierr)
+    call D_MPI_BCAST_S(ldelta          ,1, 0,comm3d,mpierr)
+    call D_MPI_BCAST_S(lmason          ,1, 0,comm3d,mpierr)
+    call D_MPI_BCAST_S(lsmagorinsky    ,1, 0,comm3d,mpierr)
+    call D_MPI_BCAST_S(lanisotrop      ,1, 0,comm3d,mpierr)
+    call D_MPI_BCAST_S(sgs_surface_fix ,1, 0,comm3d,mpierr)
+    call D_MPI_BCAST_S(nmason          ,1, 0,comm3d,mpierr)
+    call D_MPI_BCAST_S(cs              ,1, 0,comm3d,mpierr)
+    call D_MPI_BCAST_S(cf              ,1, 0,comm3d,mpierr)
+    call D_MPI_BCAST_S(cn              ,1, 0,comm3d,mpierr)
+    call D_MPI_BCAST_S(Rigc            ,1, 0,comm3d,mpierr)
+    call D_MPI_BCAST_S(Prandtl         ,1, 0,comm3d,mpierr)
+    call D_MPI_BCAST_S(ch1             ,1, 0,comm3d,mpierr)
 
   end subroutine subgridnamelist
 

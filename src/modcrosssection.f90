@@ -73,7 +73,7 @@ contains
 !> Initializing Crosssection. Read out the namelist, initializing the variables
   subroutine initcrosssection
     use modmpi,   only :myid,mpierr,comm3d,mpi_logical,mpi_integer,cmyid,myidx,myidy &
-                       , D_MPI_BCAST
+                       , D_MPI_BCAST, D_MPI_BCAST_S
     use modglobal,only :imax,jmax,ifnamopt,fname_options,dtmax,dtav_glob,ladaptive,j1,kmax,i1,dt_lim,cexpnr,tres,btime,checknamelisterror
     use modstat_nc,only : lnetcdf,open_nc, define_nc,ncinfo,nctiminfo,writestat_dims_nc
 
@@ -100,15 +100,15 @@ contains
       close(ifnamopt)
     end if
 
-    call D_MPI_BCAST(dtav       ,1,0,comm3d,mpierr)
-    call D_MPI_BCAST(lcross     ,1,0,comm3d,mpierr)
-    call D_MPI_BCAST(lbinary    ,1,0,comm3d,mpierr)
-    call D_MPI_BCAST(crossheight(1:100),100,0,comm3d,mpierr)
-    call D_MPI_BCAST(crossplane ,1,0,comm3d,mpierr)
-    call D_MPI_BCAST(crossortho ,1,0,comm3d,mpierr)
-    call D_MPI_BCAST(lxy        ,1,0,comm3d,mpierr)
-    call D_MPI_BCAST(lxz        ,1,0,comm3d,mpierr)
-    call D_MPI_BCAST(lyz        ,1,0,comm3d,mpierr)
+    call D_MPI_BCAST_S(dtav       ,1,0,comm3d,mpierr)
+    call D_MPI_BCAST_S(lcross     ,1,0,comm3d,mpierr)
+    call D_MPI_BCAST_S(lbinary    ,1,0,comm3d,mpierr)
+    call D_MPI_BCAST  (crossheight(1:100),100,0,comm3d,mpierr)
+    call D_MPI_BCAST_S(crossplane ,1,0,comm3d,mpierr)
+    call D_MPI_BCAST_S(crossortho ,1,0,comm3d,mpierr)
+    call D_MPI_BCAST_S(lxy        ,1,0,comm3d,mpierr)
+    call D_MPI_BCAST_S(lxz        ,1,0,comm3d,mpierr)
+    call D_MPI_BCAST_S(lyz        ,1,0,comm3d,mpierr)
 
     nxy=0
     k=1

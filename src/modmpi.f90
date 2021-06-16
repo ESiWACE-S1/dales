@@ -77,6 +77,11 @@ save
     procedure :: D_MPI_IRECV_REAL32
     procedure :: D_MPI_IRECV_REAL64
   end interface
+  interface D_MPI_BCAST_S
+    procedure :: D_MPI_BCAST_REAL64_S
+    procedure :: D_MPI_BCAST_INT32_S
+    procedure :: D_MPI_BCAST_LOGICAL_S
+  end interface
   interface D_MPI_BCAST
     procedure :: D_MPI_BCAST_REAL32
     procedure :: D_MPI_BCAST_REAL64
@@ -636,6 +641,31 @@ contains
     if (ierror /= MPI_SUCCESS) call abort
   end subroutine D_MPI_IRECV_REAL64
   
+
+  subroutine D_MPI_BCAST_REAL64_S(buffer, count, root, comm, ierror)
+    implicit none
+    real(real64), intent(inout)  ::  buffer
+    integer        :: count, root, ierror
+    type(MPI_COMM) :: comm
+    call MPI_BCAST(buffer, count, MPI_REAL8, root, comm, ierror)
+  end subroutine D_MPI_BCAST_REAL64_S
+  subroutine D_MPI_BCAST_INT32_S(buffer, count, root, comm, ierror)
+    implicit none
+    integer(int32), intent(inout) ::  buffer
+    integer        :: count, root, ierror
+    type(MPI_COMM) :: comm
+    call MPI_BCAST(buffer, count, MPI_INTEGER4, root, comm, ierror)
+    if (ierror /= MPI_SUCCESS) call abort
+  end subroutine D_MPI_BCAST_INT32_S
+  subroutine D_MPI_BCAST_LOGICAL_S(buffer, count, root, comm, ierror)
+    implicit none
+    logical, intent(inout)        :: buffer
+    integer        :: count, root, ierror
+    type(MPI_COMM) :: comm
+    call MPI_BCAST(buffer, count, MPI_LOGICAL, root, comm, ierror)
+    if (ierror /= MPI_SUCCESS) call abort
+  end subroutine D_MPI_BCAST_LOGICAL_S
+
   subroutine D_MPI_BCAST_REAL32(buffer, count, root, comm, ierror)
     implicit none
     real(real32), target, contiguous, intent(inout)   ::  buffer(..)

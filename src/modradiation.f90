@@ -35,7 +35,7 @@ contains
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   subroutine initradiation
     use modglobal,    only : i1,ih,j1,jh,k1,nsv,ih,jh,btime,tres,dt_lim,ifnamopt,fname_options,checknamelisterror
-    use modmpi,       only : myid,comm3d,mpi_logical,mpi_integer,D_MPI_BCAST
+    use modmpi,       only : myid,comm3d,mpi_logical,mpi_integer,D_MPI_BCAST_S
     implicit none
 
     integer :: ierr
@@ -63,26 +63,26 @@ contains
       close(ifnamopt)
     end if
 
-    call D_MPI_BCAST(SSA,1,0,comm3d,ierr)
-    call D_MPI_BCAST(iDE,1,0,comm3d,ierr)
-    call D_MPI_BCAST(laero,1,0,comm3d,ierr)
+    call D_MPI_BCAST_S(SSA,1,0,comm3d,ierr)
+    call D_MPI_BCAST_S(iDE,1,0,comm3d,ierr)
+    call D_MPI_BCAST_S(laero,1,0,comm3d,ierr)
 
-    call D_MPI_BCAST(lCnstZenith,1,0,comm3d,ierr)
-    call D_MPI_BCAST(cnstZenith, 1, 0,comm3d,ierr)
-    call D_MPI_BCAST(lCnstAlbedo,1,0,comm3d,ierr)
-    call D_MPI_BCAST(ioverlap,   1,0,comm3d,ierr)
-    call D_MPI_BCAST(inflglw,    1,0,comm3d,ierr)
-    call D_MPI_BCAST(iceflglw,   1,0,comm3d,ierr)
-    call D_MPI_BCAST(liqflglw,   1,0,comm3d,ierr)
-    call D_MPI_BCAST(inflgsw,    1,0,comm3d,ierr)
-    call D_MPI_BCAST(iceflgsw,   1,0,comm3d,ierr)
-    call D_MPI_BCAST(liqflgsw,   1,0,comm3d,ierr)
-    call D_MPI_BCAST(ocean,      1,0,comm3d,ierr)
-    call D_MPI_BCAST(usero3,     1,0,comm3d,ierr)
-    call D_MPI_BCAST(co2factor,  1, 0,comm3d,ierr)
-    call D_MPI_BCAST(doperpetual,1,0,comm3d,ierr)
-    call D_MPI_BCAST(doseasons,  1,0,comm3d,ierr)
-    call D_MPI_BCAST(iyear,      1,0,comm3d,ierr)
+    call D_MPI_BCAST_S(lCnstZenith,1,0,comm3d,ierr)
+    call D_MPI_BCAST_S(cnstZenith, 1, 0,comm3d,ierr)
+    call D_MPI_BCAST_S(lCnstAlbedo,1,0,comm3d,ierr)
+    call D_MPI_BCAST_S(ioverlap,   1,0,comm3d,ierr)
+    call D_MPI_BCAST_S(inflglw,    1,0,comm3d,ierr)
+    call D_MPI_BCAST_S(iceflglw,   1,0,comm3d,ierr)
+    call D_MPI_BCAST_S(liqflglw,   1,0,comm3d,ierr)
+    call D_MPI_BCAST_S(inflgsw,    1,0,comm3d,ierr)
+    call D_MPI_BCAST_S(iceflgsw,   1,0,comm3d,ierr)
+    call D_MPI_BCAST_S(liqflgsw,   1,0,comm3d,ierr)
+    call D_MPI_BCAST_S(ocean,      1,0,comm3d,ierr)
+    call D_MPI_BCAST_S(usero3,     1,0,comm3d,ierr)
+    call D_MPI_BCAST_S(co2factor,  1, 0,comm3d,ierr)
+    call D_MPI_BCAST_S(doperpetual,1,0,comm3d,ierr)
+    call D_MPI_BCAST_S(doseasons,  1,0,comm3d,ierr)
+    call D_MPI_BCAST_S(iyear,      1,0,comm3d,ierr)
 
     allocate(thlprad   (2-ih:i1+ih,2-jh:j1+jh,k1) )
     allocate(swd       (2-ih:i1+ih,2-jh:j1+jh,k1) )

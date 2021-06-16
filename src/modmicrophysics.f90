@@ -36,7 +36,7 @@ implicit none
 
 contains
   subroutine initmicrophysics
-    use modmpi,   only :myid,comm3d,mpi_integer,mpi_logical, D_MPI_BCAST
+    use modmpi,   only :myid,comm3d, D_MPI_BCAST_S
     use modglobal,only :ifnamopt,fname_options,nsv,checknamelisterror
     use modbulkmicro, only : initbulkmicro
     use modsimpleice, only : initsimpleice
@@ -61,19 +61,19 @@ contains
       close(ifnamopt)
     end if
 
-    call D_MPI_BCAST(imicro,   1, 0,comm3d,ierr)
-    call D_MPI_BCAST(l_sb,     1, 0,comm3d,ierr)
-    call D_MPI_BCAST(l_rain,   1, 0,comm3d,ierr)
-    call D_MPI_BCAST(l_sedc,   1, 0,comm3d,ierr)
-    call D_MPI_BCAST(l_mur_cst,1, 0,comm3d,ierr)
-    call D_MPI_BCAST(l_berry,  1, 0,comm3d,ierr)
-    call D_MPI_BCAST(l_graupel,1, 0,comm3d,ierr)
-    call D_MPI_BCAST(l_warm,   1, 0,comm3d,ierr)
-    call D_MPI_BCAST(mur_cst,  1, 0,comm3d,ierr)
-    call D_MPI_BCAST(Nc_0,     1, 0,comm3d,ierr)
-    call D_MPI_BCAST(sig_g,    1, 0,comm3d,ierr)
-    call D_MPI_BCAST(sig_gr,   1, 0,comm3d,ierr)
-    call D_MPI_BCAST(courantp, 1, 0,comm3d,ierr)
+    call D_MPI_BCAST_S(imicro,   1, 0,comm3d,ierr)
+    call D_MPI_BCAST_S(l_sb,     1, 0,comm3d,ierr)
+    call D_MPI_BCAST_S(l_rain,   1, 0,comm3d,ierr)
+    call D_MPI_BCAST_S(l_sedc,   1, 0,comm3d,ierr)
+    call D_MPI_BCAST_S(l_mur_cst,1, 0,comm3d,ierr)
+    call D_MPI_BCAST_S(l_berry,  1, 0,comm3d,ierr)
+    call D_MPI_BCAST_S(l_graupel,1, 0,comm3d,ierr)
+    call D_MPI_BCAST_S(l_warm,   1, 0,comm3d,ierr)
+    call D_MPI_BCAST_S(mur_cst,  1, 0,comm3d,ierr)
+    call D_MPI_BCAST_S(Nc_0,     1, 0,comm3d,ierr)
+    call D_MPI_BCAST_S(sig_g,    1, 0,comm3d,ierr)
+    call D_MPI_BCAST_S(sig_gr,   1, 0,comm3d,ierr)
+    call D_MPI_BCAST_S(courantp, 1, 0,comm3d,ierr)
 
     select case (imicro)
     case(imicro_none)

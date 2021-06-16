@@ -60,7 +60,7 @@ module modbulkmicro3
 !> Initializes and allocates the arrays
   subroutine initbulkmicro3
     use modglobal, only : lwarmstart,ifnamopt,fname_options,i1,ih,j1,jh,k1
-    use modmpi,    only : myid,comm3d,mpi_logical,D_MPI_BCAST
+    use modmpi,    only : myid,comm3d,D_MPI_BCAST_S
     implicit none
     integer :: ierr
 
@@ -141,46 +141,46 @@ module modbulkmicro3
      ! #sb3 END
 
     ! send values
-     call D_MPI_BCAST(l_sb_classic,      1, 0,comm3d,ierr)
-     call D_MPI_BCAST(l_sb_dumpall,      1, 0,comm3d,ierr)
-     call D_MPI_BCAST(l_sb_all_or,       1, 0,comm3d,ierr)
-     call D_MPI_BCAST(l_sb_dbg,          1, 0,comm3d,ierr)
-     call D_MPI_BCAST(l_clouds_init,     1, 0,comm3d,ierr)
-     call D_MPI_BCAST(l_ccn_init,        1, 0,comm3d,ierr)
-     call D_MPI_BCAST(l_corr_neg_qt,     1, 0,comm3d,ierr)
+     call D_MPI_BCAST_S(l_sb_classic,      1, 0,comm3d,ierr)
+     call D_MPI_BCAST_S(l_sb_dumpall,      1, 0,comm3d,ierr)
+     call D_MPI_BCAST_S(l_sb_all_or,       1, 0,comm3d,ierr)
+     call D_MPI_BCAST_S(l_sb_dbg,          1, 0,comm3d,ierr)
+     call D_MPI_BCAST_S(l_clouds_init,     1, 0,comm3d,ierr)
+     call D_MPI_BCAST_S(l_ccn_init,        1, 0,comm3d,ierr)
+     call D_MPI_BCAST_S(l_corr_neg_qt,     1, 0,comm3d,ierr)
      !
-     call D_MPI_BCAST(l_sb_lim_aggr,     1, 0,comm3d,ierr)
-     call D_MPI_BCAST(l_sb_stickyice,    1, 0,comm3d,ierr)
-     call D_MPI_BCAST(l_sb_conv_par ,    1, 0,comm3d,ierr)
+     call D_MPI_BCAST_S(l_sb_lim_aggr,     1, 0,comm3d,ierr)
+     call D_MPI_BCAST_S(l_sb_stickyice,    1, 0,comm3d,ierr)
+     call D_MPI_BCAST_S(l_sb_conv_par ,    1, 0,comm3d,ierr)
      !
-     call D_MPI_BCAST(l_c_ccn,           1, 0,comm3d,ierr)
-     call D_MPI_BCAST(l_sb_sat_max,      1, 0,comm3d,ierr)
-     call D_MPI_BCAST(l_sb_nuc_sat,      1, 0,comm3d,ierr)
-     call D_MPI_BCAST(l_sb_nuc_expl,     1, 0,comm3d,ierr)
-     call D_MPI_BCAST(l_sb_nuc_diff,     1, 0,comm3d,ierr)
-     call D_MPI_BCAST(l_sb_inuc_sat,     1, 0,comm3d,ierr)
-     call D_MPI_BCAST(l_sb_inuc_expl,    1, 0,comm3d,ierr)
-     call D_MPI_BCAST(l_sb_reisner,      1, 0,comm3d,ierr)
+     call D_MPI_BCAST_S(l_c_ccn,           1, 0,comm3d,ierr)
+     call D_MPI_BCAST_S(l_sb_sat_max,      1, 0,comm3d,ierr)
+     call D_MPI_BCAST_S(l_sb_nuc_sat,      1, 0,comm3d,ierr)
+     call D_MPI_BCAST_S(l_sb_nuc_expl,     1, 0,comm3d,ierr)
+     call D_MPI_BCAST_S(l_sb_nuc_diff,     1, 0,comm3d,ierr)
+     call D_MPI_BCAST_S(l_sb_inuc_sat,     1, 0,comm3d,ierr)
+     call D_MPI_BCAST_S(l_sb_inuc_expl,    1, 0,comm3d,ierr)
+     call D_MPI_BCAST_S(l_sb_reisner,      1, 0,comm3d,ierr)
      !
-     call D_MPI_BCAST(l_sb_reisner,      1, 0,comm3d,ierr)
+     call D_MPI_BCAST_S(l_sb_reisner,      1, 0,comm3d,ierr)
      !
-     call D_MPI_BCAST(N_inuc_R ,         1, 0,comm3d,ierr)
-     call D_MPI_BCAST(c_inuc_R ,         1, 0,comm3d,ierr)
-     call D_MPI_BCAST(a1_inuc_R ,        1, 0,comm3d,ierr)
-     call D_MPI_BCAST(a2_inuc_R ,        1, 0,comm3d,ierr)
-     call D_MPI_BCAST(n_i_max ,          1, 0,comm3d,ierr)
-     call D_MPI_BCAST(N_inuc ,           1, 0,comm3d,ierr)
-     call D_MPI_BCAST(tmp_inuc,          1, 0,comm3d,ierr)
-     call D_MPI_BCAST(x_inuc ,           1, 0,comm3d,ierr)
-     call D_MPI_BCAST(c_ccn,             1, 0,comm3d,ierr)
-     call D_MPI_BCAST(n_clmax,           1, 0,comm3d,ierr)
-     call D_MPI_BCAST(kappa_ccn ,        1, 0,comm3d,ierr)
-     call D_MPI_BCAST(sat_max ,          1, 0,comm3d,ierr)
-     call D_MPI_BCAST(x_cnuc ,           1, 0,comm3d,ierr)
+     call D_MPI_BCAST_S(N_inuc_R ,         1, 0,comm3d,ierr)
+     call D_MPI_BCAST_S(c_inuc_R ,         1, 0,comm3d,ierr)
+     call D_MPI_BCAST_S(a1_inuc_R ,        1, 0,comm3d,ierr)
+     call D_MPI_BCAST_S(a2_inuc_R ,        1, 0,comm3d,ierr)
+     call D_MPI_BCAST_S(n_i_max ,          1, 0,comm3d,ierr)
+     call D_MPI_BCAST_S(N_inuc ,           1, 0,comm3d,ierr)
+     call D_MPI_BCAST_S(tmp_inuc,          1, 0,comm3d,ierr)
+     call D_MPI_BCAST_S(x_inuc ,           1, 0,comm3d,ierr)
+     call D_MPI_BCAST_S(c_ccn,             1, 0,comm3d,ierr)
+     call D_MPI_BCAST_S(n_clmax,           1, 0,comm3d,ierr)
+     call D_MPI_BCAST_S(kappa_ccn ,        1, 0,comm3d,ierr)
+     call D_MPI_BCAST_S(sat_max ,          1, 0,comm3d,ierr)
+     call D_MPI_BCAST_S(x_cnuc ,           1, 0,comm3d,ierr)
      !
-     call D_MPI_BCAST(Nc0,               1, 0,comm3d,ierr)
-     call D_MPI_BCAST(xc0_min,           1, 0,comm3d,ierr)
-     call D_MPI_BCAST(Nccn0,             1, 0,comm3d,ierr)
+     call D_MPI_BCAST_S(Nc0,               1, 0,comm3d,ierr)
+     call D_MPI_BCAST_S(xc0_min,           1, 0,comm3d,ierr)
+     call D_MPI_BCAST_S(Nccn0,             1, 0,comm3d,ierr)
 
 
   ! adding calculation of the constant part for moment

@@ -43,7 +43,7 @@ SAVE
 
 contains
   subroutine initnudge
-    use modmpi,   only :myid,mpierr,comm3d,mpi_logical,D_MPI_BCAST
+    use modmpi,   only :myid,mpierr,comm3d,D_MPI_BCAST,D_MPI_BCAST_S
     use modglobal,only :ifnamopt,fname_options,runtime,cexpnr,ifinput,k1,kmax,checknamelisterror
     implicit none
 
@@ -70,7 +70,7 @@ contains
       write(6 ,NAMNUDGE)
       close(ifnamopt)
     end if
-    call D_MPI_BCAST(lnudge    , 1,0,comm3d,mpierr)
+    call D_MPI_BCAST_S(lnudge    , 1,0,comm3d,mpierr)
 
     if (.not. lnudge) return
     if(myid==0) then

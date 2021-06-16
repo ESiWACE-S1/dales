@@ -80,7 +80,7 @@ save
 contains
 !> Initializing Timestat. Read out the namelist, initializing the variables
   subroutine inittimestat
-    use modmpi,    only : myid,comm3d,mpi_logical,mpierr,mpi_integer, D_MPI_BCAST
+    use modmpi,    only : myid,comm3d,mpi_logical,mpierr,mpi_integer, D_MPI_BCAST_S
     use modglobal, only : ifnamopt, fname_options,cexpnr,dtmax,ifoutput,dtav_glob,tres,&
                           ladaptive,k1,kmax,rd,rv,dt_lim,btime,i1,j1,lwarmstart,checknamelisterror
     use modfields, only : thlprof,qtprof,svprof
@@ -104,12 +104,12 @@ contains
       close(ifnamopt)
     end if
 
-    call D_MPI_BCAST(dtav     ,1,0,comm3d,mpierr)
-    call D_MPI_BCAST(ltimestat  ,1,0,comm3d,mpierr)
-    call D_MPI_BCAST(blh_thres,1,0,comm3d,mpierr)
-    call D_MPI_BCAST(iblh_meth  ,1,0,comm3d,mpierr)
-    call D_MPI_BCAST(iblh_var   ,1,0,comm3d,mpierr)
-    call D_MPI_BCAST(blh_nsamp  ,1,0,comm3d,mpierr)
+    call D_MPI_BCAST_S(dtav     ,1,0,comm3d,mpierr)
+    call D_MPI_BCAST_S(ltimestat  ,1,0,comm3d,mpierr)
+    call D_MPI_BCAST_S(blh_thres,1,0,comm3d,mpierr)
+    call D_MPI_BCAST_S(iblh_meth  ,1,0,comm3d,mpierr)
+    call D_MPI_BCAST_S(iblh_var   ,1,0,comm3d,mpierr)
+    call D_MPI_BCAST_S(blh_nsamp  ,1,0,comm3d,mpierr)
     idtav = dtav/tres
 
     tnext = idtav+btime

@@ -51,7 +51,7 @@ contains
 !> Initializing fielddump. Read out the namelist, initializing the variables
   subroutine initfielddump
     use modmpi,   only :myid,comm3d,mpi_logical,mpi_integer,myidx,myidy &
-                       , D_MPI_BCAST
+                       , D_MPI_BCAST_S
     use modglobal,only :imax,jmax,kmax,cexpnr,ifnamopt,fname_options,dtmax,dtav_glob,kmax, ladaptive,dt_lim,btime,tres,checknamelisterror
     use modstat_nc,only : lnetcdf,open_nc, define_nc,ncinfo,writestat_dims_nc
     implicit none
@@ -74,15 +74,15 @@ contains
       write(6 ,NAMFIELDDUMP)
       close(ifnamopt)
     end if
-    call D_MPI_BCAST(ncoarse     ,1,0,comm3d,ierr)
-    call D_MPI_BCAST(klow        ,1,0,comm3d,ierr)
-    call D_MPI_BCAST(khigh       ,1,0,comm3d,ierr)
-    call D_MPI_BCAST(dtav        ,1,0,comm3d,ierr)
-    call D_MPI_BCAST(tmin        ,1,0,comm3d,ierr)
-    call D_MPI_BCAST(tmax        ,1,0,comm3d,ierr)
-    call D_MPI_BCAST(lfielddump  ,1,0,comm3d,ierr)
-    call D_MPI_BCAST(ldiracc     ,1,0,comm3d,ierr)
-    call D_MPI_BCAST(lbinary     ,1,0,comm3d,ierr)
+    call D_MPI_BCAST_S(ncoarse     ,1,0,comm3d,ierr)
+    call D_MPI_BCAST_S(klow        ,1,0,comm3d,ierr)
+    call D_MPI_BCAST_S(khigh       ,1,0,comm3d,ierr)
+    call D_MPI_BCAST_S(dtav        ,1,0,comm3d,ierr)
+    call D_MPI_BCAST_S(tmin        ,1,0,comm3d,ierr)
+    call D_MPI_BCAST_S(tmax        ,1,0,comm3d,ierr)
+    call D_MPI_BCAST_S(lfielddump  ,1,0,comm3d,ierr)
+    call D_MPI_BCAST_S(ldiracc     ,1,0,comm3d,ierr)
+    call D_MPI_BCAST_S(lbinary     ,1,0,comm3d,ierr)
     if (ncoarse==-1) then
       ncoarse = 1
     end if

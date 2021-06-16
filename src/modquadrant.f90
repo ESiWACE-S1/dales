@@ -61,8 +61,7 @@ save
 contains
 !> Initialization routine, reads namelists and inits variables
   subroutine initquadrant
-    use modmpi,    only : comm3d,mpierr,myid,mpi_logical,mpi_integer &
-                        , D_MPI_BCAST
+    use modmpi,    only : comm3d,mpierr,myid,D_MPI_BCAST_S
     use modglobal, only : ladaptive, dtmax,ifnamopt,fname_options,kmax,   &
                            dtav_glob,btime,tres,cexpnr,ifoutput,nsv,lwarmstart,checknamelisterror
     use modstat_nc, only : lnetcdf,define_nc,ncinfo,open_nc,define_nc,ncinfo,nctiminfo,writestat_dims_q_nc
@@ -90,13 +89,13 @@ contains
       if (khigh .gt. kmax) khigh  = kmax
     end if ! myid = 0
 
-    call D_MPI_BCAST(lquadrant ,1,0,comm3d,mpierr)
-    call D_MPI_BCAST(dtav      ,1,0,comm3d,mpierr)
-    call D_MPI_BCAST(timeav    ,1,0,comm3d,mpierr)
-    call D_MPI_BCAST(hole      ,1,0,comm3d,mpierr)
-    call D_MPI_BCAST(iwind     ,1,0,comm3d,mpierr)
-    call D_MPI_BCAST(klow      ,1,0,comm3d,mpierr)
-    call D_MPI_BCAST(khigh     ,1,0,comm3d,mpierr)
+    call D_MPI_BCAST_S(lquadrant ,1,0,comm3d,mpierr)
+    call D_MPI_BCAST_S(dtav      ,1,0,comm3d,mpierr)
+    call D_MPI_BCAST_S(timeav    ,1,0,comm3d,mpierr)
+    call D_MPI_BCAST_S(hole      ,1,0,comm3d,mpierr)
+    call D_MPI_BCAST_S(iwind     ,1,0,comm3d,mpierr)
+    call D_MPI_BCAST_S(klow      ,1,0,comm3d,mpierr)
+    call D_MPI_BCAST_S(khigh     ,1,0,comm3d,mpierr)
 
     if(.not. lquadrant) return
 

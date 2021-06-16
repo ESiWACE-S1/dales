@@ -42,7 +42,7 @@ save
 contains
 !> Initializing Cloudfield. Read out the namelist, initializing the variables
   subroutine initcloudfield
-    use modmpi,   only :myid,mpierr,comm3d,mpi_logical,D_MPI_BCAST
+    use modmpi,   only :myid,mpierr,comm3d,mpi_logical,D_MPI_BCAST_S
     use modglobal,only :ifnamopt,fname_options,dtmax,dtav_glob,btime,ladaptive,tres,checknamelisterror
     implicit none
     integer :: ierr
@@ -59,9 +59,9 @@ contains
       close(ifnamopt)
     end if
 
-    call D_MPI_BCAST(dtav         ,1,0,comm3d,mpierr)
-    call D_MPI_BCAST(lcloudfield  ,1,0,comm3d,mpierr)
-    call D_MPI_BCAST(laddinfo     ,1,0,comm3d,mpierr)
+    call D_MPI_BCAST_S(dtav         ,1,0,comm3d,mpierr)
+    call D_MPI_BCAST_S(lcloudfield  ,1,0,comm3d,mpierr)
+    call D_MPI_BCAST_S(laddinfo     ,1,0,comm3d,mpierr)
 
     idtav = dtav/tres
     tnext      = idtav   +btime

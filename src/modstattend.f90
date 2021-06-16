@@ -52,7 +52,7 @@ module modstattend
 contains
 !> Initialization routine, reads namelists and inits variables
 subroutine initstattend
-    use modmpi,   only : mpierr,mpi_logical,comm3d,myid,D_MPI_BCAST
+    use modmpi,   only : mpierr,comm3d,myid,D_MPI_BCAST_S
     use modglobal,only : cexpnr,dtmax,ifnamopt,fname_options,k1,dtav_glob,timeav_glob,&
     ladaptive, dt_lim,btime,tres,ifoutput,lwarmstart,checknamelisterror
     use modstat_nc, only : lnetcdf, open_nc,define_nc,ncinfo,nctiminfo,writestat_dims_nc
@@ -75,9 +75,9 @@ subroutine initstattend
       close(ifnamopt)
     end if
 
-    call D_MPI_BCAST(dtav       ,1,0,comm3d,mpierr)
-    call D_MPI_BCAST(timeav     ,1,0,comm3d,mpierr)
-    call D_MPI_BCAST(ltend      ,1,0,comm3d,mpierr)
+    call D_MPI_BCAST_S(dtav       ,1,0,comm3d,mpierr)
+    call D_MPI_BCAST_S(timeav     ,1,0,comm3d,mpierr)
+    call D_MPI_BCAST_S(ltend      ,1,0,comm3d,mpierr)
 
     idtav = dtav/tres
     itimeav = timeav/tres

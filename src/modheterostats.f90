@@ -101,9 +101,9 @@ contains
       close(ifnamopt)
     end if
 
-    call D_MPI_BCAST(dtav        ,1,0,comm3d,mpierr)
-    call D_MPI_BCAST(lheterostats,1,0,comm3d,mpierr)
-    call D_MPI_BCAST(ncklimit    ,1,0,comm3d,mpierr)
+    call D_MPI_BCAST_S(dtav        ,1,0,comm3d,mpierr)
+    call D_MPI_BCAST_S(lheterostats,1,0,comm3d,mpierr)
+    call D_MPI_BCAST_S(ncklimit    ,1,0,comm3d,mpierr)
 
     if(.not.(lheterostats)) return
     idtav = dtav/tres

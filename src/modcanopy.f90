@@ -55,7 +55,7 @@ module modcanopy
 contains
 !-----------------------------------------------------------------------------------------
   SUBROUTINE initcanopy
-    use modmpi,    only : myid, mpi_logical, mpi_integer, comm3d, mpierr, D_MPI_BCAST
+    use modmpi,    only : myid, mpi_logical, mpi_integer, comm3d, mpierr, D_MPI_BCAST, D_MPI_BCAST_S
     use modglobal, only : kmax, ifnamopt, fname_options, ifinput, cexpnr, zh, dzh, dzf, checknamelisterror
 
     implicit none
@@ -77,21 +77,21 @@ contains
       ncanopy = min(ncanopy,kmax)
     endif
 
-    call D_MPI_BCAST(lcanopy   ,   1, 0, comm3d, mpierr)
-    call D_MPI_BCAST(ncanopy   ,   1, 0, comm3d, mpierr)
-    call D_MPI_BCAST(lpaddistr ,   1, 0, comm3d, mpierr)
-    call D_MPI_BCAST(npaddistr ,   1, 0, comm3d, mpierr)
-    call D_MPI_BCAST(wth_total ,   1, 0, comm3d, mpierr)
-    call D_MPI_BCAST(wqt_total ,   1, 0, comm3d, mpierr)
-    call D_MPI_BCAST(wsv_total , 100, 0, comm3d, mpierr)
-    call D_MPI_BCAST(cd        ,   1, 0, comm3d, mpierr)
-    call D_MPI_BCAST(lai       ,   1, 0, comm3d, mpierr)
-    call D_MPI_BCAST(wth_can   ,   1, 0, comm3d, mpierr)
-    call D_MPI_BCAST(wqt_can   ,   1, 0, comm3d, mpierr)
-    call D_MPI_BCAST(wsv_can   , 100, 0, comm3d, mpierr)
-    call D_MPI_BCAST(wth_alph  ,   1, 0, comm3d, mpierr)
-    call D_MPI_BCAST(wqt_alph  ,   1, 0, comm3d, mpierr)
-    call D_MPI_BCAST(wsv_alph  , 100, 0, comm3d, mpierr)
+    call D_MPI_BCAST_S(lcanopy   ,   1, 0, comm3d, mpierr)
+    call D_MPI_BCAST_S(ncanopy   ,   1, 0, comm3d, mpierr)
+    call D_MPI_BCAST_S(lpaddistr ,   1, 0, comm3d, mpierr)
+    call D_MPI_BCAST_S(npaddistr ,   1, 0, comm3d, mpierr)
+    call D_MPI_BCAST_S(wth_total ,   1, 0, comm3d, mpierr)
+    call D_MPI_BCAST_S(wqt_total ,   1, 0, comm3d, mpierr)
+    call D_MPI_BCAST  (wsv_total , 100, 0, comm3d, mpierr)
+    call D_MPI_BCAST_S(cd        ,   1, 0, comm3d, mpierr)
+    call D_MPI_BCAST_S(lai       ,   1, 0, comm3d, mpierr)
+    call D_MPI_BCAST_S(wth_can   ,   1, 0, comm3d, mpierr)
+    call D_MPI_BCAST_S(wqt_can   ,   1, 0, comm3d, mpierr)
+    call D_MPI_BCAST  (wsv_can   , 100, 0, comm3d, mpierr)
+    call D_MPI_BCAST_S(wth_alph  ,   1, 0, comm3d, mpierr)
+    call D_MPI_BCAST_S(wqt_alph  ,   1, 0, comm3d, mpierr)
+    call D_MPI_BCAST  (wsv_alph  , 100, 0, comm3d, mpierr)
 
     if (.not. (lcanopy)) return
 

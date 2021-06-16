@@ -165,7 +165,7 @@ save
 contains
 
   subroutine initgenstat
-    use modmpi,    only : myid,mpierr, comm3d, mpi_logical, D_MPI_BCAST
+    use modmpi,    only : myid,mpierr, comm3d, mpi_logical, D_MPI_BCAST_S
     use modglobal, only : kmax,k1, nsv,ifnamopt,fname_options, ifoutput,&
     cexpnr,dtav_glob,timeav_glob,dt_lim,btime,tres,lwarmstart,checknamelisterror
     use modstat_nc, only : lnetcdf, open_nc,define_nc,ncinfo,nctiminfo,writestat_dims_nc
@@ -189,9 +189,9 @@ contains
       close(ifnamopt)
     end if
 
-    call D_MPI_BCAST(timeav     ,1,0,comm3d,mpierr)
-    call D_MPI_BCAST(dtav       ,1,0,comm3d,mpierr)
-    call D_MPI_BCAST(lstat      ,1,0,comm3d,mpierr)
+    call D_MPI_BCAST_S(timeav     ,1,0,comm3d,mpierr)
+    call D_MPI_BCAST_S(dtav       ,1,0,comm3d,mpierr)
+    call D_MPI_BCAST_S(lstat      ,1,0,comm3d,mpierr)
     idtav = dtav/tres
     itimeav = timeav/tres
 

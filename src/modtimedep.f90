@@ -72,7 +72,7 @@ save
 contains
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   subroutine inittimedep
-    use modmpi,    only :myid,mpi_logical,mpierr,comm3d,D_MPI_BCAST
+    use modmpi,    only :myid,mpierr,comm3d,D_MPI_BCAST,D_MPI_BCAST_S
     use modglobal, only :cexpnr,k1,kmax,ifinput,runtime,zf,ntimedep
     use modsurfdata,only :ps,qts,wqsurf,wtsurf,thls, Qnetav
     use modtimedepsv, only : inittimedepsv
@@ -311,29 +311,29 @@ contains
 
     end if
 
-    call D_MPI_BCAST(timeflux(1:kflux),kflux   ,0,comm3d,mpierr)
-    call D_MPI_BCAST(wtsurft          ,kflux   ,0,comm3d,mpierr)
-    call D_MPI_BCAST(wqsurft          ,kflux   ,0,comm3d,mpierr)
-    call D_MPI_BCAST(thlst            ,kflux   ,0,comm3d,mpierr)
-    call D_MPI_BCAST(qtst             ,kflux   ,0,comm3d,mpierr)
-    call D_MPI_BCAST(pst              ,kflux   ,0,comm3d,mpierr)
-    call D_MPI_BCAST(Qnetavt          ,kflux   ,0,comm3d,mpierr)
-    call D_MPI_BCAST(timels(1:kls)    ,kls     ,0,comm3d,mpierr)
-    call D_MPI_BCAST(ugt              ,kmax*kls,0,comm3d,mpierr)
-    call D_MPI_BCAST(vgt              ,kmax*kls,0,comm3d,mpierr)
-    call D_MPI_BCAST(wflst            ,kmax*kls,0,comm3d,mpierr)
-    call D_MPI_BCAST(dqtdxlst,kmax*kls ,0,comm3d,mpierr)
-    call D_MPI_BCAST(dqtdylst,kmax*kls ,0,comm3d,mpierr)
-    call D_MPI_BCAST(dqtdtlst,kmax*kls ,0,comm3d,mpierr)
-    call D_MPI_BCAST(dthldtlst,kmax*kls,0,comm3d,mpierr)
-    call D_MPI_BCAST(dudtlst,kmax*kls  ,0,comm3d,mpierr)
-    call D_MPI_BCAST(dvdtlst,kmax*kls  ,0,comm3d,mpierr)
-    call D_MPI_BCAST(thlpcart,kmax*kls ,0,comm3d,mpierr)
-    call D_MPI_BCAST(thlproft,kmax*kls ,0,comm3d,mpierr)
-    call D_MPI_BCAST(qtproft ,kmax*kls ,0,comm3d,mpierr)
+    call D_MPI_BCAST  (timeflux(1:kflux),kflux   ,0,comm3d,mpierr)
+    call D_MPI_BCAST  (wtsurft          ,kflux   ,0,comm3d,mpierr)
+    call D_MPI_BCAST  (wqsurft          ,kflux   ,0,comm3d,mpierr)
+    call D_MPI_BCAST  (thlst            ,kflux   ,0,comm3d,mpierr)
+    call D_MPI_BCAST  (qtst             ,kflux   ,0,comm3d,mpierr)
+    call D_MPI_BCAST  (pst              ,kflux   ,0,comm3d,mpierr)
+    call D_MPI_BCAST  (Qnetavt          ,kflux   ,0,comm3d,mpierr)
+    call D_MPI_BCAST  (timels(1:kls)    ,kls     ,0,comm3d,mpierr)
+    call D_MPI_BCAST  (ugt              ,kmax*kls,0,comm3d,mpierr)
+    call D_MPI_BCAST  (vgt              ,kmax*kls,0,comm3d,mpierr)
+    call D_MPI_BCAST  (wflst            ,kmax*kls,0,comm3d,mpierr)
+    call D_MPI_BCAST  (dqtdxlst,kmax*kls ,0,comm3d,mpierr)
+    call D_MPI_BCAST  (dqtdylst,kmax*kls ,0,comm3d,mpierr)
+    call D_MPI_BCAST  (dqtdtlst,kmax*kls ,0,comm3d,mpierr)
+    call D_MPI_BCAST  (dthldtlst,kmax*kls,0,comm3d,mpierr)
+    call D_MPI_BCAST  (dudtlst,kmax*kls  ,0,comm3d,mpierr)
+    call D_MPI_BCAST  (dvdtlst,kmax*kls  ,0,comm3d,mpierr)
+    call D_MPI_BCAST  (thlpcart,kmax*kls ,0,comm3d,mpierr)
+    call D_MPI_BCAST  (thlproft,kmax*kls ,0,comm3d,mpierr)
+    call D_MPI_BCAST  (qtproft ,kmax*kls ,0,comm3d,mpierr)
 
-    call D_MPI_BCAST(ltimedepsurf ,1,0,comm3d,mpierr)
-    call D_MPI_BCAST(ltimedepz    ,1,0,comm3d,mpierr)
+    call D_MPI_BCAST_S(ltimedepsurf ,1,0,comm3d,mpierr)
+    call D_MPI_BCAST_S(ltimedepz    ,1,0,comm3d,mpierr)
 
     call inittimedepsv
     call timedep

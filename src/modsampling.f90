@@ -61,7 +61,7 @@ save
 contains
 !> Initialization routine, reads namelists and inits variables
   subroutine initsampling
-    use modmpi,    only : comm3d,mpierr,myid,mpi_logical,D_MPI_BCAST
+    use modmpi,    only : comm3d,mpierr,myid,D_MPI_BCAST_S
     use modglobal, only : ladaptive, dtmax,k1,ifnamopt,fname_options,kmax,   &
                            dtav_glob,timeav_glob,btime,tres,cexpnr,ifoutput,lwarmstart,checknamelisterror
     use modstat_nc, only : lnetcdf,define_nc,ncinfo,open_nc,define_nc,ncinfo,nctiminfo,writestat_dims_nc
@@ -84,15 +84,15 @@ contains
     end if
 
 
-    call D_MPI_BCAST(timeav    ,1,0,comm3d,mpierr)
-    call D_MPI_BCAST(dtav      ,1,0,comm3d,mpierr)
-!    call D_MPI_BCAST(lsampall  ,1,MPI_LOGICAL,0,comm3d,mpierr)
-    call D_MPI_BCAST(lsampcl   ,1,0,comm3d,mpierr)
-    call D_MPI_BCAST(lsampco   ,1,0,comm3d,mpierr)
-    call D_MPI_BCAST(lsampup   ,1,0,comm3d,mpierr)
-    call D_MPI_BCAST(lsampbuup ,1,0,comm3d,mpierr)
-    call D_MPI_BCAST(lsampcldup,1,0,comm3d,mpierr)
-    call D_MPI_BCAST(lsamptend, 1,0,comm3d,mpierr)
+    call D_MPI_BCAST_S(timeav    ,1,0,comm3d,mpierr)
+    call D_MPI_BCAST_S(dtav      ,1,0,comm3d,mpierr)
+!    call D_MPI_BCAST_S(lsampall  ,1,MPI_LOGICAL,0,comm3d,mpierr)
+    call D_MPI_BCAST_S(lsampcl   ,1,0,comm3d,mpierr)
+    call D_MPI_BCAST_S(lsampco   ,1,0,comm3d,mpierr)
+    call D_MPI_BCAST_S(lsampup   ,1,0,comm3d,mpierr)
+    call D_MPI_BCAST_S(lsampbuup ,1,0,comm3d,mpierr)
+    call D_MPI_BCAST_S(lsampcldup,1,0,comm3d,mpierr)
+    call D_MPI_BCAST_S(lsamptend, 1,0,comm3d,mpierr)
 
     isamptot = 0
     if (lsampall) then

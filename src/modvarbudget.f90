@@ -44,7 +44,7 @@ module modvarbudget
 contains
 
   subroutine initvarbudget
-    use modmpi,     only : myid,mpierr, comm3d, D_MPI_BCAST
+    use modmpi,     only : myid,mpierr, comm3d, D_MPI_BCAST_S
     use modglobal,  only : k1,ih,i1,jh,j1,ifnamopt,fname_options, ifoutput,&
                            cexpnr,dtav_glob,timeav_glob,dt_lim,btime,tres,&
                            lwarmstart,checknamelisterror,ladaptive,dtmax
@@ -67,9 +67,9 @@ contains
       close(ifnamopt)
     end if
 
-    call D_MPI_BCAST(timeav     ,1,0,comm3d,mpierr)
-    call D_MPI_BCAST(dtav       ,1,0,comm3d,mpierr)
-    call D_MPI_BCAST(lvarbudget ,1,0,comm3d,mpierr)
+    call D_MPI_BCAST_S(timeav     ,1,0,comm3d,mpierr)
+    call D_MPI_BCAST_S(dtav       ,1,0,comm3d,mpierr)
+    call D_MPI_BCAST_S(lvarbudget ,1,0,comm3d,mpierr)
     idtav = dtav/tres
     itimeav = timeav/tres
 

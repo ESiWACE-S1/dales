@@ -73,7 +73,8 @@ contains
 
     use modglobal,  only : i1, j1, i2, j2, itot, jtot, nsv, ifnamopt, fname_options, ifinput, cexpnr, checknamelisterror
     use modraddata, only : iradiation,rad_shortw,irad_par,irad_user,irad_rrtmg
-    use modmpi,     only : myid, comm3d, mpierr, mpi_logical, mpi_integer, D_MPI_BCAST
+    use modmpi,     only : myid, comm3d, mpierr, mpi_logical, mpi_integer &
+                         , D_MPI_BCAST, D_MPI_BCAST_S
 
     implicit none
 
@@ -114,56 +115,56 @@ contains
       close(ifnamopt)
     end if
 
-    call D_MPI_BCAST(isurf        , 1       ,  0, comm3d, mpierr)
-    call D_MPI_BCAST(tsoilav      , ksoilmax, 0, comm3d, mpierr)
-    call D_MPI_BCAST(tsoildeepav  , 1       , 0, comm3d, mpierr)
-    call D_MPI_BCAST(phiwav       , ksoilmax, 0, comm3d, mpierr)
-    call D_MPI_BCAST(rootfav      , ksoilmax, 0, comm3d, mpierr)
+    call D_MPI_BCAST_S(isurf        , 1       ,  0, comm3d, mpierr)
+    call D_MPI_BCAST  (tsoilav      , ksoilmax, 0, comm3d, mpierr)
+    call D_MPI_BCAST_S(tsoildeepav  , 1       , 0, comm3d, mpierr)
+    call D_MPI_BCAST  (phiwav       , ksoilmax, 0, comm3d, mpierr)
+    call D_MPI_BCAST  (rootfav      , ksoilmax, 0, comm3d, mpierr)
 
-    call D_MPI_BCAST(lmostlocal   , 1,  0, comm3d, mpierr)
-    call D_MPI_BCAST(lsmoothflux  , 1,  0, comm3d, mpierr)
-    call D_MPI_BCAST(lneutral     , 1,  0, comm3d, mpierr)
-    call D_MPI_BCAST(z0mav        , 1, 0, comm3d, mpierr)
-    call D_MPI_BCAST(z0hav        , 1, 0, comm3d, mpierr)
-    call D_MPI_BCAST(rsisurf2     , 1, 0, comm3d, mpierr)
-    call D_MPI_BCAST(Cskinav      , 1, 0, comm3d, mpierr)
-    call D_MPI_BCAST(lambdaskinav , 1, 0, comm3d, mpierr)
-    call D_MPI_BCAST(albedoav     , 1, 0, comm3d, mpierr)
-    call D_MPI_BCAST(Qnetav       , 1, 0, comm3d, mpierr)
+    call D_MPI_BCAST_S(lmostlocal   , 1,  0, comm3d, mpierr)
+    call D_MPI_BCAST_S(lsmoothflux  , 1,  0, comm3d, mpierr)
+    call D_MPI_BCAST_S(lneutral     , 1,  0, comm3d, mpierr)
+    call D_MPI_BCAST_S(z0mav        , 1, 0, comm3d, mpierr)
+    call D_MPI_BCAST_S(z0hav        , 1, 0, comm3d, mpierr)
+    call D_MPI_BCAST_S(rsisurf2     , 1, 0, comm3d, mpierr)
+    call D_MPI_BCAST_S(Cskinav      , 1, 0, comm3d, mpierr)
+    call D_MPI_BCAST_S(lambdaskinav , 1, 0, comm3d, mpierr)
+    call D_MPI_BCAST_S(albedoav     , 1, 0, comm3d, mpierr)
+    call D_MPI_BCAST_S(Qnetav       , 1, 0, comm3d, mpierr)
 
-    call D_MPI_BCAST(rsminav      , 1, 0, comm3d, mpierr)
-    call D_MPI_BCAST(rssoilminav  , 1, 0, comm3d, mpierr)
-    call D_MPI_BCAST(cvegav       , 1, 0, comm3d, mpierr)
-    call D_MPI_BCAST(Wlav         , 1, 0, comm3d, mpierr)
-    call D_MPI_BCAST(LAIav        , 1, 0, comm3d, mpierr)
-    call D_MPI_BCAST(gDav         , 1, 0, comm3d, mpierr)
+    call D_MPI_BCAST_S(rsminav      , 1, 0, comm3d, mpierr)
+    call D_MPI_BCAST_S(rssoilminav  , 1, 0, comm3d, mpierr)
+    call D_MPI_BCAST_S(cvegav       , 1, 0, comm3d, mpierr)
+    call D_MPI_BCAST_S(Wlav         , 1, 0, comm3d, mpierr)
+    call D_MPI_BCAST_S(LAIav        , 1, 0, comm3d, mpierr)
+    call D_MPI_BCAST_S(gDav         , 1, 0, comm3d, mpierr)
 
-    call D_MPI_BCAST(z0         ,1,0,comm3d,mpierr)
-    call D_MPI_BCAST(ustin      ,1,0,comm3d,mpierr)
-    call D_MPI_BCAST(wtsurf     ,1,0,comm3d,mpierr)
-    call D_MPI_BCAST(wqsurf     ,1,0,comm3d,mpierr)
-    call D_MPI_BCAST(wsvsurf(1:nsv),nsv,0,comm3d,mpierr)
-    call D_MPI_BCAST(ps         ,1,0,comm3d,mpierr)
-    call D_MPI_BCAST(thls       ,1,0,comm3d,mpierr)
+    call D_MPI_BCAST_S(z0         ,1,0,comm3d,mpierr)
+    call D_MPI_BCAST_S(ustin      ,1,0,comm3d,mpierr)
+    call D_MPI_BCAST_S(wtsurf     ,1,0,comm3d,mpierr)
+    call D_MPI_BCAST_S(wqsurf     ,1,0,comm3d,mpierr)
+    call D_MPI_BCAST  (wsvsurf(1:nsv),nsv,0,comm3d,mpierr)
+    call D_MPI_BCAST_S(ps         ,1,0,comm3d,mpierr)
+    call D_MPI_BCAST_S(thls       ,1,0,comm3d,mpierr)
 
-    call D_MPI_BCAST(lhetero                    ,            1,  0, comm3d, mpierr)
-    call D_MPI_BCAST(loldtable                  ,            1,  0, comm3d, mpierr)
-    call D_MPI_BCAST(lrsAgs                     ,            1,  0, comm3d, mpierr)
-    call D_MPI_BCAST(lCO2Ags                    ,            1,  0, comm3d, mpierr)
-    call D_MPI_BCAST(xpatches                   ,            1,  0, comm3d, mpierr)
-    call D_MPI_BCAST(ypatches                   ,            1,  0, comm3d, mpierr)
-    call D_MPI_BCAST(planttype                  ,            1,  0, comm3d, mpierr)
-    call D_MPI_BCAST(lrelaxgc                   ,            1,  0, comm3d, mpierr)
-    call D_MPI_BCAST(lrelaxci                   ,            1,  0, comm3d, mpierr)
-    call D_MPI_BCAST(kgc                        ,            1, 0, comm3d, mpierr)
-    call D_MPI_BCAST(kci                        ,            1, 0, comm3d, mpierr)
-    call D_MPI_BCAST(phi                        ,            1, 0, comm3d, mpierr)
-    call D_MPI_BCAST(phifc                      ,            1, 0, comm3d, mpierr)
-    call D_MPI_BCAST(phiwp                      ,            1, 0, comm3d, mpierr)
-    call D_MPI_BCAST(R10                        ,            1, 0, comm3d, mpierr)
-    call D_MPI_BCAST(lsplitleaf                 ,            1,  0, comm3d, mpierr)
+    call D_MPI_BCAST_S(lhetero                    ,            1,  0, comm3d, mpierr)
+    call D_MPI_BCAST_S(loldtable                  ,            1,  0, comm3d, mpierr)
+    call D_MPI_BCAST_S(lrsAgs                     ,            1,  0, comm3d, mpierr)
+    call D_MPI_BCAST_S(lCO2Ags                    ,            1,  0, comm3d, mpierr)
+    call D_MPI_BCAST_S(xpatches                   ,            1,  0, comm3d, mpierr)
+    call D_MPI_BCAST_S(ypatches                   ,            1,  0, comm3d, mpierr)
+    call D_MPI_BCAST_S(planttype                  ,            1,  0, comm3d, mpierr)
+    call D_MPI_BCAST_S(lrelaxgc                   ,            1,  0, comm3d, mpierr)
+    call D_MPI_BCAST_S(lrelaxci                   ,            1,  0, comm3d, mpierr)
+    call D_MPI_BCAST_S(kgc                        ,            1, 0, comm3d, mpierr)
+    call D_MPI_BCAST_S(kci                        ,            1, 0, comm3d, mpierr)
+    call D_MPI_BCAST_S(phi                        ,            1, 0, comm3d, mpierr)
+    call D_MPI_BCAST_S(phifc                      ,            1, 0, comm3d, mpierr)
+    call D_MPI_BCAST_S(phiwp                      ,            1, 0, comm3d, mpierr)
+    call D_MPI_BCAST_S(R10                        ,            1, 0, comm3d, mpierr)
+    call D_MPI_BCAST_S(lsplitleaf                 ,            1,  0, comm3d, mpierr)
     
-    call D_MPI_BCAST(land_use(1:mpatch,1:mpatch),mpatch*mpatch,  0, comm3d, mpierr)
+    call D_MPI_BCAST  (land_use(1:mpatch,1:mpatch),mpatch*mpatch,  0, comm3d, mpierr)
 
     if(lCO2Ags .and. (.not. lrsAgs)) then
       if(myid==0) print *,"WARNING::: You set lCO2Ags to .true., but lrsAgs to .false."
@@ -703,7 +704,7 @@ contains
     use modglobal,  only : i1,j1,fkar,zf,cu,cv,nsv,ijtot,rd,rv
     use modfields,  only : thl0, qt0, u0, v0, u0av, v0av
     use modmpi,     only : mpierr, comm3d, mpi_sum, excjs, mpi_integer &
-                         , D_MPI_ALLREDUCE, D_MPI_BCAST
+                         , D_MPI_ALLREDUCE, D_MPI_BCAST_S
     use moduser,    only : surf_user
     implicit none
 
@@ -765,7 +766,7 @@ contains
         call getobl
       end if
 
-      call D_MPI_BCAST(oblav ,1 ,0,comm3d,mpierr)
+      call D_MPI_BCAST_S(oblav ,1 ,0,comm3d,mpierr)
 
       do j = 2, j1
         do i = 2, i1

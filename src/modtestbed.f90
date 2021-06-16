@@ -56,8 +56,7 @@ SAVE
 
 contains
   subroutine inittestbed
-    use modmpi,   only :myid,mpierr,comm3d,mpi_logical,mpi_integer &
-                       , D_MPI_BCAST
+    use modmpi,   only :myid,mpierr,comm3d,D_MPI_BCAST, D_MPI_BCAST_S
     use modglobal,only :ifnamopt,fname_options,k1,&
                         grav,rd,cp,pref0,rlv,zf,checknamelisterror
     use modsurfdata,only : ksoilmax
@@ -96,8 +95,8 @@ contains
 
     end if
  
-    call D_MPI_BCAST(ltestbed     , 1,0,comm3d,mpierr)
-    call D_MPI_BCAST(ltb_nudge    , 1,0,comm3d,mpierr)
+    call D_MPI_BCAST_S(ltestbed     , 1,0,comm3d,mpierr)
+    call D_MPI_BCAST_S(ltb_nudge    , 1,0,comm3d,mpierr)
     
     if (.not. ltestbed) return
     
@@ -133,10 +132,10 @@ contains
         if (STATUS .ne. nf90_noerr) call handle_err(STATUS)
     end if
 
-    call D_MPI_BCAST(ntnudge    , 1,0,comm3d,mpierr)
-    call D_MPI_BCAST(nknudge    , 1,0,comm3d,mpierr)
-    call D_MPI_BCAST(nknudgep1  , 1,0,comm3d,mpierr)
-    call D_MPI_BCAST(nknudges   , 1,0,comm3d,mpierr)
+    call D_MPI_BCAST_S(ntnudge    , 1,0,comm3d,mpierr)
+    call D_MPI_BCAST_S(nknudge    , 1,0,comm3d,mpierr)
+    call D_MPI_BCAST_S(nknudgep1  , 1,0,comm3d,mpierr)
+    call D_MPI_BCAST_S(nknudges   , 1,0,comm3d,mpierr)
 
     !--- allocate space for input variables & reset---
     allocate(    tnudge    (ntnudge,k1), &
@@ -636,7 +635,7 @@ contains
 
     end if
 
-    call D_MPI_BCAST(ntnudge    , 1,0,comm3d,mpierr)
+    call D_MPI_BCAST_S(ntnudge    , 1,0,comm3d,mpierr)
 
     call D_MPI_BCAST(tb_time    ,ntnudge   ,0,comm3d,mpierr)
     call D_MPI_BCAST(tb_ps      ,ntnudge   ,0,comm3d,mpierr)
