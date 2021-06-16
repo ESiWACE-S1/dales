@@ -77,6 +77,10 @@ save
     procedure :: D_MPI_IRECV_REAL32
     procedure :: D_MPI_IRECV_REAL64
   end interface
+  interface D_MPI_RECV
+    procedure :: D_MPI_RECV_REAL32
+    procedure :: D_MPI_RECV_REAL64
+  end interface
   interface D_MPI_BCAST_S
     procedure :: D_MPI_BCAST_REAL64_S
     procedure :: D_MPI_BCAST_INT32_S
@@ -382,7 +386,6 @@ contains
   type(MPI_STATUS)  :: status
   integer :: xl, yl, zl
   type(MPI_REQUEST) :: reqn, reqs, reqe, reqw
-  type(MPI_REQUEST) :: reqrn, reqrs, reqre, reqrw
   integer nssize, ewsize
   real(real64),allocatable, dimension(:) :: sendn,recvn &
                                           , sends,recvs &
@@ -412,14 +415,9 @@ contains
     call D_MPI_ISEND(sends, nssize, nbrsouth, 5, comm3d, reqs, mpierr)
 
     !   Receive south/north
-    call D_MPI_IRECV(recvs, nssize, nbrsouth, 4, comm3d, reqrs, mpierr)
-    call D_MPI_IRECV(recvn, nssize, nbrnorth, 5, comm3d, reqrn, mpierr)
+    call D_MPI_RECV(recvs, nssize, nbrsouth, 4, comm3d, status, mpierr)
+    call D_MPI_RECV(recvn, nssize, nbrnorth, 5, comm3d, status, mpierr)
 
-    ! Wait until data is received
-    call MPI_WAIT(reqrs, status, mpierr)
-    if (mpierr /= MPI_SUCCESS) call abort
-    call MPI_WAIT(reqrn, status, mpierr)
-    if (mpierr /= MPI_SUCCESS) call abort
 
     ! Write back buffers
     a(:,sy-jh:sy-1,:) = reshape(recvs,(/xl,jh,zl/))
@@ -446,14 +444,8 @@ contains
     call D_MPI_ISEND(sendw, ewsize, nbrwest, 7, comm3d, reqw, mpierr)
 
     !   Receive west/east
-    call D_MPI_IRECV(recvw, ewsize, nbrwest, 6, comm3d, reqrw, mpierr)
-    call D_MPI_IRECV(recve, ewsize, nbreast, 7, comm3d, reqre, mpierr)
-
-    ! Wait until data is received
-    call MPI_WAIT(reqrw, status, mpierr)
-    if (mpierr /= MPI_SUCCESS) call abort
-    call MPI_WAIT(reqre, status, mpierr)
-    if (mpierr /= MPI_SUCCESS) call abort
+    call D_MPI_RECV(recvw, ewsize, nbrwest, 6, comm3d, status, mpierr)
+    call D_MPI_RECV(recve, ewsize, nbreast, 7, comm3d, status, mpierr)
 
     ! Write back buffers
     a(sx-ih:sx-1,:,:) = reshape(recvw,(/ih,yl,zl/))
@@ -646,6 +638,26 @@ contains
     if (ierror /= MPI_SUCCESS) call abort
   end subroutine D_MPI_IRECV_REAL64
   
+  subroutine D_MPI_RECV_REAL32(buf, count, source, tag, comm, status, ierror)
+    implicit none
+    real(real32), target, contiguous, intent(inout)  ::   buf(..)
+    integer        :: count, source, tag, ierror
+    type(MPI_COMM) :: comm
+    type(MPI_STATUS) :: status
+    BYTE, pointer :: buf_b
+    call c_f_pointer(c_loc(buf),buf_b)
+    call MPI_RECV(buf_b,count,MPI_REAL4,source,tag,comm,status,ierror)
+    if (ierror /= MPI_SUCCESS) call abort
+  end subroutine D_MPI_RECV_REAL32
+  subroutine D_MPI_RECV_REAL64(buf, count, source, tag, comm, status, ierror)
+    implicit none
+    real(real64), contiguous, intent(inout)  ::   buf(..)
+    integer        :: count, source, tag, ierror
+    type(MPI_COMM) :: comm
+    type(MPI_STATUS) :: status
+    call MPI_RECV(buf,count,MPI_REAL8,source,tag,comm,status,ierror)
+    if (ierror /= MPI_SUCCESS) call abort
+  end subroutine D_MPI_RECV_REAL64
 
   subroutine D_MPI_BCAST_REAL64_S(buffer, count, root, comm, ierror)
     implicit none
