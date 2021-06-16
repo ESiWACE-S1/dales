@@ -246,7 +246,7 @@ contains
     call D_MPI_BCAST_S(iadv_tke,1,0,commwrld,mpierr)
     call D_MPI_BCAST_S(iadv_thl,1,0,commwrld,mpierr)
     call D_MPI_BCAST_S(iadv_qt ,1,0,commwrld,mpierr)
-    call D_MPI_BCAST  (iadv_sv(1:nsv) ,nsv,0,commwrld,mpierr)
+    call D_MPI_BCAST  (iadv_sv ,nsv,0,commwrld,mpierr)
 
     call D_MPI_BCAST_S(lnoclouds  ,1,0,commwrld,mpierr)
 
